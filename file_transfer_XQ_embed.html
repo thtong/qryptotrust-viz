@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<!--suppress JSUnresolvedReference -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PQC Secure File Transfer Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>/* FingerprintJS embedded bundle */
+/**
+ * FingerprintJS v5.1.0 - Copyright (c) FingerprintJS, Inc, 2026 (https://fingerprint.com)
+ *
+ * Licensed under MIT License
+ *
+ * Copyright (c) 2025 FingerprintJS, Inc
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"function"==typeof define&&define.amd?define(["exports"],e):e((t="undefined"!=typeof globalThis?globalThis:t||self).FingerprintJS={})}(this,(function(t){"use strict";var e="5.1.0";function n(t,e){return new Promise((n=>setTimeout(n,t,e)))}function o(t){return!!t&&"function"==typeof t.then}function i(t,e){try{const n=t();o(n)?n.then((t=>e(!0,t)),(t=>e(!1,t))):e(!0,n)}catch(n){e(!1,n)}}async function r(t,e,n=16){const o=Array(t.length);let i=Date.now();for(let r=0;r<t.length;++r){o[r]=e(t[r],r);const a=Date.now();a>=i+n&&(i=a,await new Promise((t=>{const e=new MessageChannel;e.port1.onmessage=()=>t(),e.port2.postMessage(null)})))}return o}function a(t){return t.then(void 0,(()=>{})),t}function c(t){return parseInt(t)}function s(t){return parseFloat(t)}function u(t,e){return"number"==typeof t&&isNaN(t)?e:t}function l(t){return t.reduce(((t,e)=>t+(e?1:0)),0)}function d(t,e=1){if(Math.abs(e)>=1)return Math.round(t/e)*e;{const n=1/e;return Math.round(t*n)/n}}function m(t,e){const n=t[0]>>>16,o=65535&t[0],i=t[1]>>>16,r=65535&t[1],a=e[0]>>>16,c=65535&e[0],s=e[1]>>>16;let u=0,l=0,d=0,m=0;m+=r+(65535&e[1]),d+=m>>>16,m&=65535,d+=i+s,l+=d>>>16,d&=65535,l+=o+c,u+=l>>>16,l&=65535,u+=n+a,u&=65535,t[0]=u<<16|l,t[1]=d<<16|m}function f(t,e){const n=t[0]>>>16,o=65535&t[0],i=t[1]>>>16,r=65535&t[1],a=e[0]>>>16,c=65535&e[0],s=e[1]>>>16,u=65535&e[1];let l=0,d=0,m=0,f=0;f+=r*u,m+=f>>>16,f&=65535,m+=i*u,d+=m>>>16,m&=65535,m+=r*s,d+=m>>>16,m&=65535,d+=o*u,l+=d>>>16,d&=65535,d+=i*s,l+=d>>>16,d&=65535,d+=r*c,l+=d>>>16,d&=65535,l+=n*u+o*s+i*c+r*a,l&=65535,t[0]=l<<16|d,t[1]=m<<16|f}function p(t,e){const n=t[0];32===(e%=64)?(t[0]=t[1],t[1]=n):e<32?(t[0]=n<<e|t[1]>>>32-e,t[1]=t[1]<<e|n>>>32-e):(e-=32,t[0]=t[1]<<e|n>>>32-e,t[1]=n<<e|t[1]>>>32-e)}function h(t,e){0!==(e%=64)&&(e<32?(t[0]=t[1]>>>32-e,t[1]=t[1]<<e):(t[0]=t[1]<<e-32,t[1]=0))}function b(t,e){t[0]^=e[0],t[1]^=e[1]}const y=[4283543511,3981806797],v=[3301882366,444984403];function g(t){const e=[0,t[0]>>>1];b(t,e),f(t,y),e[1]=t[0]>>>1,b(t,e),f(t,v),e[1]=t[0]>>>1,b(t,e)}const w=[2277735313,289559509],L=[1291169091,658871167],k=[0,5],V=[0,1390208809],S=[0,944331445];function W(t,e){const n=function(t){const e=new Uint8Array(t.length);for(let n=0;n<t.length;n++){const o=t.charCodeAt(n);if(o>127)return(new TextEncoder).encode(t);e[n]=o}return e}(t);e=e||0;const o=[0,n.length],i=o[1]%16,r=o[1]-i,a=[0,e],c=[0,e],s=[0,0],u=[0,0];let l;for(l=0;l<r;l+=16)s[0]=n[l+4]|n[l+5]<<8|n[l+6]<<16|n[l+7]<<24,s[1]=n[l]|n[l+1]<<8|n[l+2]<<16|n[l+3]<<24,u[0]=n[l+12]|n[l+13]<<8|n[l+14]<<16|n[l+15]<<24,u[1]=n[l+8]|n[l+9]<<8|n[l+10]<<16|n[l+11]<<24,f(s,w),p(s,31),f(s,L),b(a,s),p(a,27),m(a,c),f(a,k),m(a,V),f(u,L),p(u,33),f(u,w),b(c,u),p(c,31),m(c,a),f(c,k),m(c,S);s[0]=0,s[1]=0,u[0]=0,u[1]=0;const d=[0,0];switch(i){case 15:d[1]=n[l+14],h(d,48),b(u,d);case 14:d[1]=n[l+13],h(d,40),b(u,d);case 13:d[1]=n[l+12],h(d,32),b(u,d);case 12:d[1]=n[l+11],h(d,24),b(u,d);case 11:d[1]=n[l+10],h(d,16),b(u,d);case 10:d[1]=n[l+9],h(d,8),b(u,d);case 9:d[1]=n[l+8],b(u,d),f(u,L),p(u,33),f(u,w),b(c,u);case 8:d[1]=n[l+7],h(d,56),b(s,d);case 7:d[1]=n[l+6],h(d,48),b(s,d);case 6:d[1]=n[l+5],h(d,40),b(s,d);case 5:d[1]=n[l+4],h(d,32),b(s,d);case 4:d[1]=n[l+3],h(d,24),b(s,d);case 3:d[1]=n[l+2],h(d,16),b(s,d);case 2:d[1]=n[l+1],h(d,8),b(s,d);case 1:d[1]=n[l],b(s,d),f(s,w),p(s,31),f(s,L),b(a,s)}return b(a,o),b(c,o),m(a,c),m(c,a),g(a),g(c),m(a,c),m(c,a),("00000000"+(a[0]>>>0).toString(16)).slice(-8)+("00000000"+(a[1]>>>0).toString(16)).slice(-8)+("00000000"+(c[0]>>>0).toString(16)).slice(-8)+("00000000"+(c[1]>>>0).toString(16)).slice(-8)}function Z(t){return"function"!=typeof t}function x(t,e,n,o){const c=Object.keys(t).filter((t=>!function(t,e){for(let n=0,o=t.length;n<o;++n)if(t[n]===e)return!0;return!1}(n,t))),s=a(r(c,(n=>function(t,e){const n=a(new Promise((n=>{const o=Date.now();i(t.bind(null,e),((...t)=>{const e=Date.now()-o;if(!t[0])return n((()=>({error:t[1],duration:e})));const r=t[1];if(Z(r))return n((()=>({value:r,duration:e})));n((()=>new Promise((t=>{const n=Date.now();i(r,((...o)=>{const i=e+Date.now()-n;if(!o[0])return t({error:o[1],duration:i});t({value:o[1],duration:i})}))}))))}))})));return function(){return n.then((t=>t()))}}(t[n],e)),o));return async function(){const t=await s,e=await r(t,(t=>a(t())),o),n=await Promise.all(e),i={};for(let o=0;o<c.length;++o)i[c[o]]=n[o];return i}}function M(){const t=window,e=navigator;return l(["MSCSSMatrix"in t,"msSetImmediate"in t,"msIndexedDB"in t,"msMaxTouchPoints"in e,"msPointerEnabled"in e])>=4}function R(){const t=window,e=navigator;return l(["msWriteProfilerMark"in t,"MSStream"in t,"msLaunchUri"in e,"msSaveBlob"in e])>=3&&!M()}function F(){const t=window,e=navigator;return l(["webkitPersistentStorage"in e,"webkitTemporaryStorage"in e,0===(e.vendor||"").indexOf("Google"),"webkitResolveLocalFileSystemURL"in t,"BatteryManager"in t,"webkitMediaStream"in t,"webkitSpeechGrammar"in t])>=5}function G(){const t=window;return l(["ApplePayError"in t,"CSSPrimitiveValue"in t,"Counter"in t,0===navigator.vendor.indexOf("Apple"),"RGBColor"in t,"WebKitMediaKeys"in t])>=4}function I(){const t=window,{HTMLElement:e,Document:n}=t;return l(["safari"in t,!("ongestureend"in t),!("TouchEvent"in t),!("orientation"in t),e&&!("autocapitalize"in e.prototype),n&&"pointerLockElement"in n.prototype])>=4}function C(){const t=window;return e=t.print,/^function\s.*?\{\s*\[native code]\s*}$/.test(String(e))&&"[object WebPageNamespace]"===String(t.browser);var e}function Y(){var t,e;const n=window;return l(["buildID"in navigator,"MozAppearance"in(null!==(e=null===(t=document.documentElement)||void 0===t?void 0:t.style)&&void 0!==e?e:{}),"onmozfullscreenchange"in n,"mozInnerScreenX"in n,"CSSMozDocumentRule"in n,"CanvasCaptureMediaStream"in n])>=4}function X(){const{CSS:t}=window;return l([t.supports("selector(::details-content)"),t.supports("selector(::before::marker)"),t.supports("selector(::after::marker)"),!("locale"in CompositionEvent.prototype)])>=3}function j(){const t=window,e=navigator,{CSS:n,HTMLButtonElement:o}=t;return l([!("getStorageUpdates"in e),o&&"popover"in o.prototype,"CSSCounterStyleRule"in t,n.supports("font-size-adjust: ex-height 0.5"),n.supports("text-transform: full-width")])>=4}function P(){const t=document;return t.fullscreenElement||t.msFullscreenElement||t.mozFullScreenElement||t.webkitFullscreenElement||null}function E(){const t=F(),e=Y(),n=window,o=navigator,i="connection";return t?l([!("SharedWorker"in n),o[i]&&"ontypechange"in o[i],!("sinkId"in new Audio)])>=2:!!e&&l(["onorientationchange"in n,"orientation"in n,/android/i.test(o.appVersion)])>=2}function H(){const t=navigator,e=window,n=Audio.prototype,{visualViewport:o}=e;return l(["srLatency"in n,"srChannelCount"in n,"devicePosture"in t,o&&"segments"in o,"getTextInformation"in Image.prototype])>=3}function A(){const t=window,e=t.OfflineAudioContext||t.webkitOfflineAudioContext;if(!e)return-2;if(G()&&!I()&&!function(){const t=window;return l(["DOMRectList"in t,"RTCPeerConnectionIceEvent"in t,"SVGGeometryElement"in t,"ontransitioncancel"in t])>=3}())return-1;const n=new e(1,5e3,44100),i=n.createOscillator();i.type="triangle",i.frequency.value=1e4;const r=n.createDynamicsCompressor();r.threshold.value=-50,r.knee.value=40,r.ratio.value=12,r.attack.value=0,r.release.value=.25,i.connect(r),r.connect(n.destination),i.start(0);const[c,s]=function(t){const e=3,n=500,i=500,r=5e3;let c=()=>{};const s=new Promise(((s,u)=>{let l=!1,d=0,m=0;t.oncomplete=t=>s(t.renderedBuffer);const f=()=>{setTimeout((()=>u(N("timeout"))),Math.min(i,m+r-Date.now()))},p=()=>{try{const i=t.startRendering();switch(o(i)&&a(i),t.state){case"running":m=Date.now(),l&&f();break;case"suspended":document.hidden||d++,l&&d>=e?u(N("suspended")):setTimeout(p,n)}}catch(i){u(i)}};p(),c=()=>{l||(l=!0,m>0&&f())}}));return[s,c]}(n),u=a(c.then((t=>function(t){let e=0;for(let n=0;n<t.length;++n)e+=Math.abs(t[n]);return e}(t.getChannelData(0).subarray(4500))),(t=>{if("timeout"===t.name||"suspended"===t.name)return-3;throw t})));return()=>(s(),u)}function N(t){const e=new Error(t);return e.name=t,e}async function J(t,e,o=50){var i,r,a;const c=document;for(;!c.body;)await n(o);const s=c.createElement("iframe");try{for((await new Promise(((t,n)=>{let o=!1;const i=()=>{o=!0,t()};s.onload=i,s.onerror=t=>{o=!0,n(t)};const{style:r}=s;r.setProperty("display","block","important"),r.position="absolute",r.top="0",r.left="0",r.visibility="hidden",e&&"srcdoc"in s?s.srcdoc=e:s.src="about:blank",c.body.appendChild(s);const a=()=>{var t,e;o||("complete"===(null===(e=null===(t=s.contentWindow)||void 0===t?void 0:t.document)||void 0===e?void 0:e.readyState)?i():setTimeout(a,10))};a()})));!(null===(r=null===(i=s.contentWindow)||void 0===i?void 0:i.document)||void 0===r?void 0:r.body);)await n(o);return await t(s,s.contentWindow)}finally{null===(a=s.parentNode)||void 0===a||a.removeChild(s)}}function T(t){const[e,n]=function(t){var e,n;const o=`Unexpected syntax '${t}'`,i=/^\s*([a-z-]*)(.*)$/i.exec(t),r=i[1]||void 0,a={},c=/([.:#][\w-]+|\[.+?\])/gi,s=(t,e)=>{a[t]=a[t]||[],a[t].push(e)};for(;;){const t=c.exec(i[2]);if(!t)break;const r=t[0];switch(r[0]){case".":s("class",r.slice(1));break;case"#":s("id",r.slice(1));break;case"[":{const t=/^\[([\w-]+)([~|^$*]?=("(.*?)"|([\w-]+)))?(\s+[is])?\]$/.exec(r);if(!t)throw new Error(o);s(t[1],null!==(n=null!==(e=t[4])&&void 0!==e?e:t[5])&&void 0!==n?n:"");break}default:throw new Error(o)}}return[r,a]}(t),o=document.createElement(null!=e?e:"div");for(const i of Object.keys(n)){const t=n[i].join(" ");"style"===i?_(o.style,t):o.setAttribute(i,t)}return o}function _(t,e){for(const n of e.split(";")){const e=/^\s*([\w-]+)\s*:\s*(.+?)(\s*!([\w-]+))?\s*$/.exec(n);if(e){const[,n,o,,i]=e;t.setProperty(n,o,i||"")}}}const D=["monospace","sans-serif","serif"],z=["sans-serif-thin","ARNO PRO","Agency FB","Arabic Typesetting","Arial Unicode MS","AvantGarde Bk BT","BankGothic Md BT","Batang","Bitstream Vera Sans Mono","Calibri","Century","Century Gothic","Clarendon","EUROSTILE","Franklin Gothic","Futura Bk BT","Futura Md BT","GOTHAM","Gill Sans","HELV","Haettenschweiler","Helvetica Neue","Humanst521 BT","Leelawadee","Letter Gothic","Levenim MT","Lucida Bright","Lucida Sans","Menlo","MS Mincho","MS Outlook","MS Reference Specialty","MS UI Gothic","MT Extra","MYRIAD PRO","Marlett","Meiryo UI","Microsoft Uighur","Minion Pro","Monotype Corsiva","PMingLiU","Pristina","SCRIPTINA","Segoe UI Light","Serifa","SimHei","Small Fonts","Staccato222 BT","TRAJAN PRO","Univers CE 55 Medium","Vrinda","ZWAdobeF"];function B(t){let e,n,o=!1;const[i,r]=function(){const t=document.createElement("canvas");return t.width=1,t.height=1,[t,t.getContext("2d")]}();return!function(t,e){return!(!e||!t.toDataURL)}(i,r)?e=n="unsupported":(o=function(t){return t.rect(0,0,10,10),t.rect(2,2,6,6),!t.isPointInPath(5,5,"evenodd")}(r),t?e=n="skipped":[e,n]=function(t,e){!function(t,e){t.width=240,t.height=60,e.textBaseline="alphabetic",e.fillStyle="#f60",e.fillRect(100,1,62,20),e.fillStyle="#069",e.font='11pt "Times New Roman"';const n=`Cwm fjordbank gly ${String.fromCharCode(55357,56835)}`;e.fillText(n,2,15),e.fillStyle="rgba(102, 204, 0, 0.2)",e.font="18pt Arial",e.fillText(n,4,45)}(t,e);const n=O(t),o=O(t);if(n!==o)return["unstable","unstable"];!function(t,e){t.width=122,t.height=110,e.globalCompositeOperation="multiply";for(const[n,o,i]of[["#f2f",40,40],["#2ff",80,40],["#ff2",60,80]])e.fillStyle=n,e.beginPath(),e.arc(o,i,40,0,2*Math.PI,!0),e.closePath(),e.fill();e.fillStyle="#f9c",e.arc(60,60,60,0,2*Math.PI,!0),e.arc(60,60,20,0,2*Math.PI,!0),e.fill("evenodd")}(t,e);const i=O(t);return[i,n]}(i,r)),{winding:o,geometry:e,text:n}}function O(t){return t.toDataURL()}function $(){const t=screen,e=t=>u(c(t),null),n=[e(t.width),e(t.height)];return n.sort().reverse(),n}const U=2500;let Q,K;function q(){return function(){if(void 0!==K)return;const t=()=>{const e=tt();et(e)?K=setTimeout(t,U):(Q=e,K=void 0)};t()}(),async()=>{let t=tt();if(et(t)){if(Q)return[...Q];P()&&(await function(){const t=document;return(t.exitFullscreen||t.msExitFullscreen||t.mozCancelFullScreen||t.webkitExitFullscreen).call(t)}(),t=tt())}return et(t)||(Q=t),t}}function tt(){const t=screen;return[u(s(t.availTop),null),u(s(t.width)-s(t.availWidth)-u(s(t.availLeft),0),null),u(s(t.height)-s(t.availHeight)-u(s(t.availTop),0),null),u(s(t.availLeft),null)]}function et(t){for(let e=0;e<4;++e)if(t[e])return!1;return!0}function nt(){return u(c(navigator.hardwareConcurrency),void 0)}function ot(t){t.style.setProperty("visibility","hidden","important"),t.style.setProperty("display","block","important")}function it(t){return matchMedia(`(inverted-colors: ${t})`).matches}function rt(t){return matchMedia(`(forced-colors: ${t})`).matches}function at(t){return matchMedia(`(prefers-contrast: ${t})`).matches}function ct(t){return matchMedia(`(prefers-reduced-motion: ${t})`).matches}function st(t){return matchMedia(`(prefers-reduced-transparency: ${t})`).matches}function ut(t){return matchMedia(`(dynamic-range: ${t})`).matches}const lt=Math,dt=()=>0;const mt="mmMwWLliI0fiflO&1",ft={default:[],apple:[{font:"-apple-system-body"}],serif:[{fontFamily:"serif"}],sans:[{fontFamily:"sans-serif"}],mono:[{fontFamily:"monospace"}],min:[{fontSize:"1px"}],system:[{fontFamily:"system-ui"}]};const pt=function(){let t=window;for(;;){const n=t.parent;if(!n||n===t)return!1;try{if(n.location.origin!==t.location.origin)return!0}catch(e){if(e instanceof Error&&"SecurityError"===e.name)return!0;throw e}t=n}};const ht=new Set([10752,2849,2884,2885,2886,2928,2929,2930,2931,2932,2960,2961,2962,2963,2964,2965,2966,2967,2968,2978,3024,3042,3088,3089,3106,3107,32773,32777,32777,32823,32824,32936,32937,32938,32939,32968,32969,32970,32971,3317,33170,3333,3379,3386,33901,33902,34016,34024,34076,3408,3410,3411,3412,3413,3414,3415,34467,34816,34817,34818,34819,34877,34921,34930,35660,35661,35724,35738,35739,36003,36004,36005,36347,36348,36349,37440,37441,37443,7936,7937,7938]),bt=new Set([34047,35723,36063,34852,34853,34854,34229,36392,36795,38449]),yt=["FRAGMENT_SHADER","VERTEX_SHADER"],vt=["LOW_FLOAT","MEDIUM_FLOAT","HIGH_FLOAT","LOW_INT","MEDIUM_INT","HIGH_INT"],gt="WEBGL_debug_renderer_info";function wt(t){if(t.webgl)return t.webgl.context;const e=document.createElement("canvas");let n;e.addEventListener("webglCreateContextError",(()=>n=void 0));for(const i of["webgl","experimental-webgl"]){try{n=e.getContext(i)}catch(o){}if(n)break}return t.webgl={context:n},n}function Lt(t,e,n){const o=t.getShaderPrecisionFormat(t[e],t[n]);return o?[o.rangeMin,o.rangeMax,o.precision]:[]}function kt(t){return Object.keys(t.__proto__).filter(Vt)}function Vt(t){return"string"==typeof t&&!t.match(/[^A-Z0-9_x]/)}function St(){return Y()}function Wt(t){return"function"==typeof t.getParameter}const Zt={fonts:function(){return J((async(t,{document:e})=>{const n=e.body;n.style.fontSize="48px";const o=e.createElement("div");o.style.setProperty("visibility","hidden","important");const i={},r={},a=t=>{const n=e.createElement("span"),{style:i}=n;return i.position="absolute",i.top="0",i.left="0",i.fontFamily=t,n.textContent="mmMwWLliI0O&1",o.appendChild(n),n},c=(t,e)=>a(`'${t}',${e}`),s=D.map(a),u=(()=>{const t={};for(const e of z)t[e]=D.map((t=>c(e,t)));return t})();n.appendChild(o);for(let l=0;l<D.length;l++)i[D[l]]=s[l].offsetWidth,r[D[l]]=s[l].offsetHeight;return z.filter((t=>{return e=u[t],D.some(((t,n)=>e[n].offsetWidth!==i[t]||e[n].offsetHeight!==r[t]));var e}))}))},domBlockers:async function({debug:t}={}){if(!G()&&!E())return;const e=function(){const t=atob;return{abpIndo:["#Iklan-Melayang","#Kolom-Iklan-728","#SidebarIklan-wrapper",'[title="ALIENBOLA" i]',t("I0JveC1CYW5uZXItYWRz")],abpvn:[".quangcao","#mobileCatfish",t("LmNsb3NlLWFkcw=="),'[id^="bn_bottom_fixed_"]',"#pmadv"],adBlockFinland:[".mainostila",t("LnNwb25zb3JpdA=="),".ylamainos",t("YVtocmVmKj0iL2NsaWNrdGhyZ2guYXNwPyJd"),t("YVtocmVmXj0iaHR0cHM6Ly9hcHAucmVhZHBlYWsuY29tL2FkcyJd")],adBlockPersian:["#navbar_notice_50",".kadr",'TABLE[width="140px"]',"#divAgahi",t("YVtocmVmXj0iaHR0cDovL2cxLnYuZndtcm0ubmV0L2FkLyJd")],adBlockWarningRemoval:["#adblock-honeypot",".adblocker-root",".wp_adblock_detect",t("LmhlYWRlci1ibG9ja2VkLWFk"),t("I2FkX2Jsb2NrZXI=")],adGuardAnnoyances:[".hs-sosyal","#cookieconsentdiv",'div[class^="app_gdpr"]',".as-oil",'[data-cypress="soft-push-notification-modal"]'],adGuardBase:[".BetterJsPopOverlay",t("I2FkXzMwMFgyNTA="),t("I2Jhbm5lcmZsb2F0MjI="),t("I2NhbXBhaWduLWJhbm5lcg=="),t("I0FkLUNvbnRlbnQ=")],adGuardChinese:[t("LlppX2FkX2FfSA=="),t("YVtocmVmKj0iLmh0aGJldDM0LmNvbSJd"),"#widget-quan",t("YVtocmVmKj0iLzg0OTkyMDIwLnh5eiJd"),t("YVtocmVmKj0iLjE5NTZobC5jb20vIl0=")],adGuardFrench:["#pavePub",t("LmFkLWRlc2t0b3AtcmVjdGFuZ2xl"),".mobile_adhesion",".widgetadv",t("LmFkc19iYW4=")],adGuardGerman:['aside[data-portal-id="leaderboard"]'],adGuardJapanese:["#kauli_yad_1",t("YVtocmVmXj0iaHR0cDovL2FkMi50cmFmZmljZ2F0ZS5uZXQvIl0="),t("Ll9wb3BJbl9pbmZpbml0ZV9hZA=="),t("LmFkZ29vZ2xl"),t("Ll9faXNib29zdFJldHVybkFk")],adGuardMobile:[t("YW1wLWF1dG8tYWRz"),t("LmFtcF9hZA=="),'amp-embed[type="24smi"]',"#mgid_iframe1",t("I2FkX2ludmlld19hcmVh")],adGuardRussian:[t("YVtocmVmXj0iaHR0cHM6Ly9hZC5sZXRtZWFkcy5jb20vIl0="),t("LnJlY2xhbWE="),'div[id^="smi2adblock"]',t("ZGl2W2lkXj0iQWRGb3hfYmFubmVyXyJd"),"#psyduckpockeball"],adGuardSocial:[t("YVtocmVmXj0iLy93d3cuc3R1bWJsZXVwb24uY29tL3N1Ym1pdD91cmw9Il0="),t("YVtocmVmXj0iLy90ZWxlZ3JhbS5tZS9zaGFyZS91cmw/Il0="),".etsy-tweet","#inlineShare",".popup-social"],adGuardSpanishPortuguese:["#barraPublicidade","#Publicidade","#publiEspecial","#queTooltip",".cnt-publi"],adGuardTrackingProtection:["#qoo-counter",t("YVtocmVmXj0iaHR0cDovL2NsaWNrLmhvdGxvZy5ydS8iXQ=="),t("YVtocmVmXj0iaHR0cDovL2hpdGNvdW50ZXIucnUvdG9wL3N0YXQucGhwIl0="),t("YVtocmVmXj0iaHR0cDovL3RvcC5tYWlsLnJ1L2p1bXAiXQ=="),"#top100counter"],adGuardTurkish:["#backkapat",t("I3Jla2xhbWk="),t("YVtocmVmXj0iaHR0cDovL2Fkc2Vydi5vbnRlay5jb20udHIvIl0="),t("YVtocmVmXj0iaHR0cDovL2l6bGVuemkuY29tL2NhbXBhaWduLyJd"),t("YVtocmVmXj0iaHR0cDovL3d3dy5pbnN0YWxsYWRzLm5ldC8iXQ==")],bulgarian:[t("dGQjZnJlZW5ldF90YWJsZV9hZHM="),"#ea_intext_div",".lapni-pop-over","#xenium_hot_offers"],easyList:[".yb-floorad",t("LndpZGdldF9wb19hZHNfd2lkZ2V0"),t("LnRyYWZmaWNqdW5reS1hZA=="),".textad_headline",t("LnNwb25zb3JlZC10ZXh0LWxpbmtz")],easyListChina:[t("LmFwcGd1aWRlLXdyYXBbb25jbGljayo9ImJjZWJvcy5jb20iXQ=="),t("LmZyb250cGFnZUFkdk0="),"#taotaole","#aafoot.top_box",".cfa_popup"],easyListCookie:[".ezmob-footer",".cc-CookieWarning","[data-cookie-number]",t("LmF3LWNvb2tpZS1iYW5uZXI="),".sygnal24-gdpr-modal-wrap"],easyListCzechSlovak:["#onlajny-stickers",t("I3Jla2xhbW5pLWJveA=="),t("LnJla2xhbWEtbWVnYWJvYXJk"),".sklik",t("W2lkXj0ic2tsaWtSZWtsYW1hIl0=")],easyListDutch:[t("I2FkdmVydGVudGll"),t("I3ZpcEFkbWFya3RCYW5uZXJCbG9jaw=="),".adstekst",t("YVtocmVmXj0iaHR0cHM6Ly94bHR1YmUubmwvY2xpY2svIl0="),"#semilo-lrectangle"],easyListGermany:["#SSpotIMPopSlider",t("LnNwb25zb3JsaW5rZ3J1ZW4="),t("I3dlcmJ1bmdza3k="),t("I3Jla2xhbWUtcmVjaHRzLW1pdHRl"),t("YVtocmVmXj0iaHR0cHM6Ly9iZDc0Mi5jb20vIl0=")],easyListItaly:[t("LmJveF9hZHZfYW5udW5jaQ=="),".sb-box-pubbliredazionale",t("YVtocmVmXj0iaHR0cDovL2FmZmlsaWF6aW9uaWFkcy5zbmFpLml0LyJd"),t("YVtocmVmXj0iaHR0cHM6Ly9hZHNlcnZlci5odG1sLml0LyJd"),t("YVtocmVmXj0iaHR0cHM6Ly9hZmZpbGlhemlvbmlhZHMuc25haS5pdC8iXQ==")],easyListLithuania:[t("LnJla2xhbW9zX3RhcnBhcw=="),t("LnJla2xhbW9zX251b3JvZG9z"),t("aW1nW2FsdD0iUmVrbGFtaW5pcyBza3lkZWxpcyJd"),t("aW1nW2FsdD0iRGVkaWt1b3RpLmx0IHNlcnZlcmlhaSJd"),t("aW1nW2FsdD0iSG9zdGluZ2FzIFNlcnZlcmlhaS5sdCJd")],estonian:[t("QVtocmVmKj0iaHR0cDovL3BheTRyZXN1bHRzMjQuZXUiXQ==")],fanboyAnnoyances:["#ac-lre-player",".navigate-to-top","#subscribe_popup",".newsletter_holder","#back-top"],fanboyAntiFacebook:[".util-bar-module-firefly-visible"],fanboyEnhancedTrackers:[".open.pushModal","#issuem-leaky-paywall-articles-zero-remaining-nag","#sovrn_container",'div[class$="-hide"][zoompage-fontsize][style="display: block;"]',".BlockNag__Card"],fanboySocial:["#FollowUs","#meteored_share","#social_follow",".article-sharer",".community__social-desc"],frellwitSwedish:[t("YVtocmVmKj0iY2FzaW5vcHJvLnNlIl1bdGFyZ2V0PSJfYmxhbmsiXQ=="),t("YVtocmVmKj0iZG9rdG9yLXNlLm9uZWxpbmsubWUiXQ=="),"article.category-samarbete",t("ZGl2LmhvbGlkQWRz"),"ul.adsmodern"],greekAdBlock:[t("QVtocmVmKj0iYWRtYW4ub3RlbmV0LmdyL2NsaWNrPyJd"),t("QVtocmVmKj0iaHR0cDovL2F4aWFiYW5uZXJzLmV4b2R1cy5nci8iXQ=="),t("QVtocmVmKj0iaHR0cDovL2ludGVyYWN0aXZlLmZvcnRobmV0LmdyL2NsaWNrPyJd"),"DIV.agores300","TABLE.advright"],hungarian:["#cemp_doboz",".optimonk-iframe-container",t("LmFkX19tYWlu"),t("W2NsYXNzKj0iR29vZ2xlQWRzIl0="),"#hirdetesek_box"],iDontCareAboutCookies:['.alert-info[data-block-track*="CookieNotice"]',".ModuleTemplateCookieIndicator",".o--cookies--container","#cookies-policy-sticky","#stickyCookieBar"],icelandicAbp:[t("QVtocmVmXj0iL2ZyYW1ld29yay9yZXNvdXJjZXMvZm9ybXMvYWRzLmFzcHgiXQ==")],latvian:[t("YVtocmVmPSJodHRwOi8vd3d3LnNhbGlkemluaS5sdi8iXVtzdHlsZT0iZGlzcGxheTogYmxvY2s7IHdpZHRoOiAxMjBweDsgaGVpZ2h0OiA0MHB4OyBvdmVyZmxvdzogaGlkZGVuOyBwb3NpdGlvbjogcmVsYXRpdmU7Il0="),t("YVtocmVmPSJodHRwOi8vd3d3LnNhbGlkemluaS5sdi8iXVtzdHlsZT0iZGlzcGxheTogYmxvY2s7IHdpZHRoOiA4OHB4OyBoZWlnaHQ6IDMxcHg7IG92ZXJmbG93OiBoaWRkZW47IHBvc2l0aW9uOiByZWxhdGl2ZTsiXQ==")],listKr:[t("YVtocmVmKj0iLy9hZC5wbGFuYnBsdXMuY28ua3IvIl0="),t("I2xpdmVyZUFkV3JhcHBlcg=="),t("YVtocmVmKj0iLy9hZHYuaW1hZHJlcC5jby5rci8iXQ=="),t("aW5zLmZhc3R2aWV3LWFk"),".revenue_unit_item.dable"],listeAr:[t("LmdlbWluaUxCMUFk"),".right-and-left-sponsers",t("YVtocmVmKj0iLmFmbGFtLmluZm8iXQ=="),t("YVtocmVmKj0iYm9vcmFxLm9yZyJd"),t("YVtocmVmKj0iZHViaXp6bGUuY29tL2FyLz91dG1fc291cmNlPSJd")],listeFr:[t("YVtocmVmXj0iaHR0cDovL3Byb21vLnZhZG9yLmNvbS8iXQ=="),t("I2FkY29udGFpbmVyX3JlY2hlcmNoZQ=="),t("YVtocmVmKj0id2Vib3JhbWEuZnIvZmNnaS1iaW4vIl0="),".site-pub-interstitiel",'div[id^="crt-"][data-criteo-id]'],officialPolish:["#ceneo-placeholder-ceneo-12",t("W2hyZWZePSJodHRwczovL2FmZi5zZW5kaHViLnBsLyJd"),t("YVtocmVmXj0iaHR0cDovL2Fkdm1hbmFnZXIudGVjaGZ1bi5wbC9yZWRpcmVjdC8iXQ=="),t("YVtocmVmXj0iaHR0cDovL3d3dy50cml6ZXIucGwvP3V0bV9zb3VyY2UiXQ=="),t("ZGl2I3NrYXBpZWNfYWQ=")],ro:[t("YVtocmVmXj0iLy9hZmZ0cmsuYWx0ZXgucm8vQ291bnRlci9DbGljayJd"),t("YVtocmVmXj0iaHR0cHM6Ly9ibGFja2ZyaWRheXNhbGVzLnJvL3Ryay9zaG9wLyJd"),t("YVtocmVmXj0iaHR0cHM6Ly9ldmVudC4ycGVyZm9ybWFudC5jb20vZXZlbnRzL2NsaWNrIl0="),t("YVtocmVmXj0iaHR0cHM6Ly9sLnByb2ZpdHNoYXJlLnJvLyJd"),'a[href^="/url/"]'],ruAd:[t("YVtocmVmKj0iLy9mZWJyYXJlLnJ1LyJd"),t("YVtocmVmKj0iLy91dGltZy5ydS8iXQ=="),t("YVtocmVmKj0iOi8vY2hpa2lkaWtpLnJ1Il0="),"#pgeldiz",".yandex-rtb-block"],thaiAds:["a[href*=macau-uta-popup]",t("I2Fkcy1nb29nbGUtbWlkZGxlX3JlY3RhbmdsZS1ncm91cA=="),t("LmFkczMwMHM="),".bumq",".img-kosana"],webAnnoyancesUltralist:["#mod-social-share-2","#social-tools",t("LmN0cGwtZnVsbGJhbm5lcg=="),".zergnet-recommend",".yt.btn-link.btn-md.btn"]}}(),o=Object.keys(e),i=[].concat(...o.map((t=>e[t]))),r=await async function(t){var e;const o=document,i=o.createElement("div"),r=new Array(t.length),a={};ot(i);for(let n=0;n<t.length;++n){const e=T(t[n]);"DIALOG"===e.tagName&&e.show();const a=o.createElement("div");ot(a),a.appendChild(e),i.appendChild(a),r[n]=e}for(;!o.body;)await n(50);o.body.appendChild(i);try{for(let e=0;e<t.length;++e)r[e].offsetParent||(a[t[e]]=!0)}finally{null===(e=i.parentNode)||void 0===e||e.removeChild(i)}return a}(i);t&&function(t,e){let n="DOM blockers debug:\n```";for(const o of Object.keys(t)){n+=`\n${o}:`;for(const i of t[o])n+=`\n  ${e[i]?"🚫":"➡️"} ${i}`}console.log(`${n}\n\`\`\``)}(e,r);const a=o.filter((t=>{const n=e[t];return l(n.map((t=>r[t])))>.6*n.length}));return a.sort(),a},fontPreferences:function(){return function(t,e=4e3){return J(((n,o)=>{const i=o.document,r=i.body,a=r.style;a.width=`${e}px`,a.webkitTextSizeAdjust=a.textSizeAdjust="none",F()?r.style.zoom=""+1/o.devicePixelRatio:G()&&(r.style.zoom="reset");const c=i.createElement("div");return c.textContent=[...Array(e/20|0)].map((()=>"word")).join(" "),r.appendChild(c),t(i,r)}),'<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">')}(((t,e)=>{const n={},o={};for(const i of Object.keys(ft)){const[o={},r=mt]=ft[i],a=t.createElement("span");a.textContent=r,a.style.whiteSpace="nowrap";for(const t of Object.keys(o)){const e=o[t];void 0!==e&&(a.style[t]=e)}n[i]=a,e.append(t.createElement("br"),a)}for(const i of Object.keys(ft))o[i]=n[i].getBoundingClientRect().width;return o}))},audio:function(){return G()&&j()&&C()||F()&&H()&&function(){const t=window,{URLPattern:e}=t;return l(["union"in Set.prototype,"Iterator"in t,e&&"hasRegExpGroups"in e.prototype,"RGB8"in WebGLRenderingContext.prototype])>=3}()?-4:A()},screenFrame:function(){const t=G()&&j()&&C(),e=Y()&&X();if(t||e)return()=>Promise.resolve(void 0);const n=q();return async()=>{const t=await n(),e=t=>null===t?null:d(t,10);return[e(t[0]),e(t[1]),e(t[2]),e(t[3])]}},canvas:function(){return B(function(){const t=G()&&j()&&C(),e=Y()&&function(){const t=window,e=navigator,{CSS:n}=t;return l(["userActivation"in e,n.supports("color","light-dark(#000, #fff)"),n.supports("height","1lh"),"globalPrivacyControl"in e])>=3}();return t||e}())},osCpu:function(){return navigator.oscpu},languages:function(){const t=navigator,e=[],n=t.language||t.userLanguage||t.browserLanguage||t.systemLanguage;if(void 0!==n&&e.push([n]),Array.isArray(t.languages))F()&&function(){const t=window;return l([!("MediaSettingsRange"in t),"RTCEncodedAudioFrame"in t,""+t.Intl=="[object Intl]",""+t.Reflect=="[object Reflect]"])>=3}()||e.push(t.languages);else if("string"==typeof t.languages){const n=t.languages;n&&e.push(n.split(","))}return e},colorDepth:function(){return window.screen.colorDepth},deviceMemory:function(){return u(s(navigator.deviceMemory),void 0)},screenResolution:function(){if(!(G()&&j()&&C()))return $()},hardwareConcurrency:function(){const t=nt();return void 0!==t&&Y()&&X()?t>=8?8:4:t},timezone:function(){var t;const e=null===(t=window.Intl)||void 0===t?void 0:t.DateTimeFormat;if(e){const t=(new e).resolvedOptions().timeZone;if(t)return t}const n=-function(){const t=(new Date).getFullYear();return Math.max(s(new Date(t,0,1).getTimezoneOffset()),s(new Date(t,6,1).getTimezoneOffset()))}();return`UTC${n>=0?"+":""}${n}`},sessionStorage:function(){try{return!!window.sessionStorage}catch(t){return!0}},localStorage:function(){try{return!!window.localStorage}catch(t){return!0}},indexedDB:function(){if(!M()&&!R())try{return!!window.indexedDB}catch(t){return!0}},openDatabase:function(){return!!window.openDatabase},cpuClass:function(){return navigator.cpuClass},platform:function(){const{platform:t}=navigator;return"MacIntel"===t&&G()&&!I()?function(){if("iPad"===navigator.platform)return!0;const t=screen,e=t.width/t.height;return l(["MediaSource"in window,!!Element.prototype.webkitRequestFullscreen,e>.65&&e<1.53])>=2}()?"iPad":"iPhone":t},plugins:function(){const t=navigator.plugins;if(!t)return;const e=[];for(let n=0;n<t.length;++n){const o=t[n];if(!o)continue;const i=[];for(let t=0;t<o.length;++t){const e=o[t];i.push({type:e.type,suffixes:e.suffixes})}e.push({name:o.name,description:o.description,mimeTypes:i})}return e},touchSupport:function(){const t=navigator;let e,n=0;void 0!==t.maxTouchPoints?n=c(t.maxTouchPoints):void 0!==t.msMaxTouchPoints&&(n=t.msMaxTouchPoints);try{document.createEvent("TouchEvent"),e=!0}catch(o){e=!1}return{maxTouchPoints:n,touchEvent:e,touchStart:"ontouchstart"in window}},vendor:function(){return navigator.vendor||""},vendorFlavors:function(){const t=[];for(const e of["chrome","safari","__crWeb","__gCrWeb","yandex","__yb","__ybro","__firefox__","__edgeTrackingPreventionStatistics","webkit","oprt","samsungAr","ucweb","UCShellJava","puffinDevice"]){const n=window[e];n&&"object"==typeof n&&t.push(e)}return t.sort()},cookiesEnabled:function(){const t=document;try{t.cookie="cookietest=1; SameSite=Strict;";const e=-1!==t.cookie.indexOf("cookietest=");return t.cookie="cookietest=1; SameSite=Strict; expires=Thu, 01-Jan-1970 00:00:01 GMT",e}catch(e){return!1}},colorGamut:function(){for(const t of["rec2020","p3","srgb"])if(matchMedia(`(color-gamut: ${t})`).matches)return t},invertedColors:function(){return!!it("inverted")||!it("none")&&void 0},forcedColors:function(){return!!rt("active")||!rt("none")&&void 0},monochrome:function(){if(matchMedia("(min-monochrome: 0)").matches){for(let t=0;t<=100;++t)if(matchMedia(`(max-monochrome: ${t})`).matches)return t;throw new Error("Too high value")}},contrast:function(){return at("no-preference")?0:at("high")||at("more")?1:at("low")||at("less")?-1:at("forced")?10:void 0},reducedMotion:function(){return!!ct("reduce")||!ct("no-preference")&&void 0},reducedTransparency:function(){return!!st("reduce")||!st("no-preference")&&void 0},hdr:function(){return!!ut("high")||!ut("standard")&&void 0},math:function(){const t=lt.acos||dt,e=lt.acosh||dt,n=lt.asin||dt,o=lt.asinh||dt,i=lt.atanh||dt,r=lt.atan||dt,a=lt.sin||dt,c=lt.sinh||dt,s=lt.cos||dt,u=lt.cosh||dt,l=lt.tan||dt,d=lt.tanh||dt,m=lt.exp||dt,f=lt.expm1||dt,p=lt.log1p||dt;return{acos:t(.12312423423423424),acosh:e(1e308),acoshPf:(h=1e154,lt.log(h+lt.sqrt(h*h-1))),asin:n(.12312423423423424),asinh:o(1),asinhPf:(t=>lt.log(t+lt.sqrt(t*t+1)))(1),atanh:i(.5),atanhPf:(t=>lt.log((1+t)/(1-t))/2)(.5),atan:r(.5),sin:a(-1e300),sinh:c(1),sinhPf:(t=>lt.exp(t)-1/lt.exp(t)/2)(1),cos:s(10.000000000123),cosh:u(1),coshPf:(t=>(lt.exp(t)+1/lt.exp(t))/2)(1),tan:l(-1e300),tanh:d(1),tanhPf:(t=>(lt.exp(2*t)-1)/(lt.exp(2*t)+1))(1),exp:m(1),expm1:f(1),expm1Pf:(t=>lt.exp(t)-1)(1),log1p:p(10),log1pPf:(t=>lt.log(1+t))(10),powPI:(t=>lt.pow(lt.PI,t))(-100)};var h},pdfViewerEnabled:function(){return navigator.pdfViewerEnabled},architecture:function(){const t=new Float32Array(1),e=new Uint8Array(t.buffer);return t[0]=1/0,t[0]=t[0]-t[0],e[3]},applePay:function(){const{ApplePaySession:t}=window;if("function"!=typeof(null==t?void 0:t.canMakePayments))return-1;if(pt())return-3;try{return t.canMakePayments()?1:0}catch(e){return function(t){if(t instanceof Error&&"InvalidAccessError"===t.name&&/\bfrom\b.*\binsecure\b/i.test(t.message))return-2;throw t}(e)}},privateClickMeasurement:function(){var t;const e=document.createElement("a"),n=null!==(t=e.attributionSourceId)&&void 0!==t?t:e.attributionsourceid;return void 0===n?void 0:String(n)},audioBaseLatency:function(){if(!(E()||G()))return-2;if(!window.AudioContext)return-1;const t=(new AudioContext).baseLatency;return null==t?-1:isFinite(t)?t:-3},dateTimeLocale:function(){if(!window.Intl)return-1;const t=window.Intl.DateTimeFormat;if(!t)return-2;const e=t().resolvedOptions().locale;return e||""===e?e:-3},webGlBasics:function({cache:t}){var e,n,o,i,r,a;const c=wt(t);if(!c)return-1;if(!Wt(c))return-2;const s=St()?null:c.getExtension(gt);return{version:(null===(e=c.getParameter(c.VERSION))||void 0===e?void 0:e.toString())||"",vendor:(null===(n=c.getParameter(c.VENDOR))||void 0===n?void 0:n.toString())||"",vendorUnmasked:s?null===(o=c.getParameter(s.UNMASKED_VENDOR_WEBGL))||void 0===o?void 0:o.toString():"",renderer:(null===(i=c.getParameter(c.RENDERER))||void 0===i?void 0:i.toString())||"",rendererUnmasked:s?null===(r=c.getParameter(s.UNMASKED_RENDERER_WEBGL))||void 0===r?void 0:r.toString():"",shadingLanguageVersion:(null===(a=c.getParameter(c.SHADING_LANGUAGE_VERSION))||void 0===a?void 0:a.toString())||""}},webGlExtensions:function({cache:t}){const e=wt(t);if(!e)return-1;if(!Wt(e))return-2;const n=e.getSupportedExtensions(),o=e.getContextAttributes(),i=[],r=[],a=[],c=[],s=[];if(o)for(const l of Object.keys(o))r.push(`${l}=${o[l]}`);const u=kt(e);for(const l of u){const t=e[l];a.push(`${l}=${t}${ht.has(t)?`=${e.getParameter(t)}`:""}`)}if(n)for(const l of n){if(l===gt&&St()||"WEBGL_polygon_mode"===l&&(F()||G()))continue;const t=e.getExtension(l);if(t)for(const n of kt(t)){const o=t[n];c.push(`${n}=${o}${bt.has(o)?`=${e.getParameter(o)}`:""}`)}else i.push(l)}for(const l of yt)for(const t of vt){const n=Lt(e,l,t);s.push(`${l}.${t}=${n.join(",")}`)}return c.sort(),a.sort(),{contextAttributes:r,parameters:a,shaderPrecisions:s,extensions:n,extensionParameters:c,unsupportedExtensions:i}}};const xt="$ if upgrade to Pro: https://fingerprint.com/github/?utm_source=oss&utm_medium=referral&utm_campaign=confidence_score";function Mt(t){const e=function(t){if(E())return.4;if(G())return!I()||j()&&C()?.3:.5;const e="value"in t.platform?t.platform.value:"";if(/^Win/.test(e))return.6;if(/^Mac/.test(e))return.5;return.7}(t),n=function(t){return d(.99+.01*t,1e-4)}(e);return{score:e,comment:xt.replace(/\$/g,`${n}`)}}function Rt(t){return JSON.stringify(t,((t,e)=>{return e instanceof Error?{name:(n=e).name,message:n.message,stack:null===(o=n.stack)||void 0===o?void 0:o.split("\n"),...n}:e;var n,o}),2)}function Ft(t){return W(function(t){let e="";for(const n of Object.keys(t).sort()){const o=t[n],i="error"in o?"error":JSON.stringify(o.value);e+=`${e?"|":""}${n.replace(/([:|\\])/g,"\\$1")}:${i}`}return e}(t))}function Gt(t=50){return function(t,e=1/0){const{requestIdleCallback:o}=window;return o?new Promise((t=>o.call(window,(()=>t()),{timeout:e}))):n(Math.min(t,e))}(t,2*t)}function It(t,n){const o=Date.now();return{async get(i){const r=Date.now(),a=await t(),c=function(t){let n;const o=Mt(t);return{get visitorId(){return void 0===n&&(n=Ft(this.components)),n},set visitorId(t){n=t},confidence:o,components:t,version:e}}(a);return(n||(null==i?void 0:i.debug))&&console.log(`Copy the text below to get the debug data:\n\n\`\`\`\nversion: ${c.version}\nuserAgent: ${navigator.userAgent}\ntimeBetweenLoadAndGet: ${r-o}\nvisitorId: ${c.visitorId}\ncomponents: ${Rt(a)}\n\`\`\``),c}}}async function Ct(t={}){const{delayFallback:n,debug:o,monitoring:i=!0}=t;i&&function(){if(!(window.__fpjs_d_m||Math.random()>=.001))try{const t=new XMLHttpRequest;t.open("get",`https://m1.openfpcdn.io/fingerprintjs/v${e}/npm-monitoring`,!0),t.send()}catch(t){console.error(t)}}(),await Gt(n);const r=function(t){return x(Zt,t,[])}({cache:{},debug:o});return It(r,o)}var Yt={load:Ct,hashComponents:Ft,componentsToDebugString:Rt};const Xt=W;t.componentsToDebugString=Rt,t.default=Yt,t.getFullscreenElement=P,t.getUnstableAudioFingerprint=A,t.getUnstableCanvasFingerprint=B,t.getUnstableHardwareConcurrency=nt,t.getUnstableScreenFrame=q,t.getUnstableScreenResolution=$,t.getWebGLContext=wt,t.hashComponents=Ft,t.isAndroid=E,t.isChromium=F,t.isDesktopWebKit=I,t.isEdgeHTML=R,t.isGecko=Y,t.isSamsungInternet=H,t.isTrident=M,t.isWebKit=G,t.load=Ct,t.loadSources=x,t.murmurX64Hash128=Xt,t.prepareForSources=Gt,t.sources=Zt,t.transformSource=function(t,e){const n=t=>Z(t)?e(t):()=>{const n=t();return o(n)?n.then(e):e(n)};return e=>{const i=t(e);return o(i)?i.then(n):n(i)}},t.withIframe=J,Object.defineProperty(t,"__esModule",{value:!0})}));
+
+</script>
+    <style>
+        body { background: #f8fafc; margin: 0; min-height: 100vh; }
+        .lattice-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 20px; padding-bottom: 10px; }
+        .main-content { padding-top: 20px; }
+        select {
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 5px 10px 5px 10px !important;
+            height: 40px;
+            margin-bottom: 20px !important;
+            -moz-appearance: initial;
+            appearance: initial;
+        }
+        select::-ms-expand {
+            display: none;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script>/* @noble/post-quantum IIFE bundle */
+var noblePostQuantum=(()=>{var Mt=Object.defineProperty;var xn=Object.getOwnPropertyDescriptor;var gn=Object.getOwnPropertyNames;var mn=Object.prototype.hasOwnProperty;var An=(e,t)=>{for(var r in t)Mt(e,r,{get:t[r],enumerable:!0})},wn=(e,t,r,n)=>{if(t&&typeof t=="object"||typeof t=="function")for(let o of gn(t))!mn.call(e,o)&&o!==r&&Mt(e,o,{get:()=>t[o],enumerable:!(n=xn(t,o))||n.enumerable});return e};var Un=e=>wn(Mt({},"__esModule",{value:!0}),e);var no={};An(no,{ml_dsa44:()=>Wr,ml_dsa65:()=>Vr,ml_dsa87:()=>Xr,ml_kem1024:()=>Zr,ml_kem512:()=>Yr,ml_kem768:()=>zr,slh_dsa_sha2_128f:()=>ln,slh_dsa_sha2_128s:()=>dn,slh_dsa_sha2_192f:()=>hn,slh_dsa_sha2_192s:()=>yn,slh_dsa_sha2_256f:()=>pn,slh_dsa_sha2_256s:()=>bn,slh_dsa_shake_128f:()=>rn,slh_dsa_shake_128s:()=>nn,slh_dsa_shake_192f:()=>on,slh_dsa_shake_192s:()=>sn,slh_dsa_shake_256f:()=>cn,slh_dsa_shake_256s:()=>an});function Dt(e){return e instanceof Uint8Array||ArrayBuffer.isView(e)&&e.constructor.name==="Uint8Array"}function it(e,t=""){if(!Number.isSafeInteger(e)||e<0){let r=t&&`"${t}" `;throw new Error(`${r}expected integer >0, got ${e}`)}}function M(e,t,r=""){let n=Dt(e),o=e?.length,s=t!==void 0;if(!n||s&&o!==t){let c=r&&`"${r}" `,i=s?` of length ${t}`:"",u=n?`length=${o}`:`type=${typeof e}`;throw new Error(c+"expected Uint8Array"+i+", got "+u)}return e}function ar(e){if(typeof e!="function"||typeof e.create!="function")throw new Error("Hash must wrapped by utils.createHasher");it(e.outputLen),it(e.blockLen)}function Le(e,t=!0){if(e.destroyed)throw new Error("Hash instance has been destroyed");if(t&&e.finished)throw new Error("Hash#digest() has already been called")}function Tt(e,t){M(e,void 0,"digestInto() output");let r=t.outputLen;if(e.length<r)throw new Error('"digestInto() output" expected to be of length >='+r)}function St(e){return new Uint32Array(e.buffer,e.byteOffset,Math.floor(e.byteLength/4))}function ge(...e){for(let t=0;t<e.length;t++)e[t].fill(0)}function We(e){return new DataView(e.buffer,e.byteOffset,e.byteLength)}function we(e,t){return e<<32-t|e>>>t}var Tn=new Uint8Array(new Uint32Array([287454020]).buffer)[0]===68;function Sn(e){return e<<24&4278190080|e<<8&16711680|e>>>8&65280|e>>>24&255}function _n(e){for(let t=0;t<e.length;t++)e[t]=Sn(e[t]);return e}var vt=Tn?e=>e:_n,ur=typeof Uint8Array.from([]).toHex=="function"&&typeof Uint8Array.fromHex=="function",En=Array.from({length:256},(e,t)=>t.toString(16).padStart(2,"0"));function fr(e){if(M(e),ur)return e.toHex();let t="";for(let r=0;r<e.length;r++)t+=En[e[r]];return t}var Ee={_0:48,_9:57,A:65,F:70,a:97,f:102};function ir(e){if(e>=Ee._0&&e<=Ee._9)return e-Ee._0;if(e>=Ee.A&&e<=Ee.F)return e-(Ee.A-10);if(e>=Ee.a&&e<=Ee.f)return e-(Ee.a-10)}function lr(e){if(typeof e!="string")throw new Error("hex string expected, got "+typeof e);if(ur)return Uint8Array.fromHex(e);let t=e.length,r=t/2;if(t%2)throw new Error("hex string expected, got unpadded hex of length "+t);let n=new Uint8Array(r);for(let o=0,s=0;o<r;o++,s+=2){let c=ir(e.charCodeAt(s)),i=ir(e.charCodeAt(s+1));if(c===void 0||i===void 0){let u=e[s]+e[s+1];throw new Error('hex string expected, got non-hex character "'+u+'" at index '+s)}n[o]=c*16+i}return n}function Ve(...e){let t=0;for(let n=0;n<e.length;n++){let o=e[n];M(o),t+=o.length}let r=new Uint8Array(t);for(let n=0,o=0;n<e.length;n++){let s=e[n];r.set(s,o),o+=s.length}return r}function Je(e,t={}){let r=(o,s)=>e(s).update(o).digest(),n=e(void 0);return r.outputLen=n.outputLen,r.blockLen=n.blockLen,r.create=o=>e(o),Object.assign(r,t),Object.freeze(r)}function dr(e=32){let t=typeof globalThis=="object"?globalThis.crypto:null;if(typeof t?.getRandomValues!="function")throw new Error("crypto.getRandomValues must be defined");return t.getRandomValues(new Uint8Array(e))}var Re=e=>({oid:Uint8Array.from([6,9,96,134,72,1,101,3,4,2,e])});function hr(e,t=""){if(typeof e!="boolean"){let r=t&&`"${t}" `;throw new Error(r+"expected boolean, got type="+typeof e)}return e}var _t=BigInt(4294967295),yr=BigInt(32);function Ln(e,t=!1){return t?{h:Number(e&_t),l:Number(e>>yr&_t)}:{h:Number(e>>yr&_t)|0,l:Number(e&_t)|0}}function Et(e,t=!1){let r=e.length,n=new Uint32Array(r),o=new Uint32Array(r);for(let s=0;s<r;s++){let{h:c,l:i}=Ln(e[s],t);[n[s],o[s]]=[c,i]}return[n,o]}var Nt=(e,t,r)=>e>>>r,Gt=(e,t,r)=>e<<32-r|t>>>r,Xe=(e,t,r)=>e>>>r|t<<32-r,$e=(e,t,r)=>e<<32-r|t>>>r,at=(e,t,r)=>e<<64-r|t>>>r-32,ut=(e,t,r)=>e>>>r-32|t<<64-r;var pr=(e,t,r)=>e<<r|t>>>32-r,br=(e,t,r)=>t<<r|e>>>32-r,xr=(e,t,r)=>t<<r-32|e>>>64-r,gr=(e,t,r)=>e<<r-32|t>>>64-r;function Te(e,t,r,n){let o=(t>>>0)+(n>>>0);return{h:e+r+(o/2**32|0)|0,l:o|0}}var mr=(e,t,r)=>(e>>>0)+(t>>>0)+(r>>>0),Ar=(e,t,r,n)=>t+r+n+(e/2**32|0)|0,wr=(e,t,r,n)=>(e>>>0)+(t>>>0)+(r>>>0)+(n>>>0),Ur=(e,t,r,n,o)=>t+r+n+o+(e/2**32|0)|0,Tr=(e,t,r,n,o)=>(e>>>0)+(t>>>0)+(r>>>0)+(n>>>0)+(o>>>0),Sr=(e,t,r,n,o,s)=>t+r+n+o+s+(e/2**32|0)|0;var Bn=BigInt(0),ft=BigInt(1),Hn=BigInt(2),On=BigInt(7),Cn=BigInt(256),In=BigInt(113),Lr=[],kr=[],Br=[];for(let e=0,t=ft,r=1,n=0;e<24;e++){[r,n]=[n,(2*r+3*n)%5],Lr.push(2*(5*n+r)),kr.push((e+1)*(e+2)/2%64);let o=Bn;for(let s=0;s<7;s++)t=(t<<ft^(t>>On)*In)%Cn,t&Hn&&(o^=ft<<(ft<<BigInt(s))-ft);Br.push(o)}var Hr=Et(Br,!0),Pn=Hr[0],Rn=Hr[1],_r=(e,t,r)=>r>32?xr(e,t,r):pr(e,t,r),Er=(e,t,r)=>r>32?gr(e,t,r):br(e,t,r);function Fn(e,t=24){let r=new Uint32Array(10);for(let n=24-t;n<24;n++){for(let c=0;c<10;c++)r[c]=e[c]^e[c+10]^e[c+20]^e[c+30]^e[c+40];for(let c=0;c<10;c+=2){let i=(c+8)%10,u=(c+2)%10,U=r[u],a=r[u+1],l=_r(U,a,1)^r[i],S=Er(U,a,1)^r[i+1];for(let m=0;m<50;m+=10)e[c+m]^=l,e[c+m+1]^=S}let o=e[2],s=e[3];for(let c=0;c<24;c++){let i=kr[c],u=_r(o,s,i),U=Er(o,s,i),a=Lr[c];o=e[a],s=e[a+1],e[a]=u,e[a+1]=U}for(let c=0;c<50;c+=10){for(let i=0;i<10;i++)r[i]=e[c+i];for(let i=0;i<10;i++)e[c+i]^=~r[(i+2)%10]&r[(i+4)%10]}e[0]^=Pn[n],e[1]^=Rn[n]}ge(r)}var Lt=class e{state;pos=0;posOut=0;finished=!1;state32;destroyed=!1;blockLen;suffix;outputLen;enableXOF=!1;rounds;constructor(t,r,n,o=!1,s=24){if(this.blockLen=t,this.suffix=r,this.outputLen=n,this.enableXOF=o,this.rounds=s,it(n,"outputLen"),!(0<t&&t<200))throw new Error("only keccak-f1600 function is supported");this.state=new Uint8Array(200),this.state32=St(this.state)}clone(){return this._cloneInto()}keccak(){vt(this.state32),Fn(this.state32,this.rounds),vt(this.state32),this.posOut=0,this.pos=0}update(t){Le(this),M(t);let{blockLen:r,state:n}=this,o=t.length;for(let s=0;s<o;){let c=Math.min(r-this.pos,o-s);for(let i=0;i<c;i++)n[this.pos++]^=t[s++];this.pos===r&&this.keccak()}return this}finish(){if(this.finished)return;this.finished=!0;let{state:t,suffix:r,pos:n,blockLen:o}=this;t[n]^=r,(r&128)!==0&&n===o-1&&this.keccak(),t[o-1]^=128,this.keccak()}writeInto(t){Le(this,!1),M(t),this.finish();let r=this.state,{blockLen:n}=this;for(let o=0,s=t.length;o<s;){this.posOut>=n&&this.keccak();let c=Math.min(n-this.posOut,s-o);t.set(r.subarray(this.posOut,this.posOut+c),o),this.posOut+=c,o+=c}return t}xofInto(t){if(!this.enableXOF)throw new Error("XOF is not possible for this instance");return this.writeInto(t)}xof(t){return it(t),this.xofInto(new Uint8Array(t))}digestInto(t){if(Tt(t,this),this.finished)throw new Error("digest() was already called");return this.writeInto(t),this.destroy(),t}digest(){return this.digestInto(new Uint8Array(this.outputLen))}destroy(){this.destroyed=!0,ge(this.state)}_cloneInto(t){let{blockLen:r,suffix:n,outputLen:o,rounds:s,enableXOF:c}=this;return t||=new e(r,n,o,c,s),t.state32.set(this.state32),t.pos=this.pos,t.posOut=this.posOut,t.finished=this.finished,t.rounds=s,t.suffix=n,t.outputLen=o,t.enableXOF=c,t.destroyed=this.destroyed,t}},Or=(e,t,r,n={})=>Je(()=>new Lt(t,e,r),n);var Cr=Or(6,136,32,Re(8));var Ir=Or(6,72,64,Re(10));var Pr=(e,t,r,n={})=>Je((o={})=>new Lt(t,e,o.dkLen===void 0?r:o.dkLen,!0),n),Rr=Pr(31,168,16,Re(11)),ee=Pr(31,136,32,Re(12));function jt(e){if(!Number.isSafeInteger(e)||e<0||e>4294967295)throw new Error("wrong u32 integer:"+e);return e}function Kr(e){return jt(e),(e&e-1)===0&&e!==0}function Wt(e,t){jt(e);let r=0;for(let n=0;n<t;n++,e>>>=1)r=r<<1|e&1;return r}function Mr(e){return jt(e),31-Math.clz32(e)}function Fr(e){let t=e.length;if(t<2||!Kr(t))throw new Error("n must be a power of 2 and greater than 1. Got "+t);let r=Mr(t);for(let n=0;n<t;n++){let o=Wt(n,r);if(n<o){let s=e[n];e[n]=e[o],e[o]=s}}return e}var Vt=(e,t)=>{let{N:r,roots:n,dit:o,invertButterflies:s=!1,skipStages:c=0,brp:i=!0}=t,u=Mr(r);if(!Kr(r))throw new Error("FFT: Polynomial size should be power of two");let U=o!==s;return a=>{if(a.length!==r)throw new Error("FFT: wrong Polynomial length");o&&i&&Fr(a);for(let l=0,S=1;l<u-c;l++){let m=o?l+1+c:u-l,B=1<<m,P=B>>1,F=r>>m;for(let K=0;K<r;K+=B)for(let A=0,h=S++;A<P;A++){let H=s?o?r-h:h:A*F,R=K+A,D=K+A+P,X=n[H],x=a[D],C=a[R];if(U){let W=e.mul(x,X);a[R]=e.add(C,W),a[D]=e.sub(C,W)}else s?(a[R]=e.add(x,C),a[D]=e.mul(e.sub(x,C),X)):(a[R]=e.add(C,x),a[D]=e.mul(e.sub(C,x),X))}}return!o&&i&&Fr(a),a}};var ke=dr;function Be(e,t){if(e.length!==t.length)return!1;let r=0;for(let n=0;n<e.length;n++)r|=e[n]^t[n];return r===0}function et(e){return Uint8Array.from(e)}function Xt(e){if(typeof e!="object"||e===null||Dt(e))throw new Error("expected opts to be an object")}function Ye(e){Xt(e),e.context!==void 0&&M(e.context,void 0,"opts.context")}function Fe(e){Ye(e),e.extraEntropy!==!1&&e.extraEntropy!==void 0&&M(e.extraEntropy,void 0,"opts.extraEntropy")}function ne(e,...t){let r=o=>typeof o=="number"?o:o.bytesLen,n=t.reduce((o,s)=>o+r(s),0);return{bytesLen:n,encode:o=>{let s=new Uint8Array(n);for(let c=0,i=0;c<t.length;c++){let u=t[c],U=r(u),a=typeof u=="number"?o[c]:u.encode(o[c]);M(a,U,e),s.set(a,i),typeof u!="number"&&a.fill(0),i+=U}return s},decode:o=>{M(o,n,e);let s=[];for(let c of t){let i=r(c),u=o.subarray(0,i);s.push(typeof c=="number"?u:c.decode(u)),o=o.subarray(i)}return s}}}function be(e,t){let r=t*e.bytesLen;return{bytesLen:r,encode:n=>{if(n.length!==t)throw new Error(`vecCoder.encode: wrong length=${n.length}. Expected: ${t}`);let o=new Uint8Array(r);for(let s=0,c=0;s<n.length;s++){let i=e.encode(n[s]);o.set(i,c),i.fill(0),c+=i.length}return o},decode:n=>{M(n,r);let o=[];for(let s=0;s<n.length;s+=e.bytesLen)o.push(e.decode(n.subarray(s,s+e.bytesLen)));return o}}}function Y(...e){for(let t of e)if(Array.isArray(t))for(let r of t)r.fill(0);else t.fill(0)}function tt(e){return(1<<e)-1}var Dr=Uint8Array.of();function rt(e,t=Dr){if(M(e),M(t),t.length>255)throw new Error("context should be less than 255 bytes");return Ve(new Uint8Array([0,t.length]),t,e)}var Kn=Uint8Array.from([6,9,96,134,72,1,101,3,4,2]);function kt(e,t=0){if(!e.oid||!Be(e.oid.subarray(0,10),Kn))throw new Error("hash.oid is invalid: expected NIST hash");let r=e.outputLen*8/2;if(t>r)throw new Error("Pre-hash security strength too low: "+r+", required: "+t)}function nt(e,t,r=Dr){if(M(t),M(r),r.length>255)throw new Error("context should be less than 255 bytes");let n=e(t);return Ve(new Uint8Array([1,r.length]),r,e.oid,n)}var Bt=e=>{let{newPoly:t,N:r,Q:n,F:o,ROOT_OF_UNITY:s,brvBits:c,isKyber:i}=e,u=(A,h=n)=>{let H=A%h|0;return(H>=0?H|0:h+H|0)|0},U=(A,h=n)=>{let H=u(A,h)|0;return(H>h>>1?H-h|0:H)|0};function a(){let A=t(r);for(let h=0;h<r;h++){let H=Wt(h,c),R=BigInt(s)**BigInt(H)%BigInt(n);A[h]=Number(R)|0}return A}let l=a(),S={add:(A,h)=>u((A|0)+(h|0))|0,sub:(A,h)=>u((A|0)-(h|0))|0,mul:(A,h)=>u((A|0)*(h|0))|0,inv:A=>{throw new Error("not implemented")}},m={N:r,roots:l,invertButterflies:!0,skipStages:i?1:0,brp:!1},B=Vt(S,{dit:!1,...m}),P=Vt(S,{dit:!0,...m});return{mod:u,smod:U,nttZetas:l,NTT:{encode:A=>B(A),decode:A=>{P(A);for(let h=0;h<A.length;h++)A[h]=u(o*A[h]);return A}},bitsCoder:(A,h)=>{let H=tt(A),R=A*(r/8);return{bytesLen:R,encode:D=>{let X=new Uint8Array(R);for(let x=0,C=0,W=0,V=0;x<D.length;x++)for(C|=(h.encode(D[x])&H)<<W,W+=A;W>=8;W-=8,C>>=8)X[V++]=C&tt(W);return X},decode:D=>{let X=t(r);for(let x=0,C=0,W=0,V=0;x<D.length;x++)for(C|=D[x]<<W,W+=8;W>=A;W-=A,C>>=A)X[V++]=h.decode(C&H);return X}}}}},vr=e=>(t,r)=>{r||(r=e.blockLen);let n=new Uint8Array(t.length+2);n.set(t);let o=t.length,s=new Uint8Array(r),c=e.create({}),i=0,u=0;return{stats:()=>({calls:i,xofs:u}),get:(U,a)=>(n[o+0]=U,n[o+1]=a,c.destroy(),c=e.create({}).update(n),i++,()=>(u++,c.xofInto(s))),clean:()=>{c.destroy(),Y(s,n)}}},ot=vr(Rr),Ht=vr(ee);function Nr(e){Xt(e),e.externalMu!==void 0&&hr(e.externalMu,"opts.externalMu")}var Z=256,De=8380417,Mn=1753,Dn=8347681,Ze=13,$t=Math.floor((De-1)/88)|0,Yt=Math.floor((De-1)/32)|0,zt={2:{K:4,L:4,D:Ze,GAMMA1:2**17,GAMMA2:$t,TAU:39,ETA:2,OMEGA:80},3:{K:6,L:5,D:Ze,GAMMA1:2**19,GAMMA2:Yt,TAU:49,ETA:4,OMEGA:55},5:{K:8,L:7,D:Ze,GAMMA1:2**19,GAMMA2:Yt,TAU:60,ETA:2,OMEGA:75}},xe=e=>new Int32Array(e),{mod:ze,smod:Ct,NTT:ie,bitsCoder:vn}=Bt({N:Z,Q:De,F:Dn,ROOT_OF_UNITY:Mn,newPoly:xe,isKyber:!1,brvBits:8}),Gr=e=>e,lt=(e,t=Gr,r=Gr)=>vn(e,{encode:n=>t(r(n)),decode:n=>r(t(n))}),Ke=(e,t)=>{for(let r=0;r<e.length;r++)e[r]=ze(e[r]+t[r]);return e},jr=(e,t)=>{for(let r=0;r<e.length;r++)e[r]=ze(e[r]-t[r]);return e},Nn=e=>{for(let t=0;t<Z;t++)e[t]<<=Ze;return e},dt=(e,t)=>{for(let r=0;r<Z;r++)if(Math.abs(Ct(e[r]))>=t)return!0;return!1},Me=(e,t)=>{let r=xe(Z);for(let n=0;n<e.length;n++)r[n]=ze(e[n]*t[n]);return r};function Ot(e){let t=xe(Z);for(let r=0;r<Z;){let n=e();if(n.length%3)throw new Error("RejNTTPoly: unaligned block");for(let o=0;r<Z&&o<=n.length-3;o+=3){let s=(n[o+0]|n[o+1]<<8|n[o+2]<<16)&8388607;s<De&&(t[r++]=s)}}return t}function Zt(e){let{K:t,L:r,GAMMA1:n,GAMMA2:o,TAU:s,ETA:c,OMEGA:i}=e,{CRH_BYTES:u,TR_BYTES:U,C_TILDE_BYTES:a,XOF128:l,XOF256:S,securityLevel:m}=e;if(![2,4].includes(c))throw new Error("Wrong ETA");if(![1<<17,1<<19].includes(n))throw new Error("Wrong GAMMA1");if(![$t,Yt].includes(o))throw new Error("Wrong GAMMA2");let B=s*c,P=y=>{let _=ze(y),g=Ct(_,2*o)|0;return _-g===De-1?{r1:0,r0:g-1|0}:{r1:Math.floor((_-g)/(2*o))|0,r0:g}},F=y=>P(y).r1,K=y=>P(y).r0,A=(y,_)=>y<=o||y>De-o||y===De-o&&_===0?0:1,h=(y,_)=>{let g=Math.floor((De-1)/(2*o)),{r1:b,r0:d}=P(_);return y===1?d>0?ze(b+1,g)|0:ze(b-1,g)|0:b|0},H=y=>{let _=ze(y),g=Ct(_,2**Ze)|0;return{r1:Math.floor((_-g)/2**Ze)|0,r0:g}},R={bytesLen:i+t,encode:y=>{if(y===!1)throw new Error("hint.encode: hint is false");let _=new Uint8Array(i+t);for(let g=0,b=0;g<t;g++){for(let d=0;d<Z;d++)y[g][d]!==0&&(_[b++]=d);_[i+g]=b}return _},decode:y=>{let _=[],g=0;for(let b=0;b<t;b++){let d=xe(Z);if(y[i+b]<g||y[i+b]>i)return!1;for(let f=g;f<y[i+b];f++){if(f>g&&y[f]<=y[f-1])return!1;d[y[f]]=1}g=y[i+b],_.push(d)}for(let b=g;b<i;b++)if(y[b]!==0)return!1;return _}},D=lt(c===2?3:4,y=>c-y,y=>{if(!(-c<=y&&y<=c))throw new Error(`malformed key s1/s3 ${y} outside of ETA range [${-c}, ${c}]`);return y}),X=lt(13,y=>(1<<Ze-1)-y),x=lt(10),C=lt(n===1<<17?18:20,y=>Ct(n-y)),W=lt(o===$t?6:4),V=be(W,t),oe=ne("publicKey",32,be(x,t)),he=ne("secretKey",32,32,U,be(D,r),be(D,t),be(X,t)),ye=ne("signature",a,be(C,r),R),Ue=c===2?y=>y<15?2-y%5:!1:y=>y<9?4-y:!1;function ct(y){let _=xe(Z);for(let g=0;g<Z;){let b=y();for(let d=0;g<Z&&d<b.length;d+=1){let f=Ue(b[d]&15),T=Ue(b[d]>>4&15);f!==!1&&(_[g++]=f),g<Z&&T!==!1&&(_[g++]=T)}}return _}let xt=y=>{let _=xe(Z),g=ee.create({}).update(y),b=new Uint8Array(ee.blockLen);g.xofInto(b);let d=b.slice(0,8);for(let f=Z-s,T=8,p=0,E=0;f<Z;f++){let O=f+1;for(;O>f;)O=b[T++],!(T<ee.blockLen)&&(g.xofInto(b),T=0);_[f]=_[O],_[O]=1-((d[p]>>E++&1)<<1),E>=8&&(p++,E=0)}return _},gt=y=>{let _=xe(Z),g=xe(Z);for(let b=0;b<y.length;b++){let{r0:d,r1:f}=H(y[b]);_[b]=d,g[b]=f}return{r0:_,r1:g}},mt=(y,_)=>{for(let g=0;g<Z;g++)y[g]=h(_[g],y[g]);return y},At=(y,_)=>{let g=xe(Z),b=0;for(let d=0;d<Z;d++){let f=A(y[d],_[d]);g[d]=f,b+=f}return{v:g,cnt:b}},je=32,Ce=ne("seed",32,64,32),ue={info:{type:"internal-ml-dsa"},lengths:{secretKey:he.bytesLen,publicKey:oe.bytesLen,seed:32,signature:ye.bytesLen,signRand:je},keygen:y=>{let _=new Uint8Array(34),g=y===void 0;g&&(y=ke(32)),M(y,32,"seed"),_.set(y),g&&Y(y),_[32]=t,_[33]=r;let[b,d,f]=Ce.decode(ee(_,{dkLen:Ce.bytesLen})),T=S(d),p=[];for(let w=0;w<r;w++)p.push(ct(T.get(w&255,w>>8&255)));let E=[];for(let w=r;w<r+t;w++)E.push(ct(T.get(w&255,w>>8&255)));let O=p.map(w=>ie.encode(w.slice())),k=[],I=[],N=l(b),L=xe(Z);for(let w=0;w<t;w++){Y(L);for(let z=0;z<r;z++){let Q=Ot(N.get(z,w));Ke(L,Me(Q,O[z]))}ie.decode(L);let{r0:$,r1:q}=gt(Ke(L,E[w]));k.push($),I.push(q)}let G=oe.encode([b,I]),v=ee(G,{dkLen:U}),te=he.encode([b,f,v,p,E,k]);return N.clean(),T.clean(),Y(b,d,f,p,E,O,L,k,I,v,_),{publicKey:G,secretKey:te}},getPublicKey:y=>{let[_,g,b,d,f,T]=he.decode(y),p=l(_),E=d.map(I=>ie.encode(I.slice())),O=[],k=xe(Z);for(let I=0;I<t;I++){k.fill(0);for(let L=0;L<r;L++){let G=Ot(p.get(L,I));Ke(k,Me(G,E[L]))}ie.decode(k),Ke(k,f[I]);let{r1:N}=gt(k);O.push(N)}return p.clean(),Y(k,E,T,d,f),oe.encode([_,O])},sign:(y,_,g={})=>{Fe(g),Nr(g);let{extraEntropy:b,externalMu:d=!1}=g,[f,T,p,E,O,k]=he.decode(_),I=[],N=l(f);for(let w=0;w<t;w++){let $=[];for(let q=0;q<r;q++)$.push(Ot(N.get(q,w)));I.push($)}N.clean();for(let w=0;w<r;w++)ie.encode(E[w]);for(let w=0;w<t;w++)ie.encode(O[w]),ie.encode(k[w]);let L=d?y:ee.create({dkLen:u}).update(p).update(y).digest(),G=b===!1?new Uint8Array(32):b===void 0?ke(je):b;M(G,32,"extraEntropy");let v=ee.create({dkLen:u}).update(T).update(G).update(L).digest();M(v,u);let te=S(v,C.bytesLen);e:for(let w=0;;){let $=[];for(let j=0;j<r;j++,w++)$.push(C.decode(te.get(w&255,w>>8)()));let q=$.map(j=>ie.encode(j.slice())),z=[];for(let j=0;j<t;j++){let J=xe(Z);for(let ce=0;ce<r;ce++)Ke(J,Me(I[j][ce],q[ce]));ie.decode(J),z.push(J)}let Q=z.map(j=>j.map(F)),se=ee.create({dkLen:a}).update(L).update(V.encode(Q)).digest(),pe=ie.encode(xt(se)),Se=E.map(j=>Me(j,pe));for(let j=0;j<r;j++)if(Ke(ie.decode(Se[j]),$[j]),dt(Se[j],n-B))continue e;let Ie=0,re=[];for(let j=0;j<t;j++){let J=ie.decode(Me(O[j],pe)),ce=jr(z[j],J).map(K);if(dt(ce,o-B))continue e;let de=ie.decode(Me(k[j],pe));if(dt(de,o))continue e;Ke(ce,de);let _e=At(ce,Q[j]);re.push(_e.v),Ie+=_e.cnt}if(Ie>i)continue;te.clean();let Pe=ye.encode([se,Se,re]);return Y(se,Se,re,pe,Q,z,q,$,v,L,E,O,k,...I),Pe}throw new Error("Unreachable code path reached, report this error")},verify:(y,_,g,b={})=>{Nr(b);let{externalMu:d=!1}=b,[f,T]=oe.decode(g),p=ee(g,{dkLen:U});if(y.length!==ye.bytesLen)return!1;let[E,O,k]=ye.decode(y);if(k===!1)return!1;for(let w=0;w<r;w++)if(dt(O[w],n-B))return!1;let I=d?_:ee.create({dkLen:u}).update(p).update(_).digest(),N=ie.encode(xt(E)),L=O.map(w=>w.slice());for(let w=0;w<r;w++)ie.encode(L[w]);let G=[],v=l(f);for(let w=0;w<t;w++){let $=Me(ie.encode(Nn(T[w])),N),q=xe(Z);for(let Q=0;Q<r;Q++){let se=Ot(v.get(Q,w));Ke(q,Me(se,L[Q]))}let z=ie.decode(jr(q,$));G.push(mt(z,k[w]))}v.clean();let te=ee.create({dkLen:a}).update(I).update(V.encode(G)).digest();for(let w of k)if(!(w.reduce((q,z)=>q+z,0)<=i))return!1;for(let w of O)if(dt(w,n-B))return!1;return Be(E,te)}};return{info:{type:"ml-dsa"},internal:ue,securityLevel:m,keygen:ue.keygen,lengths:ue.lengths,getPublicKey:ue.getPublicKey,sign:(y,_,g={})=>{Fe(g);let b=rt(y,g.context),d=ue.sign(b,_,g);return Y(b),d},verify:(y,_,g,b={})=>(Ye(b),ue.verify(y,rt(_,b.context),g)),prehash:y=>(kt(y,m),{info:{type:"hashml-dsa"},securityLevel:m,lengths:ue.lengths,keygen:ue.keygen,getPublicKey:ue.getPublicKey,sign:(_,g,b={})=>{Fe(b);let d=nt(y,_,b.context),f=ue.sign(d,g,b);return Y(d),f},verify:(_,g,b,d={})=>(Ye(d),ue.verify(_,nt(y,g,d.context),b))})}}var Wr=Zt({...zt[2],CRH_BYTES:64,TR_BYTES:64,C_TILDE_BYTES:32,XOF128:ot,XOF256:Ht,securityLevel:128}),Vr=Zt({...zt[3],CRH_BYTES:64,TR_BYTES:64,C_TILDE_BYTES:48,XOF128:ot,XOF256:Ht,securityLevel:192}),Xr=Zt({...zt[5],CRH_BYTES:64,TR_BYTES:64,C_TILDE_BYTES:64,XOF128:ot,XOF256:Ht,securityLevel:256});var fe=256,He=3329,Gn=3303,jn=17,{mod:pt,nttZetas:Wn,NTT:qe,bitsCoder:Vn}=Bt({N:fe,Q:He,F:Gn,ROOT_OF_UNITY:jn,newPoly:e=>new Uint16Array(e),brvBits:7,isKyber:!0}),qt={512:{N:fe,Q:He,K:2,ETA1:3,ETA2:2,du:10,dv:4,RBGstrength:128},768:{N:fe,Q:He,K:3,ETA1:2,ETA2:2,du:10,dv:4,RBGstrength:192},1024:{N:fe,Q:He,K:4,ETA1:2,ETA2:2,du:11,dv:5,RBGstrength:256}},Xn=e=>{if(e>=12)return{encode:r=>r,decode:r=>r};let t=2**(e-1);return{encode:r=>((r<<e)+He/2)/He,decode:r=>r*He+t>>>e}},ht=e=>Vn(e,Xn(e));function Qe(e,t){for(let r=0;r<fe;r++)e[r]=pt(e[r]+t[r])}function $n(e,t){for(let r=0;r<fe;r++)e[r]=pt(e[r]-t[r])}function Yn(e,t,r,n,o){let s=pt(t*n*o+e*r),c=pt(e*n+t*r);return{c0:s,c1:c}}function It(e,t){for(let r=0;r<fe/2;r++){let n=Wn[64+(r>>1)];r&1&&(n=-n);let{c0:o,c1:s}=Yn(e[2*r+0],e[2*r+1],t[2*r+0],t[2*r+1],n);e[2*r+0]=o,e[2*r+1]=s}return e}function $r(e){let t=new Uint16Array(fe);for(let r=0;r<fe;){let n=e();if(n.length%3)throw new Error("SampleNTT: unaligned block");for(let o=0;r<fe&&o+3<=n.length;o+=3){let s=(n[o+0]>>0|n[o+1]<<8)&4095,c=(n[o+1]>>4|n[o+2]<<4)&4095;s<He&&(t[r++]=s),r<fe&&c<He&&(t[r++]=c)}}return t}function yt(e,t,r,n){let o=e(n*fe/4,t,r),s=new Uint16Array(fe),c=St(o),i=0;for(let u=0,U=0,a=0,l=0;u<c.length;u++){let S=c[u];for(let m=0;m<32;m++)a+=S&1,S>>=1,i+=1,i===n?(l=a,a=0):i===2*n&&(s[U++]=pt(l-a),a=0,i=0)}if(i)throw new Error(`sampleCBD: leftover bits: ${i}`);return s}var zn=e=>{let{K:t,PRF:r,XOF:n,HASH512:o,ETA1:s,ETA2:c,du:i,dv:u}=e,U=ht(1),a=ht(u),l=ht(i),S=ne("publicKey",be(ht(12),t),32),m=be(ht(12),t),B=ne("ciphertext",be(l,t),a),P=ne("seed",32,32);return{secretCoder:m,lengths:{secretKey:m.bytesLen,publicKey:S.bytesLen,cipherText:B.bytesLen},keygen:F=>{M(F,32,"seed");let K=new Uint8Array(33);K.set(F),K[32]=t;let A=o(K),[h,H]=P.decode(A),R=[],D=[];for(let C=0;C<t;C++)R.push(qe.encode(yt(r,H,C,s)));let X=n(h);for(let C=0;C<t;C++){let W=qe.encode(yt(r,H,t+C,s));for(let V=0;V<t;V++){let oe=$r(X.get(V,C));Qe(W,It(oe,R[V]))}D.push(W)}X.clean();let x={publicKey:S.encode([D,h]),secretKey:m.encode(R)};return Y(h,H,R,D,K,A),x},encrypt:(F,K,A)=>{let[h,H]=S.decode(F),R=[];for(let V=0;V<t;V++)R.push(qe.encode(yt(r,A,V,s)));let D=n(H),X=new Uint16Array(fe),x=[];for(let V=0;V<t;V++){let oe=yt(r,A,t+V,c),he=new Uint16Array(fe);for(let ye=0;ye<t;ye++){let Ue=$r(D.get(V,ye));Qe(he,It(Ue,R[ye]))}Qe(oe,qe.decode(he)),x.push(oe),Qe(X,It(h[V],R[V])),Y(he)}D.clean();let C=yt(r,A,2*t,c);Qe(C,qe.decode(X));let W=U.decode(K);return Qe(W,C),Y(h,R,X,C),B.encode([x,W])},decrypt:(F,K)=>{let[A,h]=B.decode(F),H=m.decode(K),R=new Uint16Array(fe);for(let D=0;D<t;D++)Qe(R,It(H[D],qe.encode(A[D])));return $n(h,qe.decode(R)),Y(R,H,A),U.encode(h)}}};function Qt(e){let t=zn(e),{HASH256:r,HASH512:n,KDF:o}=e,{secretCoder:s,lengths:c}=t,i=ne("secretKey",c.secretKey,c.publicKey,32,32),u=32,U=64;return{info:{type:"ml-kem"},lengths:{...c,seed:64,msg:u,msgRand:u,secretKey:i.bytesLen},keygen:(a=ke(U))=>{M(a,U,"seed");let{publicKey:l,secretKey:S}=t.keygen(a.subarray(0,32)),m=r(l),B=i.encode([S,l,m,a.subarray(32)]);return Y(S,m),{publicKey:l,secretKey:B}},getPublicKey:a=>{let[l,S,m,B]=i.decode(a);return Uint8Array.from(S)},encapsulate:(a,l=ke(u))=>{M(a,c.publicKey,"publicKey"),M(l,u,"message");let S=a.subarray(0,384*e.K),m=s.encode(s.decode(et(S)));if(!Be(m,S))throw Y(m),new Error("ML-KEM.encapsulate: wrong publicKey modulus");Y(m);let B=n.create().update(l).update(r(a)).digest(),P=t.encrypt(a,l,B.subarray(32,64));return Y(B.subarray(32)),{cipherText:P,sharedSecret:B.subarray(0,32)}},decapsulate:(a,l)=>{M(l,i.bytesLen,"secretKey"),M(a,c.cipherText,"cipherText");let S=i.bytesLen-96,m=S+32,B=r(l.subarray(S/2,m));if(!Be(B,l.subarray(m,m+32)))throw new Error("invalid secretKey: hash check failed");let[P,F,K,A]=i.decode(l),h=t.decrypt(a,P),H=n.create().update(h).update(K).digest(),R=H.subarray(0,32),D=t.encrypt(F,h,H.subarray(32,64)),X=Be(a,D),x=o.create({dkLen:32}).update(A).update(a).digest();return Y(h,D,X?x:R),X?R:x}}}function Zn(e,t,r){return ee.create({dkLen:e}).update(t).update(new Uint8Array([r])).digest()}var Jt={HASH256:Cr,HASH512:Ir,KDF:ee,XOF:ot,PRF:Zn},Yr=Qt({...Jt,...qt[512]}),zr=Qt({...Jt,...qt[768]}),Zr=Qt({...Jt,...qt[1024]});var Pt=class{oHash;iHash;blockLen;outputLen;finished=!1;destroyed=!1;constructor(t,r){if(ar(t),M(r,void 0,"key"),this.iHash=t.create(),typeof this.iHash.update!="function")throw new Error("Expected instance of class which extends utils.Hash");this.blockLen=this.iHash.blockLen,this.outputLen=this.iHash.outputLen;let n=this.blockLen,o=new Uint8Array(n);o.set(r.length>n?t.create().update(r).digest():r);for(let s=0;s<o.length;s++)o[s]^=54;this.iHash.update(o),this.oHash=t.create();for(let s=0;s<o.length;s++)o[s]^=106;this.oHash.update(o),ge(o)}update(t){return Le(this),this.iHash.update(t),this}digestInto(t){Le(this),M(t,this.outputLen,"output"),this.finished=!0,this.iHash.digestInto(t),this.oHash.update(t),this.oHash.digestInto(t),this.destroy()}digest(){let t=new Uint8Array(this.oHash.outputLen);return this.digestInto(t),t}_cloneInto(t){t||=Object.create(Object.getPrototypeOf(this),{});let{oHash:r,iHash:n,finished:o,destroyed:s,blockLen:c,outputLen:i}=this;return t=t,t.finished=o,t.destroyed=s,t.blockLen=c,t.outputLen=i,t.oHash=r._cloneInto(t.oHash),t.iHash=n._cloneInto(t.iHash),t}clone(){return this._cloneInto()}destroy(){this.destroyed=!0,this.oHash.destroy(),this.iHash.destroy()}},er=(e,t,r)=>new Pt(e,t).update(r).digest();er.create=(e,t)=>new Pt(e,t);function qr(e,t,r){return e&t^~e&r}function Qr(e,t,r){return e&t^e&r^t&r}var bt=class{blockLen;outputLen;padOffset;isLE;buffer;view;finished=!1;length=0;pos=0;destroyed=!1;constructor(t,r,n,o){this.blockLen=t,this.outputLen=r,this.padOffset=n,this.isLE=o,this.buffer=new Uint8Array(t),this.view=We(this.buffer)}update(t){Le(this),M(t);let{view:r,buffer:n,blockLen:o}=this,s=t.length;for(let c=0;c<s;){let i=Math.min(o-this.pos,s-c);if(i===o){let u=We(t);for(;o<=s-c;c+=o)this.process(u,c);continue}n.set(t.subarray(c,c+i),this.pos),this.pos+=i,c+=i,this.pos===o&&(this.process(r,0),this.pos=0)}return this.length+=t.length,this.roundClean(),this}digestInto(t){Le(this),Tt(t,this),this.finished=!0;let{buffer:r,view:n,blockLen:o,isLE:s}=this,{pos:c}=this;r[c++]=128,ge(this.buffer.subarray(c)),this.padOffset>o-c&&(this.process(n,0),c=0);for(let l=c;l<o;l++)r[l]=0;n.setBigUint64(o-8,BigInt(this.length*8),s),this.process(n,0);let i=We(t),u=this.outputLen;if(u%4)throw new Error("_sha2: outputLen must be aligned to 32bit");let U=u/4,a=this.get();if(U>a.length)throw new Error("_sha2: outputLen bigger than state");for(let l=0;l<U;l++)i.setUint32(4*l,a[l],s)}digest(){let{buffer:t,outputLen:r}=this;this.digestInto(t);let n=t.slice(0,r);return this.destroy(),n}_cloneInto(t){t||=new this.constructor,t.set(...this.get());let{blockLen:r,buffer:n,length:o,finished:s,destroyed:c,pos:i}=this;return t.destroyed=c,t.finished=s,t.length=o,t.pos=i,o%r&&t.buffer.set(n),t}clone(){return this._cloneInto()}},Oe=Uint32Array.from([1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225]);var ae=Uint32Array.from([1779033703,4089235720,3144134277,2227873595,1013904242,4271175723,2773480762,1595750129,1359893119,2917565137,2600822924,725511199,528734635,4215389547,1541459225,327033209]);var qn=Uint32Array.from([1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298]),ve=new Uint32Array(64),tr=class extends bt{constructor(t){super(64,t,8,!1)}get(){let{A:t,B:r,C:n,D:o,E:s,F:c,G:i,H:u}=this;return[t,r,n,o,s,c,i,u]}set(t,r,n,o,s,c,i,u){this.A=t|0,this.B=r|0,this.C=n|0,this.D=o|0,this.E=s|0,this.F=c|0,this.G=i|0,this.H=u|0}process(t,r){for(let l=0;l<16;l++,r+=4)ve[l]=t.getUint32(r,!1);for(let l=16;l<64;l++){let S=ve[l-15],m=ve[l-2],B=we(S,7)^we(S,18)^S>>>3,P=we(m,17)^we(m,19)^m>>>10;ve[l]=P+ve[l-7]+B+ve[l-16]|0}let{A:n,B:o,C:s,D:c,E:i,F:u,G:U,H:a}=this;for(let l=0;l<64;l++){let S=we(i,6)^we(i,11)^we(i,25),m=a+S+qr(i,u,U)+qn[l]+ve[l]|0,P=(we(n,2)^we(n,13)^we(n,22))+Qr(n,o,s)|0;a=U,U=u,u=i,i=c+m|0,c=s,s=o,o=n,n=m+P|0}n=n+this.A|0,o=o+this.B|0,s=s+this.C|0,c=c+this.D|0,i=i+this.E|0,u=u+this.F|0,U=U+this.G|0,a=a+this.H|0,this.set(n,o,s,c,i,u,U,a)}roundClean(){ge(ve)}destroy(){this.set(0,0,0,0,0,0,0,0),ge(this.buffer)}},rr=class extends tr{A=Oe[0]|0;B=Oe[1]|0;C=Oe[2]|0;D=Oe[3]|0;E=Oe[4]|0;F=Oe[5]|0;G=Oe[6]|0;H=Oe[7]|0;constructor(){super(32)}};var Jr=Et(["0x428a2f98d728ae22","0x7137449123ef65cd","0xb5c0fbcfec4d3b2f","0xe9b5dba58189dbbc","0x3956c25bf348b538","0x59f111f1b605d019","0x923f82a4af194f9b","0xab1c5ed5da6d8118","0xd807aa98a3030242","0x12835b0145706fbe","0x243185be4ee4b28c","0x550c7dc3d5ffb4e2","0x72be5d74f27b896f","0x80deb1fe3b1696b1","0x9bdc06a725c71235","0xc19bf174cf692694","0xe49b69c19ef14ad2","0xefbe4786384f25e3","0x0fc19dc68b8cd5b5","0x240ca1cc77ac9c65","0x2de92c6f592b0275","0x4a7484aa6ea6e483","0x5cb0a9dcbd41fbd4","0x76f988da831153b5","0x983e5152ee66dfab","0xa831c66d2db43210","0xb00327c898fb213f","0xbf597fc7beef0ee4","0xc6e00bf33da88fc2","0xd5a79147930aa725","0x06ca6351e003826f","0x142929670a0e6e70","0x27b70a8546d22ffc","0x2e1b21385c26c926","0x4d2c6dfc5ac42aed","0x53380d139d95b3df","0x650a73548baf63de","0x766a0abb3c77b2a8","0x81c2c92e47edaee6","0x92722c851482353b","0xa2bfe8a14cf10364","0xa81a664bbc423001","0xc24b8b70d0f89791","0xc76c51a30654be30","0xd192e819d6ef5218","0xd69906245565a910","0xf40e35855771202a","0x106aa07032bbd1b8","0x19a4c116b8d2d0c8","0x1e376c085141ab53","0x2748774cdf8eeb99","0x34b0bcb5e19b48a8","0x391c0cb3c5c95a63","0x4ed8aa4ae3418acb","0x5b9cca4f7763e373","0x682e6ff3d6b2b8a3","0x748f82ee5defb2fc","0x78a5636f43172f60","0x84c87814a1f0ab72","0x8cc702081a6439ec","0x90befffa23631e28","0xa4506cebde82bde9","0xbef9a3f7b2c67915","0xc67178f2e372532b","0xca273eceea26619c","0xd186b8c721c0c207","0xeada7dd6cde0eb1e","0xf57d4f7fee6ed178","0x06f067aa72176fba","0x0a637dc5a2c898a6","0x113f9804bef90dae","0x1b710b35131c471b","0x28db77f523047d84","0x32caab7b40c72493","0x3c9ebe0a15c9bebc","0x431d67c49c100d4c","0x4cc5d4becb3e42b6","0x597f299cfc657e2a","0x5fcb6fab3ad6faec","0x6c44198c4a475817"].map(e=>BigInt(e))),Qn=Jr[0],Jn=Jr[1],Ne=new Uint32Array(80),Ge=new Uint32Array(80),nr=class extends bt{constructor(t){super(128,t,16,!1)}get(){let{Ah:t,Al:r,Bh:n,Bl:o,Ch:s,Cl:c,Dh:i,Dl:u,Eh:U,El:a,Fh:l,Fl:S,Gh:m,Gl:B,Hh:P,Hl:F}=this;return[t,r,n,o,s,c,i,u,U,a,l,S,m,B,P,F]}set(t,r,n,o,s,c,i,u,U,a,l,S,m,B,P,F){this.Ah=t|0,this.Al=r|0,this.Bh=n|0,this.Bl=o|0,this.Ch=s|0,this.Cl=c|0,this.Dh=i|0,this.Dl=u|0,this.Eh=U|0,this.El=a|0,this.Fh=l|0,this.Fl=S|0,this.Gh=m|0,this.Gl=B|0,this.Hh=P|0,this.Hl=F|0}process(t,r){for(let h=0;h<16;h++,r+=4)Ne[h]=t.getUint32(r),Ge[h]=t.getUint32(r+=4);for(let h=16;h<80;h++){let H=Ne[h-15]|0,R=Ge[h-15]|0,D=Xe(H,R,1)^Xe(H,R,8)^Nt(H,R,7),X=$e(H,R,1)^$e(H,R,8)^Gt(H,R,7),x=Ne[h-2]|0,C=Ge[h-2]|0,W=Xe(x,C,19)^at(x,C,61)^Nt(x,C,6),V=$e(x,C,19)^ut(x,C,61)^Gt(x,C,6),oe=wr(X,V,Ge[h-7],Ge[h-16]),he=Ur(oe,D,W,Ne[h-7],Ne[h-16]);Ne[h]=he|0,Ge[h]=oe|0}let{Ah:n,Al:o,Bh:s,Bl:c,Ch:i,Cl:u,Dh:U,Dl:a,Eh:l,El:S,Fh:m,Fl:B,Gh:P,Gl:F,Hh:K,Hl:A}=this;for(let h=0;h<80;h++){let H=Xe(l,S,14)^Xe(l,S,18)^at(l,S,41),R=$e(l,S,14)^$e(l,S,18)^ut(l,S,41),D=l&m^~l&P,X=S&B^~S&F,x=Tr(A,R,X,Jn[h],Ge[h]),C=Sr(x,K,H,D,Qn[h],Ne[h]),W=x|0,V=Xe(n,o,28)^at(n,o,34)^at(n,o,39),oe=$e(n,o,28)^ut(n,o,34)^ut(n,o,39),he=n&s^n&i^s&i,ye=o&c^o&u^c&u;K=P|0,A=F|0,P=m|0,F=B|0,m=l|0,B=S|0,{h:l,l:S}=Te(U|0,a|0,C|0,W|0),U=i|0,a=u|0,i=s|0,u=c|0,s=n|0,c=o|0;let Ue=mr(W,oe,ye);n=Ar(Ue,C,V,he),o=Ue|0}({h:n,l:o}=Te(this.Ah|0,this.Al|0,n|0,o|0)),{h:s,l:c}=Te(this.Bh|0,this.Bl|0,s|0,c|0),{h:i,l:u}=Te(this.Ch|0,this.Cl|0,i|0,u|0),{h:U,l:a}=Te(this.Dh|0,this.Dl|0,U|0,a|0),{h:l,l:S}=Te(this.Eh|0,this.El|0,l|0,S|0),{h:m,l:B}=Te(this.Fh|0,this.Fl|0,m|0,B|0),{h:P,l:F}=Te(this.Gh|0,this.Gl|0,P|0,F|0),{h:K,l:A}=Te(this.Hh|0,this.Hl|0,K|0,A|0),this.set(n,o,s,c,i,u,U,a,l,S,m,B,P,F,K,A)}roundClean(){ge(Ne,Ge)}destroy(){ge(this.buffer),this.set(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)}},or=class extends nr{Ah=ae[0]|0;Al=ae[1]|0;Bh=ae[2]|0;Bl=ae[3]|0;Ch=ae[4]|0;Cl=ae[5]|0;Dh=ae[6]|0;Dl=ae[7]|0;Eh=ae[8]|0;El=ae[9]|0;Fh=ae[10]|0;Fl=ae[11]|0;Gh=ae[12]|0;Gl=ae[13]|0;Hh=ae[14]|0;Hl=ae[15]|0;constructor(){super(64)}};var Rt=Je(()=>new rr,Re(1));var en=Je(()=>new or,Re(3));var me={"128f":{W:16,N:16,H:66,D:22,K:33,A:6,securityLevel:128},"128s":{W:16,N:16,H:63,D:7,K:14,A:12,securityLevel:128},"192f":{W:16,N:24,H:66,D:22,K:33,A:8,securityLevel:192},"192s":{W:16,N:24,H:63,D:7,K:17,A:14,securityLevel:192},"256f":{W:16,N:32,H:68,D:17,K:35,A:9,securityLevel:256},"256s":{W:16,N:32,H:64,D:8,K:22,A:14,securityLevel:256}},le={WOTS:0,WOTSPK:1,HASHTREE:2,FORSTREE:3,FORSPK:4,WOTSPRF:5,FORSPRF:6};function eo(e){if(typeof e!="string")throw new Error("hex string expected, got "+typeof e);return BigInt(e===""?"0":"0x"+e)}function tn(e){return eo(fr(e))}function to(e,t){return lr(e.toString(16).padStart(t*2,"0"))}var sr=(e,t)=>{let r=tt(t);return n=>{let o=new Uint32Array(e);for(let s=0,c=0,i=0,u=0;s<e;s++){for(;i<t;)u=u<<8|n[c++],i+=8;i-=t,o[s]=u>>>i&r}return o}};function cr(e){return(1n<<BigInt(e))-1n}function Ae(e,t){let{N:r,W:n,H:o,D:s,K:c,A:i,securityLevel:u}=e,U=t.getContext(e);if(n!==16)throw new Error("Unsupported Winternitz parameter");let a=4,l=Math.floor(8*r/a),S=r<=8?2:r<=136?3:4,m=Math.floor(o/s),B=l+S,P=22,F=0,K=1,A=9,h=12,H=13,R=17,D=18,X=21;t.isCompressed||(P=32,F+=3,K+=7,A+=10,h+=10,H+=10,R+=10,D+=10,X+=10);let x=(d,f=new Uint8Array(P))=>{let{type:T,height:p,tree:E,layer:O,index:k,chain:I,hash:N,keypair:L}=d,{subtreeAddr:G,keypairAddr:v}=d,te=We(f);return p!==void 0&&(f[R]=p),O!==void 0&&(f[F]=O),T!==void 0&&(f[A]=T),I!==void 0&&(f[R]=I),N!==void 0&&(f[X]=N),k!==void 0&&te.setUint32(D,k,!1),G&&f.set(G.subarray(0,K+8)),E!==void 0&&te.setBigUint64(K,E,!1),L!==void 0&&(f[H]=L,m>8&&(f[h]=L>>>8)),v&&(f.set(v.subarray(0,K+8)),f[H]=v[H],m>8&&(f[h]=v[h])),f},C=sr(S,a),W=d=>{let f=sr(l,a)(d),T=0;for(let O=0;O<f.length;O++)T+=n-1-f[O];T<<=(8-S*a%8)%8;let p=C(to(T,Math.ceil(S*a/8))),E=new Uint32Array(B);return E.set(f),E.set(p,f.length),E},V=sr(c,i),oe=m*(s-1),he=m,ye=ne("hashedMessage",Math.ceil(i*c/8),Math.ceil(oe/8),Math.ceil(m/8)),Ue=(d,f,T,p)=>{let E=p.Hmsg(d,f,T,ye.bytesLen),[O,k,I]=ye.decode(E),N=tn(k)&cr(oe),L=Number(tn(I))&tt(he);return{tree:N,leafIdx:L,md:O}},ct=(d,f)=>function(p,E,O,k,I){let N=(1<<d)-1,L=new Uint8Array(d*r),G=new Uint8Array(d*r);for(let v=0;;v++){let te=new Uint8Array(2*r),w=te.subarray(0,r),$=te.subarray(r),q=v+O;$.set(f(E,q,p,I));let z=0;for(let Q=v,se=O,pe=E;;z++,Q>>>=1,pe>>>=1,se>>>=1){if(z===d)return{root:$,authPath:G};if((Q^pe)===1&&G.subarray(z*r).set($),(Q&1)===0&&v<N)break;x({height:z+1,index:(Q>>1)+(se>>1)},k),w.set(L.subarray(z*r).subarray(0,r)),$.set(p.thashN(2,te,k))}L.subarray(z*r).set($)}throw new Error("Unreachable code path reached, report this error")},xt=ct(m,(d,f,T,p)=>{let E=new Uint8Array(B*r),O=f===d?0:-1>>>0;x({keypair:f},p.leafAddr),x({keypair:f},p.pkAddr);for(let k=0;k<B;k++){let I=p.wotsSteps[k]|O,N=E.subarray(k*r,(k+1)*r);x({chain:k,hash:0,type:le.WOTSPRF},p.leafAddr),N.set(T.PRFaddr(p.leafAddr)),x({type:le.WOTS},p.leafAddr);for(let L=0;L===I&&p.wotsSig.subarray(k*r).set(N),L!==n-1;L++)x({hash:L},p.leafAddr),N.set(T.thash1(N,p.leafAddr))}return T.thashN(B,E,p.pkAddr)}),gt=ct(i,(d,f,T,p)=>{x({type:le.FORSPRF,index:f},p);let E=T.PRFaddr(p);return x({type:le.FORSTREE},p),T.thash1(E,p)}),mt=(d,f,T,p,E=new Uint8Array(r))=>{x({type:le.HASHTREE},T);let O={wotsSig:new Uint8Array(_.bytesLen),wotsSteps:W(E),leafAddr:x({subtreeAddr:f}),pkAddr:x({type:le.WOTSPK,subtreeAddr:f})},{root:k,authPath:I}=xt(d,p,0,T,O);return{root:k,sigWots:O.wotsSig.subarray(0,B*r),sigAuth:I}},At=(d,f,T,p,E,O,k)=>{let I=new Uint8Array(2*r),N=I.subarray(0,r),L=I.subarray(r,2*r);(f&1)!==0?(L.set(d.subarray(0,r)),N.set(p.subarray(0,r))):(N.set(d.subarray(0,r)),L.set(p.subarray(0,r))),f>>>=1,T>>>=1;for(let G=0;G<E-1;G++,f>>=1,T>>=1){x({height:G+1,index:f+T},k);let v=p.subarray((G+1)*r,(G+2)*r);(f&1)!==0?(L.set(O.thashN(2,I,k)),N.set(v)):(I.set(O.thashN(2,I,k)),L.set(v))}return x({height:E,index:f+T},k),O.thashN(2,I,k)},je=ne("seed",r,r,r),Ce=ne("publicKey",r,r),ue=ne("secretKey",r,r,Ce.bytesLen),y=be(ne("fors",r,r*i),c),_=be(ne("wots",B*r,m*r),s),g=ne("signature",r,y,_),b={info:{type:"internal-slh-dsa"},lengths:{publicKey:Ce.bytesLen,secretKey:ue.bytesLen,signature:g.bytesLen,seed:je.bytesLen,signRand:r},keygen(d){d!==void 0&&M(d,je.bytesLen,"seed"),d=d===void 0?ke(je.bytesLen):et(d);let[f,T,p]=je.decode(d),E=U(p,f),O=x({layer:s-1}),k=x({layer:s-1}),{root:I}=mt(E,k,O,-1>>>0),N=Ce.encode([p,I]),L=ue.encode([f,T,N]);return E.clean(),Y(f,T,I,k,O),{publicKey:N,secretKey:L}},getPublicKey:d=>{let[f,T,p]=ue.decode(d);return Uint8Array.from(p)},sign:(d,f,T={})=>{Fe(T);let{extraEntropy:p}=T,[E,O,k]=ue.decode(f),[I,N]=Ce.decode(k);p===!1?p=et(I):p===void 0?p=ke(r):p=et(p),M(p,r);let L=U(I,E),G=L.PRFmsg(O,p,d),{tree:v,leafIdx:te,md:w}=Ue(G,k,d,L),$=x({type:le.WOTS,tree:v,keypair:te}),q=[],z=x({keypairAddr:$}),Q=x({keypairAddr:$}),se=V(w),pe=[];for(let J=0;J<se.length;J++){let ce=J<<i;x({type:le.FORSPRF,height:0,index:se[J]+ce},Q);let de=L.PRFaddr(Q);x({type:le.FORSTREE},Q);let{root:_e,authPath:wt}=gt(L,se[J],ce,Q,z);q.push(_e),pe.push([de,wt])}let Se=x({type:le.FORSPK,keypairAddr:$}),Ie=L.thashN(c,Ve(...q),Se),re=x({type:le.HASHTREE}),Pe=[];for(let J=0;J<s;J++,v>>=BigInt(m)){x({tree:v,layer:J},re),x({subtreeAddr:re,keypair:te},$);let{sigWots:ce,sigAuth:de,root:_e}=mt(L,$,re,te,Ie);Ie.set(_e),Y(_e),Pe.push([ce,de]),te=Number(v&cr(m))}L.clean();let j=g.encode([G,pe,Pe]);return Y(G,p,re,$,z,Q,se,q),j},verify:(d,f,T)=>{let[p,E]=Ce.decode(T),[O,k,I]=g.decode(d),N=T;if(d.length!==g.bytesLen)return!1;let L=U(p),{tree:G,leafIdx:v,md:te}=Ue(O,N,f,L),w=x({type:le.WOTS,tree:G,keypair:v}),$=[],q=x({type:le.FORSTREE,keypairAddr:w}),z=V(te);for(let re=0;re<k.length;re++){let[Pe,j]=k[re],J=re<<i;x({height:0,index:z[re]+J},q);let ce=L.thash1(Pe,q);$.push(At(ce,z[re],J,j,i,L,q))}let Q=x({type:le.FORSPK,keypairAddr:w}),se=L.thashN(c,Ve(...$),Q),pe=x({type:le.HASHTREE}),Se=x({type:le.WOTSPK}),Ie=new Uint8Array(B*r);for(let re=0;re<I.length;re++,G>>=BigInt(m)){let[Pe,j]=I[re];x({tree:G,layer:re},pe),x({subtreeAddr:pe,keypair:v},w),x({keypairAddr:w},Se);let J=W(se);for(let de=0;de<B;de++){x({chain:de},w);let _e=n-1-J[de],wt=J[de],Kt=Ie.subarray(de*r);Kt.set(Pe.subarray(de*r,(de+1)*r));for(let Ut=wt;Ut<wt+_e&&Ut<n;Ut++)x({hash:Ut},w),Kt.set(L.thash1(Kt,w))}let ce=L.thashN(B,Ie,Se);se=At(ce,v,0,j,m,L,pe),v=Number(G&cr(m))}return Be(se,E)}};return{info:{type:"slh-dsa"},internal:b,securityLevel:u,lengths:b.lengths,keygen:b.keygen,getPublicKey:b.getPublicKey,sign:(d,f,T={})=>{Fe(T);let p=rt(d,T.context),E=b.sign(p,f,T);return Y(p),E},verify:(d,f,T,p={})=>(Ye(p),b.verify(d,rt(f,p.context),T)),prehash:d=>(kt(d,u),{info:{type:"hashslh-dsa"},lengths:b.lengths,keygen:b.keygen,getPublicKey:b.getPublicKey,sign:(f,T,p={})=>{Fe(p);let E=nt(d,f,p.context),O=b.sign(E,T,p);return Y(E),O},verify:(f,T,p,E={})=>(Ye(E),b.verify(f,nt(d,T,E.context),p))})}}var ro=()=>e=>(t,r)=>{let{N:n}=e,o={prf:0,thash:0,hmsg:0,gen_message_random:0},s=ee.create({}).update(t),c=s.clone(),i=(u,U,a)=>(o.thash++,s._cloneInto(c).update(a).update(U.subarray(0,u*n)).xof(n));return{PRFaddr:u=>{if(!r)throw new Error("no sk seed");return o.prf++,s._cloneInto(c).update(u).update(r).xof(n)},PRFmsg:(u,U,a)=>(o.gen_message_random++,ee.create({}).update(u).update(U).update(a).digest().subarray(0,n)),Hmsg:(u,U,a,l)=>(o.hmsg++,ee.create({}).update(u.subarray(0,n)).update(U).update(a).xof(l)),thash1:i.bind(null,1),thashN:i,clean:()=>{s.destroy(),c.destroy()}}},st={getContext:ro()},rn=Ae(me["128f"],st),nn=Ae(me["128s"],st),on=Ae(me["192f"],st),sn=Ae(me["192s"],st),cn=Ae(me["256f"],st),an=Ae(me["256s"],st),un=(e,t)=>r=>(n,o)=>{let{N:s}=r,c={prf:0,thash:0,hmsg:0,gen_message_random:0,mgf1:0},i=new Uint8Array(4),u=We(i),U=e.create().update(n).update(new Uint8Array(e.blockLen-s)),a=t.create().update(n).update(new Uint8Array(t.blockLen-s)),l=U.clone(),S=a.clone();function m(P,F,K){c.mgf1++;let A=new Uint8Array(Math.ceil(F/K.outputLen)*K.outputLen);if(F>2**32)throw new Error("mask too long");for(let h=0,H=A;H.length;h++)u.setUint32(0,h,!1),K.create().update(P).update(i).digestInto(H),H=H.subarray(K.outputLen);return Y(A.subarray(F)),A.subarray(0,F)}let B=(P,F,K)=>(A,h,H)=>(c.thash++,F._cloneInto(K).update(H).update(h.subarray(0,A*s)).digest().subarray(0,s));return{PRFaddr:P=>{if(!o)throw new Error("No sk seed");return c.prf++,U._cloneInto(l).update(P).update(o).digest().subarray(0,s)},PRFmsg:(P,F,K)=>(c.gen_message_random++,er.create(t,P).update(F).update(K).digest().subarray(0,s)),Hmsg:(P,F,K,A)=>{c.hmsg++;let h=Ve(P.subarray(0,s),F.subarray(0,s),t.create().update(P.subarray(0,s)).update(F).update(K).digest());return m(h,A,t)},thash1:B(e,U,l).bind(null,1),thashN:B(t,a,S),clean:()=>{U.destroy(),a.destroy(),l.destroy(),S.destroy()}}},fn={isCompressed:!0,getContext:un(Rt,Rt)},Ft={isCompressed:!0,getContext:un(Rt,en)},ln=Ae(me["128f"],fn),dn=Ae(me["128s"],fn),hn=Ae(me["192f"],Ft),yn=Ae(me["192s"],Ft),pn=Ae(me["256f"],Ft),bn=Ae(me["256s"],Ft);return Un(no);})();
+/*! noble-post-quantum - MIT License (c) 2024 Paul Miller (paulmillr.com) */
+/*! Bundled license information:
+
+@noble/hashes/utils.js:
+  (*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) *)
+
+@noble/curves/utils.js:
+  (*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) *)
+*/
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" data-type="module">
+
+
+        ///================= XQ HELPER METHODS =====================
+        const cfg =
+           {
+                DASHBOARD_URL: "https://dashboard.xqmsg.net/v2",
+                SUBSCRIPTION_URL: "https://subscription.xqmsg.net/v2",
+                VALIDATION_URL: "https://validation.xqmsg.net/v2",
+                MANAGE_URL: "https://manage.xqmsg.com",
+                DASHBOARD_API_KEY: "c42b63bc-0b63-4b49-a675-7f55bb1c4a7a-fdc5dab9-95e2-44e6-97e5-0559d5fca9ad",
+                GENERAL_API_KEY: "f243c6d1-e75f-4837-b786-4569019ddb6a-c76cf034-e4cc-42e3-82b9-657910ccbb0a",
+                TEAM_ID: 11660, // This must match a valid dashboard team. Only members of this team will be allowed to connect.
+                IDENTITY_RECIPIENT: 'pqc@identity.local',
+                IDENTITY_TITLE: 'PQC Public Identity',
+                IDENTITY_TAG : 'PQC | Identity',
+                IDENTITY_EXPIRATION_DAYS: 365,
+                FILE_EXPIRATION_DAYS: 7
+            };
+
+            /*
+            {
+                DASHBOARD_URL: "http://localhost:4819/v2",
+                SUBSCRIPTION_URL:  "http://localhost:9819/v2",
+                VALIDATION_URL:  "http://localhost:8818/v2",
+                MANAGE_URL: "http://localhost:3000",
+                DASHBOARD_API_KEY: "3cc605ae-7676-4cb2-9670-9539adf78bf2-8577ec5d-30b3-4434-818c-b980bb023b0b",
+                GENERAL_API_KEY: "7b7450ec-cc43-4c41-ac78-ebf3c2a494f5-e7317c94-c6d7-40d4-b781-e1a2359f7ad7",
+                TEAM_ID: 7673, // This must match a valid dashboard team. Only members of this team will be allowed to connect.
+                IDENTITY_RECIPIENT: 'pqc@identity.local',
+                IDENTITY_TITLE: 'PQC Public Identity',
+                IDENTITY_TAG : 'PQC | Identity',
+                IDENTITY_EXPIRATION_DAYS: 365,
+                FILE_EXPIRATION_DAYS: 7
+            }; */
+
+
+        const _getScopedKey = (key) => {
+            const user = sessionStorage.getItem('currentUser');
+            return user ? `${key}_${user}` : key;
+        };
+
+        const _apiFetch = async (url, options = {}) => {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
+            return response;
+        };
+
+        /** --- STORAGE HELPERS --- */
+        export const setCurrentUser = (email) => sessionStorage.setItem('currentUser', email);
+
+        export const readLocalStorage = (key) => localStorage.getItem(_getScopedKey(key));
+        export const writeLocalStorage = (key, value) => localStorage.setItem(_getScopedKey(key), value);
+
+        export const readSessionStorage = (key) => sessionStorage.getItem(_getScopedKey(key));
+        export const writeSessionStorage = (key, value) => sessionStorage.setItem(_getScopedKey(key), value);
+        export const removeSessionStorage = (key) => sessionStorage.removeItem(_getScopedKey(key));
+
+        const DEVICE_ID_STORAGE_KEY = 'xqDeviceId';
+        const DEVICE_ID_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+        const readDeviceId = () => localStorage.getItem(DEVICE_ID_STORAGE_KEY) || '';
+        const writeDeviceId = (value) => {
+            localStorage.setItem(DEVICE_ID_STORAGE_KEY, value);
+            return value;
+        };
+
+        const normalizeToDeviceId = (seed = '') => {
+            let hash = 2166136261;
+            for (let i = 0; i < seed.length; i++) {
+                hash ^= seed.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+
+            let value = hash >>> 0;
+            let deviceId = '';
+            for (let i = 0; i < 6; i++) {
+                deviceId = DEVICE_ID_ALPHABET[value & 31] + deviceId;
+                value = value >>> 5;
+            }
+            return deviceId;
+        };
+
+        const getDeviceId = () => {
+            return readDeviceId();
+        };
+
+        const ensureDeviceId = async () => {
+            const cached = readDeviceId();
+            if (cached) return cached;
+
+            if (!window.FingerprintJS?.load) {
+                throw new Error('FingerprintJS is not available');
+            }
+
+            const fp = await window.FingerprintJS.load();
+            const result = await fp.get();
+            if (!result?.visitorId) {
+                throw new Error('FingerprintJS failed to provide visitorId');
+            }
+
+            const normalized = normalizeToDeviceId(result.visitorId);
+            writeDeviceId(normalized);
+            return normalized;
+        };
+
+        /** --- SERIALIZATION --- */
+
+        /**
+         * Serializeds the keypair payload to json
+         * @param obj The javascript keypair to serialize
+         */
+        const serializeKeys = (obj) => JSON.stringify(obj, (key, value) => {
+            if (value instanceof Uint8Array) {
+                return { _type: 'Uint8Array', data: Array.from(value) };
+            }
+            return value;
+        });
+
+        /**
+         * Deserializes the keypair payload from json
+         * @param jsonString The json payload to deserialize
+         */
+        const deserializeKeys = (jsonString) => JSON.parse(jsonString, (key, value) => {
+            if (value?._type === 'Uint8Array') {
+                return new Uint8Array(value.data);
+            }
+            return value;
+        });
+
+        const parseCommunicationMeta = (meta) => {
+            if (!meta) return {};
+            if (typeof meta === 'object') return meta;
+
+            try {
+                return JSON.parse(meta);
+            } catch (error) {
+                return {};
+            }
+        };
+
+        const parseDeviceIdFromTitle = (title = '') => {
+            const match = title.match(/([A-Z0-9]{6})$/);
+            return match ? match[1] : '';
+        };
+
+        const isSamePublicIdentityKey = (left, right) => {
+            if (!left || !right) return false;
+
+            const hasKyber = typeof left.kyberPublicKey === 'string' && typeof right.kyberPublicKey === 'string';
+            const hasDilithium = typeof left.dilithiumPublicKey === 'string' && typeof right.dilithiumPublicKey === 'string';
+
+            if (hasKyber && hasDilithium) {
+                return left.kyberPublicKey === right.kyberPublicKey
+                    && left.dilithiumPublicKey === right.dilithiumPublicKey;
+            }
+
+            return typeof left.fingerprint === 'string'
+                && typeof right.fingerprint === 'string'
+                && left.fingerprint === right.fingerprint;
+        };
+
+        const deleteKeyByToken = async (token, xqAccessToken) => {
+            if (!token) return false;
+
+            try {
+                await _apiFetch(`${cfg.VALIDATION_URL}/key`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Api-Key": cfg.GENERAL_API_KEY,
+                        "Authorization": `Bearer ${xqAccessToken}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ tokens: [token] }),
+                });
+                return true;
+            } catch (error) {
+                return false;
+            }
+        };
+
+        /** --- API ACTIONS --- */
+
+        /**
+         * Request XQ email authorization.
+         * @param email The user email address.
+         * @returns {Promise<Error|boolean>} An exchange token to be used during validation.
+         */
+        export const requestAuthorization = async (email) => {
+            setCurrentUser(email);
+            try {
+                const response = await _apiFetch(`${cfg.SUBSCRIPTION_URL}/authorize`, {
+                    method: "POST",
+                    headers: {
+                        "Api-Key": cfg.GENERAL_API_KEY,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ user: email, codetype: "code" }),
+                });
+
+                writeSessionStorage("exchange", await response.text());
+                return true;
+            } catch (error) {
+                console.error(error);
+                return error;
+            }
+        };
+
+        /**
+         * Request a general access token post-validation.
+         * @returns {Promise<Error|boolean>}
+         */
+        const exchangeToken = async () => {
+            const exchange = readSessionStorage("exchange");
+            if (!exchange) return new Error("Unauthorized");
+
+            try {
+                const url = `${cfg.SUBSCRIPTION_URL}/exchange?b=${cfg.TEAM_ID}`;
+                const response = await _apiFetch(url, {
+                    headers: {
+                        "Api-Key": cfg.GENERAL_API_KEY,
+                        "Authorization": `Bearer ${exchange}`,
+                    },
+                });
+
+                writeSessionStorage("token", await response.text());
+                removeSessionStorage("exchange");
+                return true;
+            } catch (error) {
+                return error;
+            }
+        };
+
+        /**
+         *  Request a valid dashboard token from a valid general access token
+         * @returns {Promise<{status: *}|Error|boolean>}
+         */
+        const acquireDashboardToken = async () => {
+            const token = readSessionStorage("token");
+            if (!token) return new Error("Unauthorized");
+
+            try {
+                const url = `${cfg.DASHBOARD_URL}/login/verify?bid=${cfg.TEAM_ID}`;
+                const response = await _apiFetch(url, {
+                    headers: {
+                        "Api-Key": cfg.DASHBOARD_API_KEY,
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+
+                writeSessionStorage("dashboardToken", await response.text());
+                return true;
+            } catch (error) {
+                return error;
+            }
+        };
+
+        /**
+         * Validate an XQ user by their confirmation PIN.
+         * @param pin{string} The PIN number received in the email.
+         * @returns {Promise<Error|boolean>}
+         */
+        export const validateAuthorization = async (pin) => {
+            const exchange = readSessionStorage("exchange");
+            if (!exchange) return new Error("Unauthorized");
+
+            try {
+                const url = `${cfg.SUBSCRIPTION_URL}/codevalidation?pin=${pin}`;
+                await _apiFetch(url, {
+                    headers: {
+                        "Api-Key": cfg.GENERAL_API_KEY,
+                        "Authorization": `Bearer ${exchange}`,
+                    },
+                });
+
+                const exchanged = await exchangeToken();
+                const acquired = await acquireDashboardToken();
+                return exchanged === true && acquired === true;
+            } catch (error) {
+                return error;
+            }
+        };
+
+
+        /**
+         * Stores the users keys.Private keys are stored in local storage,
+         * while the public keys are stored on XQ.
+         * @param keys The non-public keys to store
+         * @param pubKeys The public keys that will be uploaded.
+         */
+        export const storeIdentityKeys = async (keys, pubKeys) => {
+            const token = readSessionStorage("token");
+            if (!token) return { status: "Unauthorized" };
+
+            try {
+                const deviceId = await ensureDeviceId();
+                const identityTitle = `${cfg.IDENTITY_TITLE} - ${deviceId}`;
+                const dashboardToken = readSessionStorage("dashboardToken");
+                let replacedCount = 0;
+
+                if (dashboardToken) {
+                    const response = await _apiFetch(`${cfg.DASHBOARD_URL}/communications?recipients=${cfg.IDENTITY_RECIPIENT}`, {
+                        headers: {
+                            "Api-Key": cfg.DASHBOARD_API_KEY,
+                            "Authorization": `Bearer ${dashboardToken}`,
+                        },
+                    });
+
+                    const { communications = [] } = await response.json();
+                    const activeCommunications = communications.filter(contact => contact.status === 0);
+
+                    for (const contact of activeCommunications) {
+                        if (!contact?.token) continue;
+                        if (contact.user === pubKeys.name) continue;
+
+                        try {
+                            const keyResponse = await _apiFetch(`${cfg.VALIDATION_URL}/key/${contact.token}`, {
+                                headers: {
+                                    "Api-Key": cfg.GENERAL_API_KEY,
+                                    "Authorization": `Bearer ${token}`,
+                                },
+                            });
+
+                            const existingPubKey = JSON.parse(atob(await keyResponse.text()));
+                            if (isSamePublicIdentityKey(existingPubKey, pubKeys)) {
+                                return new Error(`Key import blocked: this key is already registered in XQ for another user (${contact.user}).`);
+                            }
+                        } catch (error) {
+                        }
+                    }
+
+                    const existingIdentities = activeCommunications.filter(contact => {
+                        if (contact.user !== pubKeys.name) return false;
+                        const meta = parseCommunicationMeta(contact.meta);
+                        return (meta?.title || '') === identityTitle;
+                    });
+
+                    for (const identity of existingIdentities) {
+                        const replaced = await deleteKeyByToken(identity.token, token);
+                        if (!replaced) {
+                            return new Error(`Failed to replace existing identity '${identityTitle}' in XQ`);
+                        }
+                        replacedCount += 1;
+                    }
+                }
+
+                const data = {
+                    recipients: [cfg.IDENTITY_RECIPIENT, "team@group.local"],
+                    expires: cfg.IDENTITY_EXPIRATION_DAYS,
+                    unit: 'days',
+                    type: 'file',
+                    key: btoa(JSON.stringify(pubKeys)),
+                    meta: {
+                        title: identityTitle,
+                        type: 'keypair',
+                        labels: [cfg.IDENTITY_TAG]
+                    }
+                };
+
+                await _apiFetch(`${cfg.SUBSCRIPTION_URL}/packet/add`, {
+                    method: "POST",
+                    headers: {
+                        "Api-Key": cfg.GENERAL_API_KEY,
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                writeLocalStorage("idKeys", serializeKeys(keys));
+                return { replacedCount };
+            } catch (error) {
+                return error;
+            }
+        };
+
+        /**
+         * Fetches the cached identity keys from local storage.
+         */
+        export const getIdentityKeys = () => {
+            const json = readLocalStorage("idKeys");
+            return json ? deserializeKeys(json) : null;
+        };
+
+        /**
+         * Fetches the public key associated with a token.
+         * @param token The locator token to query
+         */
+        export const getMessageKey = async (token) => {
+            const generalToken = readSessionStorage("token");
+            if (!generalToken) return { status: "Unauthorized" };
+
+            try {
+                const response = await _apiFetch(`${cfg.VALIDATION_URL}/key/${token}`, {
+                    headers: {
+                        "Api-Key": cfg.GENERAL_API_KEY,
+                        "Authorization": `Bearer ${generalToken}`,
+                    },
+                });
+
+                return JSON.parse(atob(await response.text()));
+            } catch (error) {
+                return error;
+            }
+        };
+
+        /**
+         * Fetches a list of all the team members who have initialized public keys.
+         */
+        export const getAvailableTeamMembers = async () => {
+            const dashboardToken = readSessionStorage("dashboardToken");
+            if (!dashboardToken) return new Error("Unauthorized");
+
+            try {
+                const url = `${cfg.DASHBOARD_URL}/communications?recipients=${cfg.IDENTITY_RECIPIENT}`;
+                const response = await _apiFetch(url, {
+                    headers: {
+                        "Api-Key": cfg.DASHBOARD_API_KEY,
+                        "Authorization": `Bearer ${dashboardToken}`,
+                    },
+                });
+
+                const { communications = [] } = await response.json();
+
+                return communications
+                    .filter(c => c.status === 0)
+                    .map(contact => {
+                        const meta = parseCommunicationMeta(contact.meta);
+                        const title = meta?.title || '';
+                        const deviceId = parseDeviceIdFromTitle(title);
+
+                        return {
+                            email: contact.user,
+                            token: contact.token,
+                            title,
+                            deviceId,
+                            updated: new Date(contact.updated),
+                            enabled: true
+                        };
+                    });
+            } catch (error) {
+                return error;
+            }
+        };
+
+        /**
+         * Formats a Date object to "MM/DD/YYYY at h:mmam/pm"
+         * @param {Date} date The javascript date
+         */
+        export const formatDateTime = (date) => {
+            const d = new Date(date);
+            const datePart = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+            const timePart = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+                .toLowerCase()
+                .replace(/\s/g, '');
+
+            return `${datePart} at ${timePart}`;
+        };
+
+        /// ================ END OF HELPERS ========================
+
+        const { useState, useRef, useEffect, useCallback, useMemo } = React;
+
+        const QRYPTO_Q = 8380417;
+        const QRYPTO_DELTA = 524288;
+        const QRYPTO_CUBE_SIZE = 16;
+        const QRYPTO_PALETTE = [
+            '#e74c3c', '#e67e22', '#f39c12', '#f1c40f',
+            '#2ecc71', '#1abc9c', '#16a085', '#27ae60',
+            '#3498db', '#2980b9', '#9b59b6', '#8e44ad',
+            '#1abc9c', '#27ae60', '#2ecc71', '#16a085'
+        ];
+
+        const qryptoSha256bytes = (data) => {
+            const message = data instanceof Uint8Array ? data : new TextEncoder().encode(data);
+            const K = [
+                0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+            ];
+            let h0 = 0x6a09e667;
+            let h1 = 0xbb67ae85;
+            let h2 = 0x3c6ef372;
+            let h3 = 0xa54ff53a;
+            let h4 = 0x510e527f;
+            let h5 = 0x9b05688c;
+            let h6 = 0x1f83d9ab;
+            let h7 = 0x5be0cd19;
+            const len = message.length;
+            const bitLen = len * 8;
+            const pad = new Uint8Array(len + 1 + ((55 - (len % 64) + 64) % 64) + 8);
+            pad.set(message);
+            pad[len] = 0x80;
+            const view = new DataView(pad.buffer);
+            view.setUint32(pad.length - 4, bitLen >>> 0, false);
+            view.setUint32(pad.length - 8, Math.floor(bitLen / 0x100000000), false);
+
+            for (let offset = 0; offset < pad.length; offset += 64) {
+                const w = new Uint32Array(64);
+                for (let index = 0; index < 16; index++) {
+                    w[index] = view.getUint32(offset + index * 4, false);
+                }
+                for (let index = 16; index < 64; index++) {
+                    const s0 = ((w[index - 15] >>> 7) | (w[index - 15] << 25)) ^ ((w[index - 15] >>> 18) | (w[index - 15] << 14)) ^ (w[index - 15] >>> 3);
+                    const s1 = ((w[index - 2] >>> 17) | (w[index - 2] << 15)) ^ ((w[index - 2] >>> 19) | (w[index - 2] << 13)) ^ (w[index - 2] >>> 10);
+                    w[index] = (w[index - 16] + s0 + w[index - 7] + s1) >>> 0;
+                }
+
+                let a = h0;
+                let b = h1;
+                let c = h2;
+                let d = h3;
+                let e = h4;
+                let f = h5;
+                let g = h6;
+                let h = h7;
+
+                for (let index = 0; index < 64; index++) {
+                    const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+                    const ch = (e & f) ^ (~e & g);
+                    const t1 = (h + S1 + ch + K[index] + w[index]) >>> 0;
+                    const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+                    const maj = (a & b) ^ (a & c) ^ (b & c);
+                    const t2 = (S0 + maj) >>> 0;
+                    h = g;
+                    g = f;
+                    f = e;
+                    e = (d + t1) >>> 0;
+                    d = c;
+                    c = b;
+                    b = a;
+                    a = (t1 + t2) >>> 0;
+                }
+
+                h0 = (h0 + a) >>> 0;
+                h1 = (h1 + b) >>> 0;
+                h2 = (h2 + c) >>> 0;
+                h3 = (h3 + d) >>> 0;
+                h4 = (h4 + e) >>> 0;
+                h5 = (h5 + f) >>> 0;
+                h6 = (h6 + g) >>> 0;
+                h7 = (h7 + h) >>> 0;
+            }
+
+            const out = new Uint8Array(32);
+            const outView = new DataView(out.buffer);
+            [h0, h1, h2, h3, h4, h5, h6, h7].forEach((value, index) => outView.setUint32(index * 4, value, false));
+            return out;
+        };
+
+        const qryptoConcatBytes = (...arrays) => {
+            const out = new Uint8Array(arrays.reduce((sum, item) => sum + item.length, 0));
+            let offset = 0;
+            arrays.forEach((item) => {
+                out.set(item, offset);
+                offset += item.length;
+            });
+            return out;
+        };
+
+        const qryptoIndexBytes = (value) => new Uint8Array([(value >> 8) & 255, value & 255]);
+        const qryptoBytesToU32 = (array) => (((array[0] << 24) | (array[1] << 16) | (array[2] << 8) | array[3]) >>> 0);
+
+        const qryptoComputeLayers = (seed) => {
+            const walkTag = new TextEncoder().encode('walk');
+            const base = [];
+            for (let index = 0; index < 256; index++) {
+                const hash = qryptoSha256bytes(qryptoConcatBytes(seed, qryptoIndexBytes(index)));
+                base.push(qryptoBytesToU32(hash) % QRYPTO_Q);
+            }
+
+            const layers = [base];
+            for (let layer = 1; layer < 16; layer++) {
+                const prev = layers[layer - 1];
+                const next = [];
+                for (let index = 0; index < 256; index++) {
+                    const hash = qryptoSha256bytes(qryptoConcatBytes(seed, walkTag, new Uint8Array([layer]), qryptoIndexBytes(index)));
+                    const sign = (hash[0] & 1) ? 1 : -1;
+                    let coefficient = prev[index] + sign * QRYPTO_DELTA;
+                    if (coefficient < 0 || coefficient >= QRYPTO_Q) coefficient = prev[index] - sign * QRYPTO_DELTA;
+                    next.push(coefficient);
+                }
+                layers.push(next);
+            }
+            return layers;
+        };
+
+        const qryptoValueColor = (value) => QRYPTO_PALETTE[Math.min(Math.floor(value / (QRYPTO_Q / 16)), 15)];
+        const qryptoHexInt = (hex) => parseInt(hex.slice(1), 16);
+
+        // ==================== LATTICE CUBE COMPONENT ====================
+        const LatticeCube = ({ size = 200, className = "", colorBytes = null, seedEmail = "" }) => {
+            const canvasRef = useRef(null);
+            const animationRef = useRef(null);
+
+            const seedBytes = useMemo(() => {
+                if (colorBytes instanceof Uint8Array && colorBytes.length > 0) return colorBytes;
+                return new TextEncoder().encode(seedEmail || 'public-key-cube');
+            }, [colorBytes, seedEmail]);
+
+            const cubeData = useMemo(() => qryptoComputeLayers(seedBytes), [seedBytes]);
+
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                if (!canvas || !window.THREE) return undefined;
+
+                const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                renderer.setClearColor(0x000000, 0);
+                renderer.setSize(size, size, false);
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 600);
+                camera.position.set(0, 0, 52);
+
+                scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
+                directionalLight.position.set(1, 1, 1);
+                scene.add(directionalLight);
+
+                const pivot = new THREE.Group();
+                scene.add(pivot);
+
+                const geometry = new THREE.SphereGeometry(0.19, 10, 7);
+                const spacing = 1.1;
+                const offset = ((QRYPTO_CUBE_SIZE - 1) * spacing) / 2;
+                const meshes = [];
+
+                for (let layer = 0; layer < 16; layer++) {
+                    for (let index = 0; index < 256; index++) {
+                        const column = index % 16;
+                        const row = Math.floor(index / 16);
+                        const material = new THREE.MeshLambertMaterial({ color: qryptoHexInt(qryptoValueColor(cubeData[layer][index])) });
+                        const mesh = new THREE.Mesh(geometry, material);
+                        mesh.position.set(column * spacing - offset, -(row * spacing - offset), -(layer * spacing - offset));
+                        pivot.add(mesh);
+                        meshes.push(mesh);
+                    }
+                }
+
+                let rotX = 0.45;
+                let rotY = 0.55;
+                let dragging = false;
+                let prevX = 0;
+                let prevY = 0;
+
+                const applyRotation = () => {
+                    pivot.rotation.x = rotX;
+                    pivot.rotation.y = rotY;
+                };
+
+                const onPointerDown = (event) => {
+                    dragging = true;
+                    prevX = event.clientX;
+                    prevY = event.clientY;
+                };
+
+                const onPointerMove = (event) => {
+                    if (!dragging) return;
+                    rotY += (event.clientX - prevX) * 0.01;
+                    rotX += (event.clientY - prevY) * 0.01;
+                    prevX = event.clientX;
+                    prevY = event.clientY;
+                    applyRotation();
+                };
+
+                const onPointerUp = () => {
+                    dragging = false;
+                };
+
+                const onTouchStart = (event) => {
+                    if (!event.touches.length) return;
+                    dragging = true;
+                    prevX = event.touches[0].clientX;
+                    prevY = event.touches[0].clientY;
+                };
+
+                const onTouchMove = (event) => {
+                    if (!dragging || !event.touches.length) return;
+                    rotY += (event.touches[0].clientX - prevX) * 0.01;
+                    rotX += (event.touches[0].clientY - prevY) * 0.01;
+                    prevX = event.touches[0].clientX;
+                    prevY = event.touches[0].clientY;
+                    applyRotation();
+                };
+
+                const renderLoop = () => {
+                    if (!dragging) {
+                        rotY += 0.005;
+                        applyRotation();
+                    }
+                    renderer.render(scene, camera);
+                    animationRef.current = requestAnimationFrame(renderLoop);
+                };
+
+                applyRotation();
+                canvas.addEventListener('mousedown', onPointerDown);
+                canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+                window.addEventListener('mousemove', onPointerMove);
+                window.addEventListener('mouseup', onPointerUp);
+                window.addEventListener('touchmove', onTouchMove, { passive: true });
+                window.addEventListener('touchend', onPointerUp);
+                animationRef.current = requestAnimationFrame(renderLoop);
+
+                return () => {
+                    cancelAnimationFrame(animationRef.current);
+                    canvas.removeEventListener('mousedown', onPointerDown);
+                    canvas.removeEventListener('touchstart', onTouchStart);
+                    window.removeEventListener('mousemove', onPointerMove);
+                    window.removeEventListener('mouseup', onPointerUp);
+                    window.removeEventListener('touchmove', onTouchMove);
+                    window.removeEventListener('touchend', onPointerUp);
+                    meshes.forEach((mesh) => {
+                        mesh.material.dispose();
+                        pivot.remove(mesh);
+                    });
+                    geometry.dispose();
+                    renderer.dispose();
+                };
+            }, [cubeData, size]);
+
+            return (
+                <div className={`${className}`}>
+                    <canvas
+                        ref={canvasRef}
+                        width={size}
+                        height={size}
+                        className="rounded-lg shadow-2xl cursor-grab bg-transparent"
+                    />
+                    <div className="text-center text-xs text-gray-400 mt-1">
+                        Qrypto Trust Public Key Cube
+                    </div>
+                </div>
+            );
+        };
+
+        // ==================== CRYPTO UTILITIES ====================
+        const cryptoUtils = {
+            generateRandomBytes: (len) => {
+                // Handle large arrays by generating in chunks (max 65536 per call)
+                const arr = new Uint8Array(len);
+                const chunk = 65536;
+                for (let i = 0; i < len; i += chunk) {
+                    const size = Math.min(chunk, len - i);
+                    const temp = new Uint8Array(size);
+                    window.crypto.getRandomValues(temp);
+                    arr.set(temp, i);
+                }
+                return arr;
+            },
+            bytesToHex: (bytes) => Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(''),
+            hexToBytes: (hex) => {
+                const bytes = new Uint8Array(hex.length / 2);
+                for (let i = 0; i < hex.length; i += 2) bytes[i/2] = parseInt(hex.substr(i, 2), 16);
+                return bytes;
+            },
+            bytesToBase64: (bytes) => {
+                // Handle large arrays by processing in chunks
+                const chunk = 8192;
+                let result = '';
+                for (let i = 0; i < bytes.length; i += chunk) {
+                    const slice = bytes.subarray(i, i + chunk);
+                    result += String.fromCharCode.apply(null, slice);
+                }
+                return btoa(result);
+            },
+            base64ToBytes: (b64) => {
+                const binary = atob(b64);
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                    bytes[i] = binary.charCodeAt(i);
+                }
+                return bytes;
+            },
+            fingerprint: (key) => {
+                const hash = new Uint8Array(32);
+                for (let i = 0; i < 32; i++) hash[i] = key[i % key.length] ^ (i * 17);
+                return cryptoUtils.bytesToHex(hash).match(/.{1,4}/g).slice(0, 8).join(' ').toUpperCase();
+            }
+        };
+
+        // Real PQC operations using @noble/post-quantum (FIPS 203 / FIPS 204)
+        const pqc = {
+            kyber: {
+                // ML-KEM-768 (FIPS 203) — post-quantum KEM
+                keygen: () => noblePostQuantum.ml_kem768.keygen(),
+                encapsulate: (pk) => {
+                    const result = noblePostQuantum.ml_kem768.encapsulate(pk);
+                    // Normalise property name to lowercase 'ciphertext' for internal consistency
+                    return { sharedSecret: result.sharedSecret, ciphertext: result.cipherText };
+                },
+                decapsulate: (ct, sk) => noblePostQuantum.ml_kem768.decapsulate(ct, sk)
+            },
+            dilithium: {
+                // ML-DSA-65 (FIPS 204) — post-quantum digital signature
+                keygen: () => noblePostQuantum.ml_dsa65.keygen(),
+                sign: (msg, sk) => noblePostQuantum.ml_dsa65.sign(msg, sk),
+                // Real API is verify(sig, msg, pk) — we adapt here so callers keep (msg, sig, pk) order
+                verify: (msg, sig, pk) => noblePostQuantum.ml_dsa65.verify(sig, msg, pk)
+            }
+        };
+
+        // Real AES-256-GCM via Web Crypto API (built-in in all modern browsers)
+        const aes = {
+            encrypt: async (data, keyBytes) => {
+                const iv = cryptoUtils.generateRandomBytes(12);
+                const cryptoKey = await crypto.subtle.importKey(
+                    'raw', keyBytes, { name: 'AES-GCM' }, false, ['encrypt']
+                );
+                const encryptedBuffer = await crypto.subtle.encrypt(
+                    { name: 'AES-GCM', iv }, cryptoKey, data
+                );
+                return { iv, encrypted: new Uint8Array(encryptedBuffer) };
+            },
+            decrypt: async (encryptedBytes, keyBytes, iv) => {
+                const cryptoKey = await crypto.subtle.importKey(
+                    'raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']
+                );
+                const decryptedBuffer = await crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv }, cryptoKey, encryptedBytes
+                );
+                return new Uint8Array(decryptedBuffer);
+            }
+        };
+
+
+
+        // ==================== MAIN EMAIL DEMO COMPONENT ====================
+        const PQCEmailDemo = () => {
+            const [phase, setPhase] = useState('login'); // login, code, identity or ready
+            const [teamMembers, setTeamMembers] = useState([]);
+            const [selectedMember, setSelectedMember] = useState(null);
+            const [deviceId, setDeviceId] = useState(() => getDeviceId());
+            const [mode, setMode] = useState(null);
+            const [step, setStep] = useState(0);
+            const [teamEmail, setTeamEmail] = useState('');
+            const [pin, setPin] = useState('');
+            const [userName, setUserName] = useState('');
+            const [myKeys, setMyKeys] = useState(null);
+            const [recipientPubKey, setRecipientPubKey] = useState(null);
+            const [prefetchedSenderPublicKey, setPrefetchedSenderPublicKey] = useState(null);
+            const [senderKeyLookupError, setSenderKeyLookupError] = useState('');
+            const [decryptErrorMessage, setDecryptErrorMessage] = useState('');
+            const [recipientName, setRecipientName] = useState('');
+            const [subject, setSubject] = useState('');
+            const [message, setMessage] = useState('');
+            const [attachments, setAttachments] = useState([]);
+            const [encryptedPackage, setEncryptedPackage] = useState(null);
+            const [receivedPackage, setReceivedPackage] = useState(null);
+            const [decryptedData, setDecryptedData] = useState(null);
+            const [processing, setProcessing] = useState(false);
+            const [decrypting, setDecrypting] = useState(false);
+            const [logs, setLogs] = useState([]);
+            const [showLattice, setShowLattice] = useState(true);
+            const [identityStatus, setIdentityStatus] = useState({ type: 'unknown', message: 'Checking key status...' });
+            const [identityAction, setIdentityAction] = useState('idle');
+            const importKeysInputRef = useRef(null);
+
+            const latticeSeedEmail = useMemo(() => {
+                return sessionStorage.getItem('currentUser') || '';
+            }, [phase]);
+
+            const latticeColorBytes = useMemo(() => {
+                const sourceIdentity =
+                    myKeys?.dilithium?.publicKey
+                        ? myKeys
+                        : getIdentityKeys();
+
+                if (sourceIdentity?.dilithium?.publicKey) return sourceIdentity.dilithium.publicKey;
+                if (sourceIdentity?.kyber?.publicKey) return sourceIdentity.kyber.publicKey;
+                return null;
+            }, [myKeys, phase]);
+
+            useEffect(() => {
+                let mounted = true;
+                ensureDeviceId().then((id) => {
+                    if (mounted) setDeviceId(id);
+                });
+                return () => {
+                    mounted = false;
+                };
+            }, []);
+
+            const refreshTeamMembers = async ({ withProcessing = false, logMessage = true } = {}) => {
+                if (withProcessing) setProcessing(true);
+
+                try {
+                    const members = await getAvailableTeamMembers();
+                    if (members instanceof Error) {
+                        showError(members.message);
+                        return false;
+                    }
+
+                    setTeamMembers(members);
+                    if (logMessage) addLog(`Refreshed member list (${members.length} available)`, 'info');
+                    return true;
+                } catch (error) {
+                    showError(error);
+                    return false;
+                } finally {
+                    if (withProcessing) setProcessing(false);
+                }
+            };
+
+            const normalizeMessage = (value) => {
+                if (value instanceof Error) {
+                    return value.message || String(value);
+                }
+
+                if (typeof value === 'string') {
+                    const trimmed = value.trim();
+                    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+                        try {
+                            const parsed = JSON.parse(trimmed);
+                            if (parsed && typeof parsed === 'object') {
+                                if (typeof parsed.status === 'string') return parsed.status;
+                                if (typeof parsed.message === 'string') return parsed.message;
+                            }
+                        } catch (ignored) { }
+                    }
+                    return value;
+                }
+
+                if (value && typeof value === 'object') {
+                    if (typeof value.status === 'string') return value.status;
+                    if (typeof value.message === 'string') return value.message;
+                    try {
+                        return JSON.stringify(value);
+                    } catch (ignored) {
+                        return String(value);
+                    }
+                }
+
+                if (value === null || typeof value === 'undefined') {
+                    return 'Unknown error';
+                }
+
+                return String(value);
+            };
+
+            const addLog = (msg, type = 'info') => {
+                const normalized = normalizeMessage(msg);
+                setLogs(prev => [...prev, { msg: normalized, type, time: new Date().toLocaleTimeString() }]);
+            };
+
+            const showError = (message) =>  {
+                const normalizedMessage = normalizeMessage(message);
+                addLog(normalizedMessage, 'error');
+                console.error("Error Received: ", normalizedMessage, message);
+            }
+
+            const signIn = async () => {
+                setProcessing(true);
+                try {
+                    const result = await requestAuthorization(teamEmail);
+                    setProcessing(false);
+                    if (result instanceof Error) {
+                        showError(result.message);
+                        return;
+                    }
+                    // Success
+                    setPhase('code');
+
+                } catch (error) {
+                    showError(error);
+                    setProcessing(false);
+                }
+            }
+
+            const isIdentityValid = (id) => {
+                if (!id) return false;
+                try {
+                    noblePostQuantum.ml_dsa65.getPublicKey(id.dilithium.secretKey);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            };
+
+            const checkIdentityStatus = async () => {
+                const identity = getIdentityKeys();
+                if (!identity) {
+                    return {
+                        type: 'empty',
+                        message: 'No local keypair found on this device. Generate a keypair to continue.',
+                        identity: null
+                    };
+                }
+
+                if (!isIdentityValid(identity)) {
+                    return {
+                        type: 'invalid-local',
+                        message: 'Local keypair is invalid or corrupted. Generate a new keypair.',
+                        identity: null
+                    };
+                }
+
+                const currentDeviceId = await ensureDeviceId();
+                const members = await getAvailableTeamMembers();
+                if (members instanceof Error) {
+                    throw members;
+                }
+
+                const xqIdentity = members.find(member =>
+                    member.email === teamEmail && member.deviceId === currentDeviceId
+                );
+
+                if (!xqIdentity) {
+                    return {
+                        type: 'missing-xq',
+                        message: 'Local keypair exists, but no matching key was found in XQ for this device.',
+                        identity: null
+                    };
+                }
+
+                const xqKey = await getMessageKey(xqIdentity.token);
+                if (xqKey instanceof Error) {
+                    throw xqKey;
+                }
+
+                const localKyberPublicKey = identity?.kyber?.publicKey
+                    ? cryptoUtils.bytesToBase64(identity.kyber.publicKey)
+                    : null;
+                const localDilithiumPublicKey = identity?.dilithium?.publicKey
+                    ? cryptoUtils.bytesToBase64(identity.dilithium.publicKey)
+                    : null;
+
+                const keyMatches =
+                    localKyberPublicKey &&
+                    localDilithiumPublicKey &&
+                    localKyberPublicKey === xqKey.kyberPublicKey &&
+                    localDilithiumPublicKey === xqKey.dilithiumPublicKey;
+
+                if (!keyMatches) {
+                    return {
+                        type: 'mismatch',
+                        message: 'Local keypair does not match the key stored in XQ. Generate a new keypair to replace it.',
+                        identity: null
+                    };
+                }
+
+                return {
+                    type: 'valid',
+                    message: 'Current keypair is available in XQ and valid for this device.',
+                    identity
+                };
+            };
+
+            const generateAndStoreIdentity = async () => {
+                setIdentityAction('generating');
+                try {
+                    addLog('Generating ML-KEM-768 keypair...', 'process');
+                    await new Promise(r => setTimeout(r, 500));
+                    const kyberKeys = pqc.kyber.keygen();
+                    addLog(`✓ Kyber public key: ${kyberKeys.publicKey.length} bytes`, 'success');
+
+                    addLog('Generating ML-DSA-65 keypair...', 'process');
+                    await new Promise(r => setTimeout(r, 500));
+                    const dilithiumKeys = pqc.dilithium.keygen();
+                    addLog(`✓ Dilithium public key: ${dilithiumKeys.publicKey.length} bytes`, 'success');
+
+                    const identity = {
+                        kyber: kyberKeys,
+                        dilithium: dilithiumKeys,
+                        name: teamEmail
+                    };
+
+                    const pubKeys = {
+                        name: identity.name,
+                        kyberPublicKey: cryptoUtils.bytesToBase64(identity.kyber.publicKey),
+                        dilithiumPublicKey: cryptoUtils.bytesToBase64(identity.dilithium.publicKey),
+                        fingerprint: cryptoUtils.fingerprint(identity.dilithium.publicKey)
+                    };
+
+                    const response = await storeIdentityKeys(identity, pubKeys);
+                    if (response instanceof Error) {
+                        showError(response.message);
+                        return;
+                    }
+
+                    if (response?.replacedCount > 0) {
+                        addLog(`✓ Replaced ${response.replacedCount} existing identity key(s) in XQ`, 'success');
+                    } else {
+                        addLog('✓ Uploaded identity keys to XQ', 'success');
+                    }
+
+                    setMyKeys(identity);
+                    setIdentityStatus({
+                        type: 'valid',
+                        message: 'Current keypair is available in XQ and valid for this device.'
+                    });
+                } catch (error) {
+                    showError(error);
+                } finally {
+                    setIdentityAction('idle');
+                }
+            };
+
+            const continueToApp = async () => {
+                if (!myKeys || identityStatus.type !== 'valid') return;
+
+                setIdentityAction('continuing');
+                try {
+                    const refreshed = await refreshTeamMembers({ withProcessing: false, logMessage: false });
+                    if (!refreshed) return;
+                    setPhase('ready');
+                } finally {
+                    setIdentityAction('idle');
+                }
+            };
+
+            const refreshIdentityStatus = async () => {
+                setIdentityAction('checking');
+                try {
+                    const status = await checkIdentityStatus();
+                    setIdentityStatus({ type: status.type, message: status.message });
+                    setMyKeys(status.identity || null);
+                } catch (error) {
+                    showError(error);
+                } finally {
+                    setIdentityAction('idle');
+                }
+            };
+
+            const exportLocalKeypair = () => {
+                const identity = getIdentityKeys();
+                if (!identity) {
+                    showError('No local keypair to export');
+                    return;
+                }
+
+                try {
+                    const payload = serializeKeys(identity);
+                    const blob = new Blob([payload], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    const safeEmail = (teamEmail || 'user').replace(/[^a-zA-Z0-9@._-]/g, '_');
+                    const safeDevice = (deviceId || 'device').replace(/[^a-zA-Z0-9_-]/g, '_');
+                    link.href = url;
+                    link.download = `pqc_identity_${safeEmail}_${safeDevice}.json`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    addLog('Exported local keypair', 'success');
+                } catch (error) {
+                    showError(error);
+                }
+            };
+
+            const importLocalKeypair = async (event) => {
+                const file = event.target.files?.[0];
+                if (!file) return;
+
+                setIdentityAction('importing');
+                try {
+                    const existingIdentity = getIdentityKeys();
+                    if (existingIdentity) {
+                        const shouldReplace = window.confirm('A local keypair already exists and will be replaced by the imported keypair. Continue?');
+                        if (!shouldReplace) return;
+                    }
+
+                    const text = await file.text();
+                    const imported = deserializeKeys(text);
+
+                    if (!isIdentityValid(imported)) {
+                        showError('Invalid keypair file');
+                        return;
+                    }
+
+                    const currentDeviceId = await ensureDeviceId();
+                    const importedDeviceId = imported?.deviceId;
+                    imported.name = teamEmail;
+                    imported.deviceId = currentDeviceId;
+
+                    if (importedDeviceId && importedDeviceId !== currentDeviceId) {
+                        addLog(`Imported keypair device ID (${importedDeviceId}) differs from this device (${currentDeviceId}); using current device ID for XQ upload`, 'info');
+                    }
+
+                    const pubKeys = {
+                        name: imported.name,
+                        kyberPublicKey: cryptoUtils.bytesToBase64(imported.kyber.publicKey),
+                        dilithiumPublicKey: cryptoUtils.bytesToBase64(imported.dilithium.publicKey),
+                        fingerprint: cryptoUtils.fingerprint(imported.dilithium.publicKey)
+                    };
+
+                    const response = await storeIdentityKeys(imported, pubKeys);
+                    if (response instanceof Error) {
+                        showError(response.message);
+                        return;
+                    }
+
+                    setMyKeys(imported);
+                    if (response?.replacedCount > 0) {
+                        addLog(`Imported keypair and replaced ${response.replacedCount} existing identity key(s) in XQ`, 'success');
+                    } else {
+                        addLog('Imported keypair and uploaded to XQ', 'success');
+                    }
+                    await refreshIdentityStatus();
+                } catch (error) {
+                    showError(error);
+                } finally {
+                    if (event.target) event.target.value = '';
+                    setIdentityAction('idle');
+                }
+            };
+
+            const deleteAllIdentityKeysInXQ = async () => {
+                const confirmed = window.confirm('Delete all your PQC identity keys stored in XQ? This cannot be undone.');
+                if (!confirmed) return;
+
+                setIdentityAction('deleting');
+                try {
+                    const dashboardToken = readSessionStorage("dashboardToken");
+                    const xqAccessToken = readSessionStorage("token");
+                    if (!dashboardToken || !xqAccessToken) {
+                        showError('Unauthorized');
+                        return;
+                    }
+
+                    const response = await _apiFetch(`${cfg.DASHBOARD_URL}/communications?recipients=${cfg.IDENTITY_RECIPIENT}`, {
+                        headers: {
+                            "Api-Key": cfg.DASHBOARD_API_KEY,
+                            "Authorization": `Bearer ${dashboardToken}`,
+                        },
+                    });
+
+                    const { communications = [] } = await response.json();
+                    const myIdentityKeys = communications.filter(contact => {
+                        if (contact.status !== 0) return false;
+                        if (contact.user !== teamEmail) return false;
+                        const meta = parseCommunicationMeta(contact.meta);
+                        return (meta?.title || '').startsWith(cfg.IDENTITY_TITLE);
+                    });
+
+                    let deletedCount = 0;
+                    for (const identity of myIdentityKeys) {
+                        const deleted = await deleteKeyByToken(identity.token, xqAccessToken);
+                        if (deleted) deletedCount += 1;
+                    }
+
+                    addLog(`Deleted ${deletedCount} key(s) from XQ`, deletedCount > 0 ? 'success' : 'info');
+
+                    const status = await checkIdentityStatus();
+                    setIdentityStatus({ type: status.type, message: status.message });
+                    setMyKeys(status.identity || null);
+                } catch (error) {
+                    showError(error);
+                } finally {
+                    setIdentityAction('idle');
+                }
+            };
+
+            const validateCode = async () => {
+                setProcessing(true);
+                try {
+
+                    const result = await validateAuthorization(pin);
+                    if (result instanceof Error) {
+                        showError(result.message);
+                        setProcessing(false);
+                        return;
+                    }
+
+                    addLog('Checking current keypair status...', 'process');
+                    const status = await checkIdentityStatus();
+                    setIdentityStatus({ type: status.type, message: status.message });
+                    setMyKeys(status.identity || null);
+                    setProcessing(false);
+                    setPhase('identity');
+
+                } catch (error) {
+                    showError(error);
+                    setProcessing(false);
+                }
+            }
+
+            const loadSelectedMemberKeys = async () => {
+                setProcessing(true);
+                try {
+                   const index = teamMembers.findIndex(member => member.token === selectedMember );
+                   if (index < 0) {
+                       showError("Invalid Member");
+                       setProcessing(false);
+                       return;
+                   }
+
+                   // Retrieve the public key for the selected member.
+                   const pubKey = await getMessageKey(teamMembers[index].token);
+                   if (pubKey instanceof Error) {
+                       showError(pubKey.message);
+                       setProcessing(false);
+                       return;
+                   }
+
+                    setRecipientPubKey({
+                        name: pubKey.name,
+                        kyberPublicKey: cryptoUtils.base64ToBytes(pubKey.kyberPublicKey),
+                        dilithiumPublicKey: cryptoUtils.base64ToBytes(pubKey.dilithiumPublicKey),
+                        fingerprint: pubKey.fingerprint
+                    });
+
+                    const selectedRecipient = teamMembers[index];
+                    const selectedRecipientLabel = selectedRecipient.deviceId
+                        ? `${selectedRecipient.email} (${selectedRecipient.deviceId})`
+                        : selectedRecipient.email;
+
+                    setProcessing(false);
+                    setRecipientName(selectedRecipientLabel);
+                    addLog(`Loaded public keys for ${selectedRecipientLabel}`, 'success');
+
+                   setStep(1);
+
+                } catch (error) {
+                    showError(error);
+                    setProcessing(false);
+                }
+            }
+
+
+
+            const generateKeys = async () => {
+                setProcessing(true);
+                addLog('Generating ML-KEM-768 keypair...', 'process');
+                await new Promise(r => setTimeout(r, 500));
+                const kyberKeys = pqc.kyber.keygen();
+                addLog(`✓ Kyber public key: ${kyberKeys.publicKey.length} bytes`, 'success');
+
+                addLog('Generating ML-DSA-65 keypair...', 'process');
+                await new Promise(r => setTimeout(r, 500));
+                const dilithiumKeys = pqc.dilithium.keygen();
+                addLog(`✓ Dilithium public key: ${dilithiumKeys.publicKey.length} bytes`, 'success');
+
+                const keys = {
+                    kyber: kyberKeys,
+                    dilithium: dilithiumKeys,
+                    name: userName
+                };
+                setMyKeys(keys);
+                addLog(`Keys generated for ${userName}`, 'success');
+                const fp = cryptoUtils.fingerprint(dilithiumKeys.publicKey);
+                addLog(`Fingerprint: ${fp}`, 'info');
+                setStep(1);
+                setProcessing(false);
+            };
+
+            const handleFileAttachment = async (e) => {
+                const files = Array.from(e.target.files);
+                const newAttachments = await Promise.all(files.map(async (file) => {
+                    const buffer = await file.arrayBuffer();
+                    return {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: new Uint8Array(buffer)
+                    };
+                }));
+                setAttachments(prev => [...prev, ...newAttachments]);
+                addLog(`Added ${files.length} attachment(s)`, 'info');
+            };
+
+            const encryptAndSign = async () => {
+                setProcessing(true);
+                addLog('Starting encryption process...', 'process');
+                
+                try {
+                    // Prepare payload
+                    addLog('Preparing payload...', 'process');
+                    await new Promise(r => setTimeout(r, 200));
+                    
+                    const payload = {
+                        subject,
+                        body: message,
+                        attachments: attachments.map(a => ({
+                            name: a.name,
+                            type: a.type,
+                            data: cryptoUtils.bytesToBase64(a.data)
+                        })),
+                        timestamp: new Date().toISOString()
+                    };
+                    const payloadStr = JSON.stringify(payload);
+                    const payloadBytes = new TextEncoder().encode(payloadStr);
+                    addLog(`✓ Payload prepared: ${payloadBytes.length} bytes`, 'success');
+                    
+                    // ML-KEM encapsulation
+                    addLog('Performing ML-KEM-768 encapsulation...', 'process');
+                    await new Promise(r => setTimeout(r, 400));
+                    const { sharedSecret, ciphertext } = pqc.kyber.encapsulate(recipientPubKey.kyberPublicKey);
+                    addLog(`✓ Generated shared secret (32 bytes)`, 'success');
+                    addLog(`✓ Ciphertext: ${ciphertext.length} bytes`, 'success');
+                    
+                    // AES-GCM encryption — sharedSecret (32 bytes) used directly as AES-256 key
+                    addLog('Encrypting with AES-256-GCM...', 'process');
+                    await new Promise(r => setTimeout(r, 300));
+                    const { iv, encrypted } = await aes.encrypt(payloadBytes, sharedSecret);
+                    addLog(`✓ Encrypted payload: ${encrypted.length} bytes`, 'success');
+                    
+                    // ML-DSA signature
+                    addLog('Signing with ML-DSA-65...', 'process');
+                    await new Promise(r => setTimeout(r, 400));
+                    const signature = pqc.dilithium.sign(encrypted, myKeys.dilithium.secretKey);
+                    addLog(`✓ Signature: ${signature.length} bytes`, 'success');
+                    const senderDeviceId = deviceId || await ensureDeviceId();
+                    
+                    const pkg = {
+                        version: '1.0',
+                        algorithm: { kem: 'ML-KEM-768', sig: 'ML-DSA-65', enc: 'AES-256-GCM' },
+                        sender: {
+                            email: myKeys.name,
+                            deviceId: senderDeviceId,
+                            fingerprint: cryptoUtils.fingerprint(myKeys.dilithium.publicKey)
+                        },
+                        recipient: recipientName,
+                        kemCiphertext: cryptoUtils.bytesToBase64(ciphertext),
+                        iv: cryptoUtils.bytesToBase64(iv),
+                        encryptedPayload: cryptoUtils.bytesToBase64(encrypted),
+                        signature: cryptoUtils.bytesToBase64(signature),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    setEncryptedPackage(pkg);
+                    addLog('✓ Encryption complete!', 'success');
+                    setStep(2);
+                } catch (error) {
+                    addLog(`✗ Error: ${error.message}`, 'error');
+                    console.error('Encryption error:', error);
+                } finally {
+                    setProcessing(false);
+                }
+            };
+
+            const downloadPackage = () => {
+                const blob = new Blob([JSON.stringify(encryptedPackage, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `encrypted_email_${Date.now()}.pqc.json`;
+                a.click();
+                addLog('Downloaded encrypted package', 'success');
+            };
+
+            const validateEncryptedPackageFormat = (pkg) => {
+                const isObject = (value) => !!value && typeof value === 'object' && !Array.isArray(value);
+                const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
+                const isLikelyBase64 = (value) => {
+                    if (!isNonEmptyString(value)) return false;
+                    const normalized = value.trim();
+                    return normalized.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(normalized);
+                };
+
+                if (!isObject(pkg)) {
+                    throw new Error('Invalid encrypted package format: root object is missing.');
+                }
+
+                if (!isObject(pkg.sender)) {
+                    throw new Error('Invalid encrypted package format: sender block is missing.');
+                }
+
+                if (!isNonEmptyString(pkg.sender.email) || !isNonEmptyString(pkg.sender.deviceId)) {
+                    throw new Error('Invalid encrypted package format: sender must include email and deviceId.');
+                }
+
+                if (!isObject(pkg.algorithm) || !isNonEmptyString(pkg.algorithm.kem) || !isNonEmptyString(pkg.algorithm.sig) || !isNonEmptyString(pkg.algorithm.enc)) {
+                    throw new Error('Invalid encrypted package format: algorithm block is incomplete.');
+                }
+
+                const encodedFields = ['kemCiphertext', 'iv', 'encryptedPayload', 'signature'];
+                for (const field of encodedFields) {
+                    if (!isLikelyBase64(pkg[field])) {
+                        throw new Error(`Invalid encrypted package format: ${field} is missing or not valid base64.`);
+                    }
+                }
+            };
+
+            const resolveSenderKeyFromPackage = async (pkg) => {
+                const sender = pkg?.sender || {};
+                const senderEmail = typeof sender.email === 'string' ? sender.email.trim() : '';
+                const senderDeviceId = typeof sender.deviceId === 'string' ? sender.deviceId.trim() : '';
+
+                if (!senderEmail || !senderDeviceId) {
+                    throw new Error('Encrypted package is missing sender email or device ID metadata.');
+                }
+
+                const members = await getAvailableTeamMembers();
+                if (members instanceof Error) {
+                    throw members;
+                }
+
+                const senderMember = members.find(member =>
+                    member.email === senderEmail && member.deviceId === senderDeviceId
+                );
+
+                if (!senderMember) {
+                    throw new Error(`No public key found in XQ for sender ${senderEmail} (${senderDeviceId}).`);
+                }
+
+                const pubKey = await getMessageKey(senderMember.token);
+                if (pubKey instanceof Error) {
+                    throw pubKey;
+                }
+
+                return {
+                    email: senderMember.email,
+                    token: senderMember.token,
+                    deviceId: senderMember.deviceId,
+                    name: pubKey.name,
+                    kyberPublicKey: cryptoUtils.base64ToBytes(pubKey.kyberPublicKey),
+                    dilithiumPublicKey: cryptoUtils.base64ToBytes(pubKey.dilithiumPublicKey),
+                    fingerprint: pubKey.fingerprint
+                };
+            };
+
+            const loadReceivedPackage = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const uploadErrorMessage = 'Invalid file: expected a valid .pqc.json encrypted packet format.';
+                setProcessing(true);
+                setSenderKeyLookupError('');
+                setDecryptErrorMessage('');
+                let hasValidatedPackage = false;
+                try {
+                    const text = await file.text();
+                    let pkg;
+                    try {
+                        pkg = JSON.parse(text);
+                    } catch (parseError) {
+                        throw parseError;
+                    }
+                    validateEncryptedPackageFormat(pkg);
+                    hasValidatedPackage = true;
+                    setReceivedPackage(pkg);
+                    const senderKey = await resolveSenderKeyFromPackage(pkg);
+
+                    const senderLabel = `${senderKey.email} (${senderKey.deviceId})`;
+                    setPrefetchedSenderPublicKey(senderKey);
+                    setRecipientName(senderLabel);
+                    setDecryptErrorMessage('');
+                    addLog(`Loaded encrypted file transfer from ${senderLabel}`, 'info');
+                    addLog(`Resolved sender public key for ${senderLabel} (cached before decrypt)`, 'success');
+                } catch (error) {
+                    if (!hasValidatedPackage) {
+                        setReceivedPackage(null);
+                        setSenderKeyLookupError(uploadErrorMessage);
+                    } else {
+                        setSenderKeyLookupError(normalizeMessage(error));
+                    }
+                    setPrefetchedSenderPublicKey(null);
+                    setRecipientName('');
+                    showError(error);
+                    console.error('Receive upload error details:', error);
+                } finally {
+                    setProcessing(false);
+                }
+            };
+
+            const verifyAndDecrypt = async () => {
+                setProcessing(true);
+                setDecrypting(true);
+                setDecryptErrorMessage('');
+                addLog('Starting decryption process...', 'process');
+                
+                try {
+                    const ciphertext = cryptoUtils.base64ToBytes(receivedPackage.kemCiphertext);
+                    const encrypted = cryptoUtils.base64ToBytes(receivedPackage.encryptedPayload);
+                    const signature = cryptoUtils.base64ToBytes(receivedPackage.signature);
+                    const iv = cryptoUtils.base64ToBytes(receivedPackage.iv);
+
+                    const senderPublicKey = mode === 'receive' ? prefetchedSenderPublicKey : recipientPubKey;
+                    if (!senderPublicKey) {
+                        throw new Error('Sender public key is not available. Upload a packet with a resolvable sender key first.');
+                    }
+
+                    const keyLabel = senderPublicKey.deviceId
+                        ? `${senderPublicKey.email} (${senderPublicKey.deviceId})`
+                        : (senderPublicKey.email || senderPublicKey.name || 'sender');
+
+                    // ML-KEM decapsulation
+                    addLog('Performing ML-KEM-768 decapsulation...', 'process');
+                    await new Promise(r => setTimeout(r, 400));
+                    const sharedSecret = pqc.kyber.decapsulate(ciphertext, myKeys.kyber.secretKey);
+                    addLog('✓ Recovered shared secret', 'success');
+
+                    addLog(`Verifying signature with ${keyLabel}...`, 'process');
+                    const valid = pqc.dilithium.verify(encrypted, signature, senderPublicKey.dilithiumPublicKey);
+                    if (!valid) {
+                        setDecryptErrorMessage('Signature verification failed. The file may have been modified or signed by a different key.');
+                        addLog(`✗ Signature verification failed for ${keyLabel}`, 'error');
+                        return;
+                    }
+
+                    addLog('Decrypting with AES-256-GCM...', 'process');
+                    await new Promise(r => setTimeout(r, 300));
+                    const payloadBytes = await aes.decrypt(encrypted, sharedSecret, iv);
+                    const payload = JSON.parse(new TextDecoder().decode(payloadBytes));
+
+                    setRecipientPubKey(senderPublicKey);
+                    setRecipientName(senderPublicKey.email || senderPublicKey.name || recipientName);
+                    setDecryptedData(payload);
+                    addLog(`✓ Signature verified with ${keyLabel}`, 'success');
+                    addLog('✓ Decryption complete!', 'success');
+                    setStep(1);
+                } catch (error) {
+                    setDecryptErrorMessage(`Decryption failed: ${normalizeMessage(error)}`);
+                    addLog(`✗ Error: ${error.message}`, 'error');
+                    console.error('Decryption error:', error);
+                } finally {
+                    setDecrypting(false);
+                    setProcessing(false);
+                }
+            };
+
+            const reset = () => {
+                setMode(null);
+                setStep(0);
+                setUserName('');
+                setRecipientPubKey(null);
+                setPrefetchedSenderPublicKey(null);
+                setSenderKeyLookupError('');
+                setDecryptErrorMessage('');
+                setRecipientName('');
+                setSubject('');
+                setMessage('');
+                setAttachments([]);
+                setEncryptedPackage(null);
+                setReceivedPackage(null);
+                setDecryptedData(null);
+                setDecrypting(false);
+                setLogs([]);
+            };
+
+            const logout = () => {
+                setMyKeys(null);
+                setTeamEmail('');
+                setTeamMembers(null);
+                sessionStorage.clear();
+                setPhase('login');
+            }
+
+            const goToKeyManagement = () => {
+                setMode(null);
+                setStep(0);
+                setPhase('identity');
+            }
+
+            const wrapContent = (content) => {
+                return <div className="min-h-screen p-4">
+                    {showLattice && (
+                        <div className="lattice-container">
+                            <LatticeCube size={200} colorBytes={latticeColorBytes} seedEmail={latticeSeedEmail} />
+                        </div>
+                    )}
+                    <div className="flex items-center justify-center main-content">
+                        <div className="max-w-2xl w-full">
+                            <div className="text-center mb-8">
+                                <h1 className="text-4xl font-bold text-gray-900 mb-2">🔐 PQC Secure File Transfer</h1>
+                                <p className="text-gray-500">Post-Quantum Cryptography Demo</p>
+                                <p className="text-gray-400 text-sm mt-2">ML-KEM-768 + ML-DSA-65 + AES-256-GCM</p>
+                            </div>
+
+                            {content}
+
+                            <div className="mt-8 text-center">
+                                <label className="flex items-center justify-center gap-2 text-gray-500 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={showLattice}
+                                        onChange={e => setShowLattice(e.target.checked)}
+                                        className="rounded"
+                                    />
+                                    Show Lattice Visualization
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+            // Login Phase
+            if (phase === 'login') {
+                return (
+                    wrapContent(
+                        <div className="space-y-4">
+                            <h2 className="text-lg font-semibold text-gray-900">Sign into Team</h2>
+                            <input
+                                type="text"
+                                placeholder="Your Team Email Address"
+                                value={teamEmail}
+                                disabled={processing}
+                                onChange={e => setTeamEmail(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' && teamEmail.length > 0 && !processing) {
+                                        e.preventDefault();
+                                        signIn();
+                                    }
+                                }}
+                                className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-400 focus:outline-none"
+                            />
+                            <button
+                                onClick={() => signIn()}
+                                disabled={teamEmail.length === 0 || processing}
+                                className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                            >
+                                {processing ? '⏳ Please Wait...' : 'Sign-In'}
+                            </button>
+                        </div>
+                    ));
+            }
+
+            // Code Entry Phase
+            if (phase === 'code') {
+                return (
+                    wrapContent(
+                        <div className="space-y-4">
+                            <h2 className="text-lg font-semibold text-gray-900">Enter Validation Code:</h2>
+                            <p>
+                                <text className="text-gray-900">A confirmation email was sent to you at <b>{teamEmail}</b>. Enter the PIN code you received below:</text>
+                            </p>
+                            <input
+                                type="text"
+                                placeholder="Enter Validation Code"
+                                value={pin}
+                                disabled={processing}
+                                onChange={e => setPin(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' && pin.length >= 6 && !processing) {
+                                        e.preventDefault();
+                                        validateCode();
+                                    }
+                                }}
+                                className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-400 focus:outline-none"
+                            />
+                            <button
+                                onClick={() => validateCode()}
+                                disabled={pin.length < 6 || processing}
+                                className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                            >
+                               Validate
+                            </button>
+                        </div>
+                    ));
+            }
+
+            if (phase === 'identity') {
+                const statusStyles = {
+                    valid: 'bg-green-50 border border-green-400 text-green-700',
+                    empty: 'bg-yellow-50 border border-yellow-400 text-yellow-700',
+                    'missing-xq': 'bg-orange-50 border border-orange-400 text-orange-700',
+                    'invalid-local': 'bg-red-50 border border-red-400 text-red-600',
+                    mismatch: 'bg-red-50 border border-red-400 text-red-600',
+                    unknown: 'bg-gray-50 border border-gray-300 text-gray-600'
+                };
+
+                return (
+                    wrapContent(
+                        <div className="space-y-4">
+                            <h2 className="text-lg font-semibold text-gray-900">Keypair Management</h2>
+                            <p className="text-gray-600">Signed in as <b>{teamEmail}</b> (Device ID: <b>{deviceId || 'Loading...'}</b>)</p>
+
+                            <div className={`rounded-lg p-4 ${statusStyles[identityStatus.type] || statusStyles.unknown}`}>
+                                <p className="font-semibold mb-1">Current Key Status</p>
+                                <p>{identityStatus.message}</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <button
+                                    onClick={refreshIdentityStatus}
+                                    disabled={identityAction !== 'idle'}
+                                    className="w-full bg-gray-200 hover:bg-gray-300 disabled:bg-gray-300 text-gray-900 py-3 rounded-lg font-semibold transition-colors"
+                                >
+                                    {identityAction === 'checking' ? '⏳ Checking...' : 'Check Current Key Status'}
+                                </button>
+                                <button
+                                    onClick={generateAndStoreIdentity}
+                                    disabled={identityAction !== 'idle'}
+                                    className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                                >
+                                    {identityAction === 'generating' ? '⏳ Generating...' : 'Generate Keypair'}
+                                </button>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <button
+                                    onClick={exportLocalKeypair}
+                                    disabled={identityAction !== 'idle'}
+                                    className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                                >
+                                    Export Keypair
+                                </button>
+                                <button
+                                    onClick={() => importKeysInputRef.current?.click()}
+                                    disabled={identityAction !== 'idle'}
+                                    className="w-full bg-purple-600 hover:bg-purple-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                                >
+                                    {identityAction === 'importing' ? '⏳ Importing...' : 'Import Keypair'}
+                                </button>
+                                <input
+                                    ref={importKeysInputRef}
+                                    type="file"
+                                    accept=".json"
+                                    onChange={importLocalKeypair}
+                                    className="hidden"
+                                />
+                            </div>
+
+                            <button
+                                onClick={deleteAllIdentityKeysInXQ}
+                                disabled={identityAction !== 'idle'}
+                                className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                            >
+                                {identityAction === 'deleting' ? '⏳ Deleting...' : 'Delete All My XQ Keys'}
+                            </button>
+
+                            <button
+                                onClick={continueToApp}
+                                disabled={identityAction !== 'idle' || identityStatus.type !== 'valid' || !myKeys}
+                                className="w-full bg-green-600 hover:bg-green-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                            >
+                                {identityAction === 'continuing' ? '⏳ Continuing...' : 'Continue'}
+                            </button>
+                        </div>
+                    )
+                );
+            }
+
+            // Ready Phase
+            // Mode Selection Screen
+            if (!mode) {
+                return wrapContent(
+                    <div className="space-y-4">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <button
+                                onClick={() => setMode('send')}
+                                className="bg-gradient-to-br from-blue-600 to-blue-800 p-8 rounded-xl hover:from-blue-500 hover:to-blue-700 transition-all transform hover:scale-105 shadow-xl"
+                            >
+                                <div className="text-6xl mb-4">📤</div>
+                                <div className="text-xl font-bold text-white">Send Secure File Transfer</div>
+                                <div className="text-blue-200 text-sm mt-2">Encrypt & sign a message</div>
+                            </button>
+
+                            <button
+                                onClick={() => setMode('receive')}
+                                className="bg-gradient-to-br from-green-600 to-green-800 p-8 rounded-xl hover:from-green-500 hover:to-green-700 transition-all transform hover:scale-105 shadow-xl"
+                            >
+                                <div className="text-6xl mb-4">📥</div>
+                                <div className="text-xl font-bold text-white">Receive Secure File Transfer</div>
+                                <div className="text-green-200 text-sm mt-2">Verify & decrypt a message</div>
+                            </button>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <button
+                                onClick={goToKeyManagement}
+                                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-900 py-3 rounded-lg font-semibold transition-colors"
+                            >
+                                🔑 Go to Keypair Management
+                            </button>
+                            <button
+                                onClick={logout}
+                                className="w-full bg-red-600 hover:bg-red-500 text-white py-3 rounded-lg font-semibold transition-colors"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
+
+            const totalSteps = mode === 'receive' ? 2 : 3;
+            const progressSteps = Array.from({ length: totalSteps }, (_, i) => i);
+
+            return (
+                <div className="min-h-screen p-4">
+                    {showLattice && (
+                        <div className="lattice-container">
+                            <LatticeCube size={200} colorBytes={latticeColorBytes} seedEmail={latticeSeedEmail} />
+                        </div>
+                    )}
+                    <div className="max-w-4xl mx-auto main-content">
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h1 className="text-2xl font-bold text-gray-900">
+                                    {mode === 'send' ? '📤 Send Secure File Transfer' : '📥 Receive Secure File Transfer'}
+                                </h1>
+                                <p className="text-gray-500 text-sm">Step {step + 1} of {totalSteps}</p>
+                                <p className="text-green-700 text-xs mt-1">✅ Key Status: {identityStatus.type === 'valid' ? 'Valid' : 'Check Required'}</p>
+                            </div>
+                            <button onClick={reset} className="text-gray-500 hover:text-gray-900 text-sm">
+                                ← Back to Start
+                            </button>
+
+                            <button onClick={logout} className="text-gray-500 hover:text-gray-900 text-sm">
+                                Logout
+                            </button>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="flex gap-2 mb-6">
+                            {progressSteps.map(i => (
+                                <div key={i} className={`h-2 flex-1 rounded ${i <= step ? 'bg-blue-500' : 'bg-gray-200'}`} />
+                            ))}
+                        </div>
+
+                        <div className="grid lg:grid-cols-3 gap-6">
+                            {/* Main Content */}
+                            <div className="lg:col-span-2 bg-white/80 rounded-xl p-6 backdrop-blur">
+                                {/* SEND MODE */}
+                                {mode === 'send' && (
+                                    <>
+
+                                        {step === 0 && (
+                                            <div className="space-y-4">
+                                                <h2 className="text-lg font-semibold text-gray-900">Sending as {teamEmail}</h2>
+                                                <div className="bg-gray-50 rounded-lg p-4">
+                                                    <p className="text-gray-600 mb-2">Your fingerprint:</p>
+                                                    <code className="text-green-700 font-mono text-sm">
+                                                        {cryptoUtils.fingerprint(myKeys.dilithium.publicKey)}
+                                                    </code>
+                                                    <p className="text-gray-500 mt-2 text-sm">Device ID: {deviceId}</p>
+                                                </div>
+                                                <div className="border-t border-gray-300 pt-4">
+                                                    <p className="text-gray-500 mb-2">Select a Message Recipient:</p>
+                                                    <select
+                                                        onClick={() => refreshTeamMembers({ withProcessing: false, logMessage: false })}
+                                                        onChange={e => setSelectedMember(e.target.value)}
+                                                        className="w-full text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 hover:file:bg-blue-500"
+                                                    >
+                                                        <option key="empty" value="empty">None Selected</option>
+                                                        {teamMembers.map(member => (
+                                                            <option key={member.token} value={member.token}>{member.email}{member.deviceId ? ` (${member.deviceId})` : ''} (Updated {formatDateTime(member.updated)})</option>
+                                                        ))}
+                                                    </select>
+                                                    <button
+                                                        onClick={loadSelectedMemberKeys}
+                                                        disabled={!selectedMember || selectedMember === 'empty' || processing}
+                                                        className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold transition-colors"
+                                                    >
+                                                        Use Selected Recipient
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {step === 1 && (
+                                            <div className="space-y-4">
+                                                <h2 className="text-lg font-semibold text-gray-900">Compose Message</h2>
+                                                <div className="bg-gray-50 rounded-lg p-3">
+                                                    <span className="text-gray-500">To: </span>
+                                                    <span className="text-gray-900">{recipientName}</span>
+                                                    <span className="text-gray-400 text-xs ml-2">
+                                                        ({recipientPubKey.fingerprint})
+                                                    </span>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Subject"
+                                                    value={subject}
+                                                    onChange={e => setSubject(e.target.value)}
+                                                    className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-400 focus:outline-none"
+                                                />
+                                                <textarea
+                                                    placeholder="Message body..."
+                                                    value={message}
+                                                    onChange={e => setMessage(e.target.value)}
+                                                    rows={5}
+                                                    className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-400 focus:outline-none resize-none"
+                                                />
+                                                <div>
+                                                    <input
+                                                        type="file"
+                                                        multiple
+                                                        onChange={handleFileAttachment}
+                                                        className="w-full text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-200 file:text-gray-900 hover:file:bg-gray-300"
+                                                    />
+                                                    {attachments.length > 0 && (
+                                                        <div className="mt-2 space-y-1">
+                                                            {attachments.map((a, i) => (
+                                                                <div key={i} className="text-sm text-gray-500">
+                                                                    📎 {a.name} ({(a.size / 1024).toFixed(1)} KB)
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <button
+                                                    onClick={encryptAndSign}
+                                                    disabled={!subject || !message || processing}
+                                                    className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold"
+                                                >
+                                                    {processing ? '⏳ Encrypting...' : '🔒 Encrypt & Sign'}
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {step === 2 && encryptedPackage && (
+                                            <div className="space-y-4">
+                                                <h2 className="text-lg font-semibold text-gray-900">✅ File Transfer Encrypted!</h2>
+                                                <div className="bg-green-50 border border-green-400 rounded-lg p-4">
+                                                    <p className="text-green-700">Your message has been encrypted and signed.</p>
+                                                    <p className="text-green-700 text-sm mt-2">
+                                                        Download the .pqc.json file and send it to {recipientName} via any channel.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={downloadPackage}
+                                                    className="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold"
+                                                >
+                                                    📥 Download Encrypted Package
+                                                </button>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
+                                {/* RECEIVE MODE */}
+                                {mode === 'receive' && (
+                                    <>
+
+                                        {step === 0 && (
+                                            <div className="space-y-4">
+                                                <h2 className="text-lg font-semibold text-gray-900">Load & Decrypt</h2>
+                                                <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                                                    <p className="text-gray-600 mb-2">Your fingerprint:</p>
+                                                    <code className="text-green-700 font-mono text-sm">
+                                                        {cryptoUtils.fingerprint(myKeys.dilithium.publicKey)}
+                                                    </code>
+                                                    <p className="text-gray-500 mt-2 text-sm">Device ID: {deviceId}</p>
+                                                </div>
+
+                                                <div className="border-t border-gray-300 pt-4">
+                                                    {!receivedPackage ? (
+                                                        <>
+                                                            <p className="text-gray-500 mb-2">Load encrypted file transfer (.pqc.json):</p>
+                                                            <input
+                                                                type="file"
+                                                                accept=".json"
+                                                                onChange={loadReceivedPackage}
+                                                                className="w-full text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-500"
+                                                            />
+                                                            <p className="text-gray-400 text-xs mt-2">
+                                                                Sender key is resolved automatically from packet sender + device ID.
+                                                            </p>
+                                                            {senderKeyLookupError && (
+                                                                <p className="text-red-600 text-xs mt-2">{senderKeyLookupError}</p>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <div className="space-y-4">
+                                                            <div className="bg-gray-50 rounded-lg p-4">
+                                                                <p className="text-gray-500">From: <span className="text-gray-900">{receivedPackage.sender.email} ({receivedPackage.sender.deviceId})</span></p>
+                                                                <p className="text-gray-400 text-xs">{receivedPackage.sender.fingerprint}</p>
+                                                                <p className="text-gray-400 text-xs mt-1">Resolved sender key: {recipientName || 'Not found'}</p>
+                                                                {senderKeyLookupError && (
+                                                                    <p className="text-red-600 text-xs mt-1">{senderKeyLookupError}</p>
+                                                                )}
+                                                            </div>
+                                                            <button
+                                                                onClick={verifyAndDecrypt}
+                                                                disabled={processing || !prefetchedSenderPublicKey}
+                                                                className="w-full bg-green-600 hover:bg-green-500 disabled:bg-gray-300 text-white py-3 rounded-lg font-semibold"
+                                                            >
+                                                                {decrypting ? '⏳ Decrypting...' : (processing ? '⏳ Preparing...' : '🔓 Verify & Decrypt')}
+                                                            </button>
+                                                            {decryptErrorMessage && (
+                                                                <p className="text-red-600 text-xs mt-2">{decryptErrorMessage}</p>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                            </div>
+                                        )}
+
+                                        {step === 1 && decryptedData && (
+                                            <div className="space-y-4">
+                                                <h2 className="text-lg font-semibold text-gray-900">✅ Message Decrypted!</h2>
+                                                <div className="bg-gray-50 rounded-lg p-4">
+                                                    <p className="text-gray-500 text-sm">Subject:</p>
+                                                    <p className="text-gray-900 font-semibold">{decryptedData.subject}</p>
+                                                </div>
+                                                <div className="bg-gray-50 rounded-lg p-4">
+                                                    <p className="text-gray-500 text-sm">Message:</p>
+                                                    <p className="text-gray-900 whitespace-pre-wrap">{decryptedData.body}</p>
+                                                </div>
+                                                {decryptedData.attachments?.length > 0 && (
+                                                    <div className="bg-gray-50 rounded-lg p-4">
+                                                        <p className="text-gray-500 text-sm mb-2">Attachments:</p>
+                                                        {decryptedData.attachments.map((a, i) => (
+                                                            <div key={i} className="flex items-center justify-between py-2">
+                                                                <span className="text-gray-900">📎 {a.name}</span>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        const data = cryptoUtils.base64ToBytes(a.data);
+                                                                        const blob = new Blob([data], { type: a.type });
+                                                                        const url = URL.createObjectURL(blob);
+                                                                        const link = document.createElement('a');
+                                                                        link.href = url;
+                                                                        link.download = a.name;
+                                                                        link.click();
+                                                                    }}
+                                                                    className="text-blue-600 hover:text-blue-500 text-sm"
+                                                                >
+                                                                    ⬇️ Download
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Log Panel */}
+                            <div className="bg-gray-50 rounded-xl p-4 h-fit max-h-96 overflow-y-auto">
+                                <h3 className="text-gray-500 text-sm font-semibold mb-3">📋 Operation Log</h3>
+                                <div className="space-y-2 font-mono text-xs">
+                                    {logs.length === 0 ? (
+                                        <p className="text-gray-400">Waiting for operations...</p>
+                                    ) : (
+                                        logs.map((log, i) => (
+                                            <div key={i} className={`${
+                                                log.type === 'success' ? 'text-green-700' :
+                                                log.type === 'error' ? 'text-red-600' :
+                                                log.type === 'process' ? 'text-yellow-600' : 'text-gray-500'
+                                            }`}>
+                                                <span className="text-gray-400">[{log.time}]</span> {log.msg}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="mt-6 text-center text-gray-400 text-xs">
+                            PQC Secure File Transfer Demo | FIPS 203 (ML-KEM-768) + FIPS 204 (ML-DSA-65) | Simulation for demonstration purposes
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<PQCEmailDemo />, document.getElementById('root'));
+    </script>
+</body>
+</html>
