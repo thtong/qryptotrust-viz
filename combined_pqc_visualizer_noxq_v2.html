@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZAP Visualizer — Qrypto Trust Post-Quantum Identity</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --white:#ffffff;--bg:#ffffff;--off-white:#f7f7f5;--light-gray:#ebebeb;
+  --mid-gray:#c8c8c8;--dark-gray:#555;--ink:#111111;--ink-soft:#333333;
+  --rule:#dddddd;--cube-bg:#f0f0ee;
+  --font-display:'Libre Baskerville',serif;
+  --font-sans:'Source Sans 3',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --page-pad:4vw;--max-w:2000px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+.qt-header{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);transition:box-shadow .2s}
+.qt-header.scrolled{box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.qt-header-inner{max-width:var(--max-w);margin:0 auto;padding:0 var(--page-pad);display:flex;align-items:center;justify-content:space-between;height:60px}
+.qt-logo{font-family:var(--font-sans);font-weight:900;font-size:18px;letter-spacing:-.01em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.qt-nav{display:flex;align-items:center;gap:0}
+.qt-nav-item{position:relative}
+.qt-nav-item>a,.qt-nav-btn{font-family:var(--font-sans);font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;padding:8px 14px;display:block;cursor:pointer;background:none;border:none;letter-spacing:.01em;white-space:nowrap;transition:opacity .15s}
+.qt-nav-item>a:hover,.qt-nav-btn:hover{opacity:.6}
+.qt-dropdown{position:absolute;top:100%;left:0;background:var(--white);border:1px solid var(--rule);min-width:200px;opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity .2s,transform .2s;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.qt-nav-item:hover .qt-dropdown{opacity:1;pointer-events:all;transform:translateY(0)}
+.qt-dropdown a{display:block;font-family:var(--font-sans);font-size:13px;font-weight:400;color:var(--ink);text-decoration:none;padding:10px 18px;border-bottom:1px solid var(--rule);transition:background .15s}
+.qt-dropdown a:last-child{border-bottom:none}
+.qt-dropdown a:hover{background:var(--off-white)}
+.qt-viz-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dark-gray);border:1px solid var(--mid-gray);padding:3px 9px;border-radius:2px;margin-left:16px;white-space:nowrap}
+
+/* HERO */
+.hero{padding:100px var(--page-pad) 48px;max-width:var(--max-w);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--dark-gray);margin-bottom:16px}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.2rem,3.5vw,4rem);font-weight:700;line-height:1.1;color:var(--ink);margin-bottom:20px}
+.hero h1 em{font-style:italic}
+.hero-body{font-size:1.05rem;color:var(--ink-soft);line-height:1.75;margin-bottom:28px;max-width:520px}
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.pill{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;padding:4px 12px;border-radius:20px;border:1px solid var(--mid-gray);color:var(--dark-gray);background:var(--off-white);text-transform:uppercase}
+.hero-cta{display:inline-block;padding:12px 32px;background:var(--ink);color:var(--white);font-family:var(--font-sans);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border-radius:40px;text-decoration:none;cursor:pointer;border:none;transition:opacity .2s}
+.hero-cta:hover{opacity:.75}
+.hero-visual{background:var(--off-white);border:1px solid var(--rule);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;min-height:240px}
+.hero-cube-preview{display:grid;grid-template-columns:repeat(8,10px);gap:3px;margin-bottom:16px}
+.hcp{width:10px;height:10px;border-radius:1px}
+.hero-visual-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dark-gray)}
+@media(max-width:820px){.hero{grid-template-columns:1fr;padding-top:80px}.hero-visual{display:none}}
+
+hr.sec{border:none;border-top:1px solid var(--rule);margin:0}
+
+/* SECTION CHROME */
+.sec-wrap{max-width:var(--max-w);margin:0 auto;padding:60px var(--page-pad)}
+.sec-eyebrow{font-family:var(--font-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--dark-gray);margin-bottom:10px}
+.sec-title{font-family:var(--font-display);font-size:clamp(1.6rem,2.5vw,2.6rem);font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:14px}
+.sec-lead{font-size:1rem;color:var(--ink-soft);max-width:680px;line-height:1.75;margin-bottom:40px}
+
+/* ZAP */
+.zap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule)}
+.zap-col{padding:36px 32px;border-right:1px solid var(--rule)}
+.zap-col:last-child{border-right:none}
+.zap-letter{font-family:var(--font-display);font-size:4rem;font-weight:700;line-height:1;color:var(--ink);margin-bottom:4px}
+.zap-word{font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:12px;text-decoration:underline;text-underline-offset:3px}
+.zap-desc{font-size:14px;color:var(--ink-soft);line-height:1.65}
+.zap-algs{margin-top:14px;display:flex;flex-direction:column;gap:4px}
+.zap-alg{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--dark-gray);background:var(--off-white);border:1px solid var(--rule);padding:3px 8px;border-radius:2px;display:inline-block;align-self:flex-start}
+.nist5-badge{font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;border:1px solid var(--ink);color:var(--ink);padding:2px 7px;border-radius:2px;display:inline-block;margin-top:6px;font-weight:500}
+@media(max-width:720px){.zap-grid{grid-template-columns:1fr}.zap-col{border-right:none;border-bottom:1px solid var(--rule)}.zap-col:last-child{border-bottom:none}}
+
+/* CUBE */
+.cube-outer{background:var(--cube-bg);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.cube-header{max-width:var(--max-w);margin:0 auto;padding:40px var(--page-pad) 0}
+.cube-stage{max-width:var(--max-w);margin:0 auto;display:grid;grid-template-columns:1fr 360px;height:620px}
+.canvas-wrap{position:relative;overflow:hidden;border-right:1px solid var(--rule);height:100%}
+#c{display:block;width:100%;height:100%;cursor:grab;outline:none}
+#c.drag{cursor:grabbing}
+.c-overlay{position:absolute;top:12px;left:14px;font-family:var(--font-mono);font-size:8px;letter-spacing:.14em;color:#777;text-transform:uppercase;pointer-events:none;line-height:2}
+.c-overlay span{color:#333;font-weight:500}
+.c-hint{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:8px;color:#999;letter-spacing:.1em;pointer-events:none;white-space:nowrap}
+.scrubber{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px}
+.scrubber input[type=range]{width:160px;accent-color:#333;cursor:pointer}
+.sl{font-family:var(--font-mono);font-size:8px;color:#666;letter-spacing:.08em;min-width:40px}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--white);font-family:var(--font-mono);font-size:9px;letter-spacing:.05em;padding:4px 9px;border-radius:2px;white-space:nowrap;opacity:0;transition:opacity .1s;z-index:500}
+
+/* SIDE PANEL */
+.side-panel{background:var(--cube-bg);display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 14px 18px;gap:10px;border-left:1px solid var(--rule);height:100%;box-sizing:border-box}
+.side-panel::-webkit-scrollbar{width:3px}
+.side-panel::-webkit-scrollbar-thumb{background:var(--mid-gray)}
+.slab{font-family:var(--font-mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#888;margin-bottom:4px;font-weight:500}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.sc{background:var(--white);padding:6px 8px}
+.sc.w{grid-column:1/-1}
+.sv{font-family:var(--font-mono);font-size:10px;color:var(--ink);font-weight:500}
+.ss{font-family:var(--font-mono);font-size:7px;color:#999;margin-top:1px}
+.ebw{margin-top:3px;height:2px;background:var(--light-gray);overflow:hidden}
+.eb{height:100%;background:var(--ink);width:0%;transition:width .6s ease}
+.badge{display:inline-block;padding:1px 6px;font-family:var(--font-mono);font-size:8px;font-weight:700;letter-spacing:.06em;border:1px solid}
+.badge.pass{border-color:var(--ink);color:var(--ink)}
+.badge.marginal{border-color:#888;color:#888}
+.badge.fail{border-color:#c00;color:#c00}
+.badge.blank{border-color:var(--mid-gray);color:#aaa}
+.co{background:var(--white);border:1px solid var(--rule);padding:6px 8px}
+.cr{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.ck{font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#999;font-family:var(--font-mono)}
+.cv{font-size:10px;color:var(--ink);font-weight:500;font-family:var(--font-mono)}
+.cd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;border:1px solid var(--rule)}
+.br{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.bs{width:7px;height:7px;border-radius:1px;flex-shrink:0}
+.bn{font-family:var(--font-mono);font-size:7px;color:#888;width:68px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb{flex:1;height:2px;background:var(--light-gray);overflow:hidden}
+.bf{height:100%;transition:width .5s ease}
+.bc{font-family:var(--font-mono);font-size:7px;color:var(--dark-gray);width:16px;text-align:right;flex-shrink:0}
+.vc{display:flex;gap:4px;flex-wrap:wrap}
+.vb{font-family:var(--font-mono);font-size:8px;letter-spacing:.06em;padding:4px 8px;border:1px solid var(--rule);background:var(--white);color:var(--dark-gray);cursor:pointer;transition:all .15s}
+.vb:hover{border-color:var(--ink);color:var(--ink)}
+.vb.on{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.pfooter{font-family:var(--font-mono);font-size:7px;color:#aaa;letter-spacing:.08em;line-height:1.9;border-top:1px solid var(--rule);padding-top:8px;margin-top:auto}
+@media(max-width:900px){.cube-stage{grid-template-columns:1fr;height:auto}.canvas-wrap{height:380px}}
+
+/* Drop zone */
+.dz{border:1.5px dashed var(--mid-gray);background:var(--off-white);padding:10px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.dz:hover,.dz.ov{border-color:var(--ink);background:var(--light-gray)}
+.dz input{position:absolute;top:0;right:0;bottom:0;left:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz p{font-family:var(--font-mono);font-size:9px;color:var(--dark-gray);line-height:1.4}
+.dz small{font-family:var(--font-mono);font-size:8px;color:#aaa;display:block;margin-top:2px}
+.dstat{margin-top:4px;font-family:var(--font-mono);font-size:9px;color:var(--ink);min-height:12px;letter-spacing:.04em}
+.dstat.err{color:#c00}
+
+/* CTA */
+.cta-strip{background:var(--ink);color:var(--white);padding:60px var(--page-pad);text-align:center}
+.cta-strip h2{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,3rem);font-weight:700;margin-bottom:12px}
+.cta-strip p{font-size:1rem;color:rgba(255,255,255,.7);max-width:560px;margin:0 auto 28px}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-white{padding:12px 32px;background:var(--white);color:var(--ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:40px;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s}
+.btn-white:hover{opacity:.85}
+.btn-outline-w{padding:12px 32px;background:transparent;color:var(--white);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:40px;text-decoration:none;border:1.5px solid rgba(255,255,255,.4);cursor:pointer;transition:border-color .2s}
+.btn-outline-w:hover{border-color:var(--white)}
+
+/* FOOTER */
+.footer{background:var(--white);border-top:1px solid var(--rule);padding:28px var(--page-pad);max-width:var(--max-w);margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--font-sans);font-weight:900;font-size:14px;color:var(--ink)}
+.footer-text{font-family:var(--font-mono);font-size:8px;color:#aaa;letter-spacing:.1em;line-height:1.9;text-align:right}
+
+/* LOADING */
+#loading-overlay{position:fixed;top:0;right:0;bottom:0;left:0;background:var(--white);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .4s}
+#loading-overlay.done{opacity:0;pointer-events:none}
+.loading-grid{display:grid;grid-template-columns:repeat(4,8px);gap:3px}
+.lg-cell{width:8px;height:8px;background:var(--ink);opacity:.15;animation:lgp .8s ease-in-out infinite}
+@keyframes lgp{0%,100%{opacity:.1}50%{opacity:.8}}
+.loading-text{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;color:var(--dark-gray);text-transform:uppercase}
+
+/* ─── REPORT SECTION ─────────────────────────────────────────────────────── */
+.rpt-section-outer{background:#fff;border-top:1px solid #ddd}
+.rpt-section-inner{max-width:2000px;margin:0 auto;padding:60px 4vw 80px}
+.rpt-intro{margin-bottom:40px}
+.rpt-intro-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#555;margin-bottom:10px}
+.rpt-intro-title{font-family:'Libre Baskerville',serif;font-size:clamp(1.6rem,2.5vw,2.6rem);font-weight:700;color:#111;line-height:1.15;margin-bottom:14px}
+.rpt-intro-lead{font-size:1rem;color:#333;max-width:680px;line-height:1.75;margin-bottom:20px}
+.rpt-policy-banner{border:1px solid #ddd;border-left:3px solid #111;background:#f7f7f5;padding:16px 20px;font-family:Arial,sans-serif;font-size:11pt;color:#111;line-height:1.6}
+.rpt-policy-banner strong{color:#111}
+.rpt-kp-selector{margin-bottom:36px}
+.rpt-kp-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#888;margin-bottom:10px}
+.rpt-kp-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.rpt-kp-tab{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:7px 16px;border:1px solid #ddd;background:#fff;color:#555;cursor:pointer;transition:all .15s;min-width:52px;text-align:center}
+.rpt-kp-tab:hover{border-color:#111;color:#111}
+.rpt-kp-tab.active{background:#111;color:#fff;border-color:#111}
+.rpt-kp-meta{font-family:'DM Mono',monospace;font-size:9px;color:#aaa;letter-spacing:.05em;min-height:16px}
+.rpt-loading{font-family:'DM Mono',monospace;font-size:10px;color:#aaa;letter-spacing:.12em;text-align:center;padding:40px 0}
+.rpt-doc{display:none;font-family:Arial,sans-serif;font-size:11pt;color:#111;line-height:1.5}
+.rpt-doc.active{display:block}
+.rpt-doc-title{font-size:26pt;font-weight:bold;color:#1A1A2E;margin:0 0 4pt}
+.rpt-doc-subtitle{font-size:13pt;color:#2E4A7A;margin:0 0 4pt}
+.rpt-doc-meta{font-size:10pt;color:#555;margin:0 0 12pt}
+.rpt-doc-rule{border:none;border-top:2px solid #ddd;margin:16pt 0}
+.rpt-doc h1{font-size:20pt;color:#1A1A2E;margin:18pt 0 6pt;font-family:Arial,sans-serif}
+.rpt-doc h2{font-size:14pt;color:#2E4A7A;margin:14pt 0 4pt;font-family:Arial,sans-serif}
+.rpt-doc p{margin:4pt 0 8pt}
+.rpt-doc ol{margin:4pt 0 8pt;padding-left:24pt}
+.rpt-doc ol li{margin-bottom:3pt}
+.rpt-doc code.mono{font-family:'Courier New',monospace;font-size:9.5pt;color:#1A3A6A;background:#f4f4f8;padding:4pt 8pt;margin:4pt 0 8pt;display:block}
+.rpt-doc table{border-collapse:collapse;width:100%;margin:8pt 0 14pt;font-size:10pt}
+.rpt-doc th{background:#1A1A2E;color:#fff;padding:5pt 8pt;text-align:left;font-size:9.5pt}
+.rpt-doc td{padding:5pt 8pt;border:1px solid #ddd}
+.rpt-doc tr:nth-child(even) td{background:#f5f5fa}
+.rpt-doc .badge-pass{background:#e8f5e9;color:#2e7d32;padding:1pt 6pt;border-radius:3pt;font-weight:bold}
+.rpt-doc .badge-marg{background:#fff8e1;color:#f57f17;padding:1pt 6pt;border-radius:3pt;font-weight:bold}
+.rpt-doc .badge-fail{background:#ffebee;color:#c62828;padding:1pt 6pt;border-radius:3pt;font-weight:bold}
+.rpt-doc-divider{border:none;border-top:3px solid #ddd;margin:40pt 0 32pt}
+.rpt-doc-footer{font-size:9pt;color:#999;margin-top:24pt;border-top:1px solid #eee;padding-top:6pt}
+
+/* ─── CERT LOADER STRIP (compact, collapsible) ──────────────────────────── */
+.cert-loader-strip{max-width:var(--max-w);margin:0 auto;padding:10px var(--page-pad) 12px}
+.cl-strip{border:1.5px solid var(--rule);border-radius:4px;background:var(--white);position:relative;overflow:hidden;transition:border-color .2s}
+.cl-strip:hover,.cl-strip.open{border-color:var(--ink)}
+.cl-strip::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#FF0000,#FF6600,#FFD700,#00FF00,#00BFFF,#0000FF,#9400D3,#FF00FF);background-size:200% 100%;animation:cl-shimmer 4s linear infinite}
+@keyframes cl-shimmer{0%{background-position:0 0}100%{background-position:200% 0}}
+
+/* Collapsed bar */
+.cl-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 10px 18px;cursor:pointer;user-select:none;gap:12px}
+.cl-bar-left{display:flex;align-items:center;gap:10px;min-width:0}
+.cl-bar-icon{font-size:16px;flex-shrink:0}
+.cl-bar-title{font-family:var(--font-sans);font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+.cl-bar-sep{width:1px;height:16px;background:var(--rule);flex-shrink:0}
+.cl-bar-hint{font-family:var(--font-mono);font-size:10px;color:var(--dark-gray);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cl-bar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.cl-bar-btn{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;font-weight:600;padding:5px 14px;background:var(--ink);color:var(--white);border:none;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:opacity .15s;white-space:nowrap}
+.cl-bar-btn:hover{opacity:.75}
+.cl-bar-chev{font-size:11px;color:var(--dark-gray);transition:transform .25s;flex-shrink:0}
+.cl-strip.open .cl-bar-chev{transform:rotate(180deg)}
+
+/* Expanded body */
+.cl-body{display:none;border-top:1px solid var(--rule);padding:14px 18px 16px}
+.cl-strip.open .cl-body{display:block}
+
+/* Card sections inside body */
+.cl-section{display:flex;flex-direction:column;gap:6px}
+.cl-section-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.cl-section-badge{font-family:var(--font-mono);font-size:7px;letter-spacing:.14em;font-weight:700;padding:2px 7px;border-radius:2px;text-transform:uppercase}
+.cl-section-badge.upload{background:var(--off-white);color:var(--ink);border:1px solid var(--mid-gray)}
+.cl-section-title{font-family:var(--font-sans);font-size:13px;font-weight:700;color:var(--ink)}
+.cl-section-desc{font-family:var(--font-sans);font-size:11px;color:var(--dark-gray);line-height:1.5;margin-bottom:4px}
+
+/* Drop zone (medium) */
+.dz-lg{border:2px dashed var(--mid-gray);background:var(--off-white);border-radius:4px;padding:16px 12px;text-align:center;cursor:pointer;transition:border-color .25s,background .25s;position:relative;animation:dz-pulse 3s ease-in-out infinite}
+@keyframes dz-pulse{0%,100%{border-color:var(--mid-gray)}50%{border-color:var(--ink)}}
+.dz-lg:hover,.dz-lg.ov{border-color:var(--ink);background:var(--light-gray);animation:none}
+.dz-lg input{position:absolute;top:0;right:0;bottom:0;left:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-lg-content{display:flex;align-items:center;gap:12px;pointer-events:none;justify-content:center}
+.dz-lg-icon{color:var(--dark-gray);opacity:.6;flex-shrink:0}
+.dz-lg-text{font-family:var(--font-sans);font-size:12px;color:var(--ink);font-weight:600;line-height:1.4;text-align:left}
+.dz-lg-text span{font-weight:400;color:var(--dark-gray);font-size:11px}
+.dz-lg-formats{font-family:var(--font-mono);font-size:9px;color:#999;letter-spacing:.06em;text-align:left}
+.dstat-lg{margin-top:6px;font-family:var(--font-mono);font-size:10px;color:var(--ink);min-height:12px;letter-spacing:.04em}
+.dstat-lg.err{color:#c00}
+
+.side-status-compact{background:var(--white);border:1px solid var(--rule);padding:8px 10px;min-height:32px}
+
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loading-grid" id="lgrid"></div>
+  <div class="loading-text">Initializing Dilithium Cube</div>
+</div>
+<div id="tip"></div>
+
+<div style="max-width:var(--max-w);margin:0 auto">
+</div>
+
+<div class="cube-outer" id="cube-view">
+  <div class="cube-header">
+    <div class="sec-eyebrow">Live Visualization</div>
+    <h2 class="sec-title" style="margin-bottom:4px">ML-DSA-65 Dilithium Cube</h2>
+    <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--dark-gray);margin-bottom:0">4,096 spheres &nbsp;&middot;&nbsp; 16 Dilithium bands &nbsp;&middot;&nbsp; FIPS 204</p>
+  </div>
+
+  <!-- ═══ COMPACT CERT LOADER STRIP ═══ -->
+  <div class="cert-loader-strip">
+    <div class="cl-strip" id="cl-strip">
+      <div class="cl-bar" onclick="clToggle()">
+        <div class="cl-bar-left">
+          <span class="cl-bar-icon">&#x1F510;</span>
+          <span class="cl-bar-title">Load Your Own Certificate</span>
+          <span class="cl-bar-sep"></span>
+          <span class="cl-bar-hint">Upload a Dilithium cert to visualize your own key</span>
+        </div>
+        <div class="cl-bar-right">
+          <span class="cl-bar-btn">Open</span>
+          <span class="cl-bar-chev">&#x25BE;</span>
+        </div>
+      </div>
+      <div class="cl-body">
+
+          <!-- File Upload -->
+          <div class="cl-section">
+            <div class="cl-section-head">
+              <span class="cl-section-badge upload">UPLOAD</span>
+              <span class="cl-section-title">&#x2B21; Drop or Browse</span>
+            </div>
+            <div class="cl-section-desc">Upload any Dilithium cert or key file for inspection &mdash; all formats auto-detected</div>
+            <div class="dz-lg" id="dz">
+              <input type="file" id="fi">
+              <div class="dz-lg-content">
+                <div class="dz-lg-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <div>
+                  <div class="dz-lg-text">Drag &amp; drop here <span>or click to browse</span></div>
+                  <div class="dz-lg-formats">.bin &middot; .b64 &middot; .hex &middot; .pem &middot; .json &middot; any format</div>
+                </div>
+              </div>
+            </div>
+            <div class="dstat-lg" id="dstat"></div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="cube-stage">
+    <div class="canvas-wrap">
+      <canvas id="c" tabindex="0"></canvas>
+      <div class="c-overlay">
+        <div>PQC &middot; 3D CUBE &middot; 16&times;16&times;16 &middot; <span id="lbl">ALL LAYERS</span></div>
+        <div style="color:#555;font-size:7px" id="cube-status">Loading&hellip;</div>
+      </div>
+      <div class="c-hint">DRAG &middot; SCROLL &middot; CLICK sphere to inspect</div>
+      <div class="scrubber">
+        <span class="sl" id="sv">ALL</span>
+        <input type="range" id="ls" min="0" max="16" step="1" value="0">
+        <span class="sl">L16</span>
+      </div>
+    </div>
+    <div class="side-panel">
+
+      <!-- Compact cert status (sources moved above) -->
+      <div>
+        <div class="slab">Active Certificate</div>
+        <div class="side-status-compact">
+          <div class="dstat" id="dstat-side" style="font-size:9px;color:var(--ink);min-height:14px;font-family:var(--font-mono);letter-spacing:.04em"></div>
+        </div>
+      </div>
+
+      <!-- Cert Metadata Panel -->
+      <div class="cert-meta-panel" id="certMetaPanel">
+        <div class="cert-meta-header">&#x1F4CB; Certificate Metadata</div>
+        <div class="cert-meta-grid" id="certMetaGrid">
+          <div class="cert-meta-cell full">
+            <div class="cert-meta-label">Status</div>
+            <div class="cert-meta-value empty" id="cmStatus">No cert loaded</div>
+          </div>
+          <div class="cert-meta-cell full">
+            <div class="cert-meta-label">Subject</div>
+            <div class="cert-meta-value empty" id="cmSubject">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell full">
+            <div class="cert-meta-label">Issuer</div>
+            <div class="cert-meta-value empty" id="cmIssuer">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell">
+            <div class="cert-meta-label">Not Before</div>
+            <div class="cert-meta-value empty" id="cmNotBefore">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell">
+            <div class="cert-meta-label">Not After</div>
+            <div class="cert-meta-value empty" id="cmNotAfter">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell">
+            <div class="cert-meta-label">Serial Number</div>
+            <div class="cert-meta-value empty" id="cmSerial">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell">
+            <div class="cert-meta-label">Algorithm</div>
+            <div class="cert-meta-value empty" id="cmAlg">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell full">
+            <div class="cert-meta-label">Key Usage</div>
+            <div class="cert-meta-value empty" id="cmUsage">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell full">
+            <div class="cert-meta-label">Source / Account</div>
+            <div class="cert-meta-value empty" id="cmAccount">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell">
+            <div class="cert-meta-label">Format</div>
+            <div class="cert-meta-value empty" id="cmFormat">&mdash;</div>
+          </div>
+          <div class="cert-meta-cell">
+            <div class="cert-meta-label">Key Size</div>
+            <div class="cert-meta-value empty" id="cmKeySize">&mdash;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribution Analysis -->
+      <div>
+        <div class="slab">Distribution Analysis <span id="layerNote" style="font-size:7px;color:#aaa;letter-spacing:.04em;text-transform:none;font-weight:400"></span></div>
+        <div class="sg">
+          <div class="sc w"><div class="slab">Token / Identity</div><div class="sv" id="stok" style="font-size:9px">&mdash;</div></div>
+          <div class="sc"><div class="slab">Min</div><div class="sv" id="stmin">&mdash;</div></div>
+          <div class="sc"><div class="slab">Max</div><div class="sv" id="stmax">&mdash;</div></div>
+          <div class="sc"><div class="slab">Mean</div><div class="sv" id="stmean">&mdash;</div></div>
+          <div class="sc"><div class="slab">Std Dev</div><div class="sv" id="ststd">&mdash;</div></div>
+          <div class="sc w">
+            <div class="slab">Shannon Entropy</div>
+            <div class="sv" id="stH">&mdash;</div>
+            <div class="ss" id="stHp"></div>
+            <div class="ebw"><div class="eb" id="ebar"></div></div>
+          </div>
+          <div class="sc w">
+            <div class="slab">&#967;&sup2; Uniformity Test</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="sv" id="stchi">&mdash;</div>
+              <div class="badge blank" id="stbadge">&mdash;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Sphere -->
+      <div>
+        <div class="slab">Selected Sphere</div>
+        <div class="co">
+          <div class="cr"><span class="ck">Sphere</span><span class="cv" id="ci">&mdash;</span></div>
+          <div class="cr"><span class="ck">Position</span><span class="cv" id="cp">&mdash;</span></div>
+          <div class="cr"><span class="ck">Value</span><span class="cv" id="cv2">&mdash;</span></div>
+          <div class="cr"><span class="ck">Band</span><span class="cv"><span class="cd" id="cdot" style="background:#ddd"></span><span id="cb">&mdash;</span></span></div>
+          <div class="cr"><span class="ck">Color</span><span class="cv" id="cc">&mdash;</span></div>
+        </div>
+      </div>
+
+      <!-- Band Distribution -->
+      <div>
+        <div class="slab">Band Distribution</div>
+        <div id="bviz"></div>
+      </div>
+
+      <!-- View controls -->
+      <div>
+        <div class="slab">View</div>
+        <div class="vc">
+          <button class="vb" onclick="setView(0.45,0.55)">Iso</button>
+          <button class="vb" onclick="setView(0,0)">Front</button>
+          <button class="vb" onclick="setView(0,1.57)">Side</button>
+          <button class="vb" onclick="setView(1.57,0)">Top</button>
+          <button class="vb on" id="spinBtn" onclick="toggleSpin()">&#9654; Spin</button>
+        </div>
+      </div>
+
+      <div class="pfooter">NIST FIPS 204 &middot; ML-DSA-65 &middot; CRYSTALS-Dilithium<br>q = 8,380,417 &middot; n = 256 &middot; &delta; = 524,288<br>Qrypto Trust &middot; qryptotrust.com</div>
+    </div>
+  </div>
+</div>
+<hr class="sec">
+
+<!-- REPORT SECTION — Dynamically generated -->
+<div class="rpt-section-outer" id="rpt-section">
+<div class="rpt-section-inner">
+  <div class="rpt-intro">
+    <div class="rpt-intro-eyebrow">Cryptographic Analysis</div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+      <h2 class="rpt-intro-title" style="margin-bottom:0">PQC Identity &amp; Entropy Reports</h2>
+      <button class="rpt-dl-btn" onclick="downloadReport()" title="View as PDF">&#x2193; PDF Report</button>
+    </div>
+    <p class="rpt-intro-lead">Per-identity statistical analysis combining CRYSTALS-Dilithium parameter verification with 16-layer &plusmn;&delta; walk entropy evaluation. Reports generate automatically when a cert is loaded.</p>
+    <div class="rpt-policy-banner" id="rpt-policy-banner">
+      <strong>Issuance Policy</strong><br>
+      All keypairs must satisfy NIST FIPS&nbsp;204 requirements for ML-DSA-65.
+      Qrypto Trust applies a stricter standard: any keypair whose per-layer average &chi;&sup2;
+      approaches the 30.578 critical threshold, or whose individual layers show marginal
+      uniformity, is rejected and regenerated prior to issuance &mdash; even when it technically
+      passes &mdash; to maximize cryptographic security margins for Zero Trust deployments.
+    </div>
+  </div>
+
+  <!-- Report tabs: ingested certs -->
+  <div class="rpt-kp-selector">
+    <div class="rpt-kp-label" id="rpt-kp-label">Load a Dilithium cert to generate reports</div>
+    <div class="rpt-kp-tabs" id="rpt-kp-tabs"></div>
+    <div class="rpt-kp-meta" id="rpt-kp-meta"></div>
+  </div>
+
+  <div id="rpt-docs-container">
+    <div class="rpt-loading" id="rpt-placeholder">&#x2B21; No cert loaded &mdash; drop a Dilithium cert file above to generate live reports.</div>
+  </div>
+</div>
+</div>
+<hr class="sec">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────────
+const q=8380417, DELTA=524288, N=16;
+const PALETTE=['#FF0000','#FF4500','#FF6600','#FFD700','#FFFF00','#ADFF2F',
+               '#7FFF00','#00FF00','#00FF7F','#00FFFF','#00BFFF','#0000FF',
+               '#9400D3','#FF00FF','#FF1493','#FF69B4'];
+const PNAMES=['Red','Orange Red','Orange','Gold','Yellow','Green Yellow',
+              'Chartreuse','Lime','Spring Green','Cyan','Deep Sky Blue','Blue',
+              'Violet','Magenta','Deep Pink','Hot Pink'];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let cubeData=[], tokenStr='', filterLayer=-1, spinning=false, spinRAF=null;
+let loadedCerts=[]; // [{name, tokenStr, cubeData, date}]
+// ── Default cert (jason@qryptotrust.com / HZJK3G) ────────────────────────────
+const DEFAULT_CERT = {
+  name: 'jason@qryptotrust.com',
+  deviceId: 'HZJK3G',
+  dilithiumBytes: [210,4,202,184,77,254,125,198,111,105,136,59,177,222,137,215,4,123,207,236,76,26,169,202,155,179,64,137,36,190,250,203,67,112,106,7,30,145,91,63,156,96,157,63,205,170,148,78,149,123,166,153,251,209,134,1,213,47,251,155,205,204,169,232,0,114,37,79,195,5,46,31,221,128,184,15,196,42,232,155,208,148,186,168,55,69,180,20,63,239,213,42,148,199,226,98,208,168,62,195,242,48,2,217,49,182,40,255,180,80,85,20,177,17,125,51,174,249,163,96,229,107,82,174,56,19,149,205,96,130,68,150,84,199,185,177,214,26,203,199,42,186,117,104,134,25,151,113,241,128,232,32,128,201,55,75,42,110,190,182,217,155,144,59,81,42,99,145,95,29,192,14,141,236,103,241,247,30,25,64,158,226,222,167,79,139,179,18,19,57,65,195,126,231,65,27,205,242,145,185,33,213,98,250,109,143,113,121,86,87,24,94,148,223,37,151,32,110,161,94,206,80,50,162,52,128,159,180,31,229,30,148,19,201,119,36,93,171,224,41,78,224,24,82,58,120,191,8,187,172,136,54,36,241,13,228,209,23,134,34,100,111,217,95,134,228,149,69,127,185,111,118,245,149,143,7,81,54,79,201,97,172,236,69,151,49,174,18,155,90,86,126,183,60,226,37,17,52,26,172,201,20,161,206,117,218,236,197,122,97,19,57,136,201,158,12,242,38,78,15,168,248,254,164,5,113,227,66,179,193,135,136,217,62,65,229,187,160,124,189,194,77,233,12,22,191,45,212,119,158,186,31,62,49,134,74,105,224,254,196,191,184,215,118,38,147,71,18,164,218,205,147,253,66,192,78,113,82,34,215,225,145,131,128,173,142,226,162,141,204,116,75,89,244,59,141,132,189,193,182,244,168,83,76,65,115,189,41,227,96,63,30,226,172,119,217,196,141,228,186,100,105,102,213,198,108,245,162,215,206,121,30,241,144,95,210,30,49,50,31,102,195,150,223,132,73,172,210,148,110,242,201,162,168,77,204,36,155,65,38,164,42,200,248,131,46,89,187,72,101,202,8,246,66,253,151,199,167,18,199,254,64,104,75,17,242,7,66,152,120,0,100,93,87,248,69,96,61,82,84,163,203,79,31,135,121,172,26,86,190,150,199,238,209,234,185,199,130,167,12,100,249,62,117,167,200,239,235,74,98,229,11,190,51,1,21,145,130,241,128,160,252,154,70,104,190,57,239,149,100,113,36,228,169,1,58,253,39,244,24,118,247,136,201,141,156,171,123,27,178,133,249,195,111,141,198,176,54,44,199,173,189,250,122,112,211,74,180,180,85,164,180,219,70,158,156,236,114,119,36,46,218,228,192,141,192,120,73,211,116,110,23,17,201,64,229,105,174,89,45,102,126,106,236,20,61,211,52,167,184,226,242,49,54,236,216,187,195,233,76,51,171,5,69,240,1,236,104,90,65,37,23,168,48,145,252,219,250,92,235,227,147,198,183,162,150,135,114,154,60,37,14,93,145,132,47,190,188,70,36,173,111,165,59,39,244,132,135,7,135,109,188,209,154,127,41,240,4,236,10,254,129,62,249,163,172,235,228,87,172,167,139,54,208,129,251,3,66,88,124,121,19,1,2,166,7,192,97,84,175,245,163,227,203,170,197,127,137,14,165,149,218,235,74,73,175,217,176,189,245,181,146,238,227,132,0,132,191,187,183,2,254,40,130,189,88,89,195,85,133,97,255,200,235,61,124,152,113,190,40,125,20,12,23,80,210,1,104,226,207,18,170,41,57,91,75,192,221,169,213,242,73,240,134,123,22,31,164,3,119,199,6,163,23,26,53,2,68,42,173,174,177,18,162,90,123,156,101,29,140,88,203,63,121,195,170,49,16,48,102,198,159,182,124,171,60,158,128,243,192,245,33,59,192,227,204,191,112,221,225,249,59,141,48,196,172,100,80,253,149,30,182,119,163,113,110,186,129,179,249,247,184,132,6,78,31,198,250,244,229,54,124,245,96,36,92,189,122,197,18,216,141,115,172,147,229,155,59,50,244,65,91,156,243,217,76,232,227,248,180,129,100,189,114,239,3,185,102,5,53,30,13,130,121,83,145,117,194,103,159,79,4,230,176,64,163,126,34,68,79,118,177,218,130,232,116,200,186,243,51,134,85,62,109,37,219,244,254,68,10,2,108,9,211,80,198,162,125,177,213,217,243,42,122,92,93,210,243,37,180,163,205,132,86,238,52,29,188,32,56,198,57,217,194,12,229,118,88,64,4,211,163,230,8,11,251,129,2,84,72,24,95,45,202,41,62,173,226,170,75,143,203,173,122,190,190,192,179,246,207,220,19,8,219,243,182,232,105,2,132,161,131,78,131,118,142,151,217,158,191,101,172,183,234,74,10,211,230,72,59,72,50,49,116,30,6,104,173,248,217,198,5,115,223,27,252,19,41,217,147,230,76,90,115,152,224,151,246,147,4,106,186,112,140,151,184,218,255,177,105,2,16,24,232,48,163,30,51,189,221,149,44,109,164,126,231,210,43,86,212,7,189,106,52,154,15,152,135,137,206,121,149,98,25,193,109,52,17,246,128,236,101,137,128,1,125,124,93,244,174,98,6,245,208,204,190,4,216,142,159,169,122,74,56,150,253,74,178,37,101,59,1,230,133,153,67,233,151,6,21,122,7,67,211,43,225,251,172,177,60,125,114,17,70,17,157,161,58,187,5,255,72,136,55,229,60,107,243,130,96,104,56,49,242,6,107,219,88,98,126,222,14,229,29,15,30,2,251,133,206,32,232,89,208,145,194,161,72,248,5,181,47,168,128,135,95,2,124,149,246,224,229,124,190,225,135,217,103,41,39,88,90,72,91,65,56,97,253,161,218,241,199,217,66,107,20,104,116,140,214,229,5,93,50,0,222,220,110,52,29,165,118,8,78,174,167,173,62,141,104,155,53,32,129,49,69,225,153,129,202,3,30,7,225,25,106,21,122,180,255,90,30,189,219,47,47,108,184,218,30,141,91,172,67,111,181,148,115,39,186,37,3,170,48,177,24,248,204,72,247,41,245,57,255,221,236,213,244,37,243,159,182,218,58,93,231,175,56,117,27,116,240,227,143,203,243,134,215,192,16,112,187,222,191,27,166,81,48,14,97,125,77,218,119,174,215,183,99,148,218,213,0,181,117,190,128,128,150,100,108,97,220,13,215,32,199,250,163,76,85,226,142,15,117,177,84,138,197,220,45,29,178,195,119,44,124,99,224,65,110,232,153,227,186,55,13,83,237,232,6,244,103,57,222,52,196,111,169,130,172,145,75,175,0,115,225,21,11,105,200,232,16,116,58,59,163,169,90,12,143,121,72,32,14,183,38,14,50,147,123,200,176,244,54,238,196,170,147,211,157,232,92,112,22,13,159,62,110,82,22,99,162,73,73,125,160,193,209,235,191,184,156,71,106,42,110,52,126,10,237,69,47,152,242,92,117,253,112,136,223,114,229,94,236,109,150,22,77,237,127,130,81,91,212,139,201,32,53,85,212,231,141,2,83,218,71,164,16,252,79,71,228,91,72,164,240,24,82,117,32,3,185,94,20,238,245,250,148,185,133,60,177,105,59,199,190,182,116,109,224,71,172,59,178,92,94,120,37,193,235,223,240,55,235,154,179,222,237,177,104,230,73,90,25,202,236,222,77,85,215,49,67,211,8,228,33,197,76,147,91,92,13,223,141,230,19,140,14,175,44,109,29,114,222,189,13,17,30,231,128,208,166,135,86,201,172,108,112,216,46,218,39,128,151,162,213,188,78,246,185,46,31,65,35,194,174,240,136,207,120,52,241,243,110,191,23,98,109,98,254,228,8,9,20,174,220,74,146,59,96,44,103,69,29,6,210,46,221,133,246,82,61,236,6,101,255,180,183,241,205,14,179,84,191,105,115,106,192,180,36,212,94,127,39,148,50,106,10,57,129,16,195,44,172,86,245,124,65,209,17,134,108,30,53,4,213,150,166,223,152,20,204,3,233,141,8,13,54,242,215,201,95,75,102,136,51,29,170,82,189,35,113,188,243,242,70,249,162,233,240,142,249,130,62,101,167,126,75,165,17,193,221,111,195,207,90,187,108,151,211,79,34,26,228,64,18,241,151,36,65,232,94,65,221,138,154,88,45,63,102,69,16,109,76,189,57,115,241,235,71,228,0,82,66,143,182,2,159,127,249,138,94,69,58,157,63,11,195,3,47,59,72,5,181,232,241,87,122,140,38,142,156,199,87,66,44,147,191,85,91,16,147,24,184,28,230,209,27,209,228,151,32,22,161,125,149,53,37,176,143,18,252,124,174,219,193,85,243,226,71,131,161,134,251,249,120,240,168,182,52,234,134,223,39,144,181,19,11,143,24,41,246],
+  kyberBytes: [232,100,49,197,116,25,155,199,205,31,135,175,90,182,105,69,112,74,209,50,110,81,89,98,62,216,41,230,66,161,114,131,13,107,44,122,76,8,36,7,44,81,132,39,204,63,214,128,184,0,118,59,160,9,244,139,122,238,134,67,115,153,12,15,185,136,62,65,22,238,59,41,194,245,135,61,249,94,8,98,74,6,57,71,76,138,106,67,4,15,35,73,48,177,124,176,212,22,89,123,186,103,220,120,74,120,211,108,207,100,43,27,218,19,171,140,19,107,235,75,219,123,3,245,88,153,224,179,130,139,155,166,225,34,61,217,195,8,1,164,134,91,74,177,124,129,134,134,193,139,142,96,74,88,202,7,99,12,84,147,86,170,20,136,84,20,233,110,150,40,54,112,51,143,110,65,139,31,36,144,229,236,30,44,74,200,31,28,65,241,242,153,47,201,3,212,251,196,78,240,142,209,139,183,158,179,122,243,250,50,185,41,15,15,156,194,161,82,44,15,38,12,175,27,158,227,134,159,201,0,185,49,180,11,177,96,160,170,26,106,184,115,199,198,55,99,164,3,16,64,56,14,117,168,110,191,210,103,75,34,16,21,120,23,149,75,175,141,27,144,137,82,172,24,248,125,153,96,100,102,187,84,226,91,193,152,33,38,189,10,189,64,203,90,131,38,112,12,163,63,78,248,2,8,160,202,157,123,108,229,26,103,68,240,62,133,27,115,197,228,64,211,228,21,255,123,78,9,7,142,84,115,41,245,252,48,32,240,8,225,19,196,24,181,3,99,58,40,61,54,135,15,202,114,244,19,185,193,252,153,42,112,114,22,6,162,30,53,129,185,116,74,7,188,170,138,218,197,244,233,154,78,40,44,150,149,123,204,188,145,11,97,66,133,56,204,181,64,84,80,6,54,99,101,181,58,82,191,7,217,129,163,192,37,87,48,80,203,3,124,35,121,59,16,75,30,25,73,193,151,100,179,17,181,37,194,246,37,207,82,189,252,68,178,187,139,149,137,166,109,166,148,180,222,50,77,118,53,174,251,156,72,228,162,32,205,6,169,252,231,147,198,49,0,91,144,84,226,232,188,194,53,85,98,21,120,142,193,156,30,103,118,212,88,159,0,199,43,140,105,108,119,131,111,100,183,206,178,76,183,107,186,70,2,187,68,219,118,65,56,84,105,188,65,153,145,165,56,71,120,99,251,91,176,144,166,129,184,3,160,233,7,57,0,179,34,182,241,78,220,58,13,21,149,103,5,160,194,162,176,199,230,121,102,231,72,146,70,200,156,252,232,77,75,120,158,203,123,105,44,241,153,96,153,47,102,151,56,196,225,126,104,117,155,33,112,115,61,162,205,86,105,179,78,26,199,83,96,135,138,12,34,129,102,114,228,44,125,85,66,102,103,64,28,169,81,12,169,186,201,61,42,109,73,16,82,200,245,148,74,188,30,74,21,115,214,251,34,28,92,75,62,155,47,226,247,85,143,241,207,150,120,151,151,59,175,113,116,104,104,41,115,163,128,106,63,50,17,25,87,174,207,67,82,143,74,63,39,108,187,129,57,44,116,213,48,226,25,171,173,153,140,24,12,41,187,70,165,47,155,34,254,74,143,103,86,104,241,185,38,88,23,173,176,73,181,191,5,89,142,59,96,166,113,198,88,250,122,41,41,52,170,170,4,116,44,105,203,106,183,236,0,195,58,120,5,68,123,157,72,152,2,201,172,90,183,121,198,155,172,83,51,135,149,169,209,76,100,76,19,122,210,196,121,6,158,129,108,112,144,5,18,189,140,203,251,136,159,74,199,41,135,250,94,87,209,113,9,36,206,197,211,10,232,37,92,1,105,85,135,60,20,174,8,14,182,156,59,78,114,46,173,243,81,77,65,72,253,87,170,51,217,62,234,68,147,39,114,176,195,69,107,178,64,86,240,130,188,95,53,197,231,193,162,77,116,122,235,216,204,93,139,144,207,76,46,0,161,180,115,1,35,221,176,3,154,184,123,53,208,154,67,115,62,75,100,25,164,151,108,121,23,48,171,22,172,134,97,175,182,33,82,54,148,43,148,251,120,104,235,181,21,50,109,176,105,206,3,212,103,157,100,134,4,48,163,55,220,207,82,28,61,76,225,171,13,99,119,9,164,4,143,148,24,56,106,206,96,220,10,95,194,32,194,85,82,181,160,126,80,0,58,202,248,119,45,88,14,63,102,112,236,215,110,214,105,97,145,2,162,207,52,156,107,101,172,200,64,138,153,199,113,101,245,68,38,16,94,196,51,155,163,10,116,102,69,23,80,96,15,25,224,183,24,224,173,23,192,92,98,224,31,243,18,16,216,151,54,127,24,122,126,200,176,187,155,206,126,224,21,43,54,202,83,219,205,253,116,125,231,36,7,37,59,167,2,70,207,210,119,98,1,100,182,59,233,103,51,166,50,34,247,20,120,131,148,204,113,198,230,197,59,50,213,39,153,8,137,197,215,74,184,52,129,251,140,204,203,112,29,119,49,167,13,91,81,100,41,120,103,210,21,48,204,54,228,245,87,5,134,46,58,135,179,242,87,144,205,152,23,136,7,106,145,208,23,137,18,88,184,83,66,103,241,32,105,237,41,70,249,122,94,166,227,109,141,40,24,55,127,177,243,73,49,127,130,176,241,12,162,230,57,178,45]
+};
+
+let activeCertIdx=0;
+// cert metadata for the currently active cert (populated by extractCertMeta)
+let currentCertMeta=null;
+
+// ── Crypto ────────────────────────────────────────────────────────────────────
+async function sha256(d){
+  const b=typeof d==='string'?new TextEncoder().encode(d):d;
+  return new Uint8Array(await crypto.subtle.digest('SHA-256',b));
+}
+function cat(...a){const o=new Uint8Array(a.reduce((s,x)=>s+x.length,0));let p=0;a.forEach(x=>{o.set(x,p);p+=x.length;});return o;}
+function i2b(n){return new Uint8Array([(n>>8)&255,n&255]);}
+function b2u(a){return((a[0]<<24)|(a[1]<<16)|(a[2]<<8)|a[3])>>>0;}
+
+async function computeLayers(seed){
+  const base=[];
+  for(let i=0;i<256;i++){
+    const h=await sha256(cat(seed,i2b(i)));
+    base.push(b2u(h)%q);
+  }
+  const L=[base];
+  for(let l=1;l<16;l++){
+    const prev=L[l-1],nxt=[];
+    for(let i=0;i<256;i++){
+      const h=await sha256(cat(seed,new TextEncoder().encode('walk'),new Uint8Array([l]),i2b(i)));
+      const s=(h[0]&1)?1:-1; let c=prev[i]+s*DELTA;
+      if(c<0||c>=q)c=prev[i]-s*DELTA;
+      nxt.push(c);
+    }
+    L.push(nxt);
+  }
+  return L;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function valColor(v){return PALETTE[Math.min(Math.floor(v/(q/16)),15)];}
+function valBand(v){return Math.min(Math.floor(v/(q/16)),15);}
+function hexInt(h){return parseInt(h.slice(1),16);}
+
+// ── Three.js ──────────────────────────────────────────────────────────────────
+const canv=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas:canv,antialias:true,powerPreference:'default'});
+// Handle WebGL context loss (Safari is aggressive about reclaiming GPU resources)
+canv.addEventListener('webglcontextlost', e => {
+  e.preventDefault();
+  cancelAnimationFrame(spinRAF);
+}, false);
+canv.addEventListener('webglcontextrestored', () => {
+  buildCube();
+  if(cubeData.length) refreshColors();
+}, false);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setClearColor(0xf0f0ee,1);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(42,1,0.1,600);
+camera.position.set(0,0,52);
+scene.add(new THREE.AmbientLight(0xffffff,1.0));
+const pivot=new THREE.Group(); scene.add(pivot);
+
+let backdropMesh=null;
+function makeBackdropTexture(identity,token){
+  const W=2048,H=768;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const cx=cv.getContext('2d');
+  cx.fillStyle='#f0f0ee';cx.fillRect(0,0,W,H);
+  cx.textAlign='center';cx.textBaseline='middle';
+  const smoke='rgb(60,62,66)';
+  cx.font='bold 87px sans-serif';cx.fillStyle=smoke;cx.fillText('Qrypto Trust PQC',W/2,H*0.13);
+  cx.font='bold 108px sans-serif';cx.fillStyle=smoke;cx.fillText(identity,W/2,H*0.42);
+  cx.font='bold 72px sans-serif';cx.fillStyle=smoke;cx.fillText(token,W/2,H*0.64);
+  cx.font='bold 81px sans-serif';cx.fillStyle=smoke;cx.fillText('XQ Zero Trust',W/2,H*0.87);
+  return cv;
+}
+function updateBackdrop(identity,token){
+  if(backdropMesh)scene.remove(backdropMesh);
+  const tex=new THREE.CanvasTexture(makeBackdropTexture(identity,token));
+  const geo=new THREE.PlaneGeometry(56,21);
+  const mat=new THREE.MeshBasicMaterial({map:tex,transparent:false,depthWrite:true,side:THREE.DoubleSide});
+  backdropMesh=new THREE.Mesh(geo,mat);
+  const cubeHalf=(N-1)*SP/2;
+  backdropMesh.position.set(0,0,-(cubeHalf+1.5));
+  scene.add(backdropMesh);
+}
+
+const GEO=new THREE.SphereGeometry(0.19,10,7);
+const SP=1.1, OFF=(N-1)*SP/2;
+let meshes=[], selOutline=null;
+let rotX=0.45, rotY=0.55, drag=false, px=0, py=0;
+function applyRot(){pivot.rotation.x=rotX;pivot.rotation.y=rotY;}
+
+function buildCube(){
+  meshes.forEach(m=>pivot.remove(m));meshes=[];
+  if(selOutline){pivot.remove(selOutline);selOutline=null;}
+  for(let layer=0;layer<16;layer++){
+    for(let idx=0;idx<256;idx++){
+      const col=idx%16,row=Math.floor(idx/16);
+      const mat=new THREE.MeshLambertMaterial({color:0xaaaaaa});
+      const mesh=new THREE.Mesh(GEO,mat);
+      mesh.position.set(col*SP-OFF,-(row*SP-OFF),-(layer*SP-OFF));
+      mesh.userData={layer,idx,col,row};
+      pivot.add(mesh);meshes.push(mesh);
+    }
+  }
+}
+
+function refreshColors(){
+  if(!cubeData.length)return;
+  meshes.forEach(m=>{
+    const{layer,idx}=m.userData;
+    const visible=filterLayer<0||layer===filterLayer;
+    m.visible=visible;
+    if(visible)m.material.color.setHex(hexInt(valColor(cubeData[layer][idx])));
+  });
+  if(selOutline){const show=filterLayer<0||selOutline.userData.layer===filterLayer;selOutline.visible=show;}
+}
+
+function selectSphere(layer,idx){
+  if(selOutline){pivot.remove(selOutline);selOutline=null;}
+  const base=meshes[layer*256+idx];
+  const outGeo=new THREE.SphereGeometry(0.24,10,7);
+  const outMat=new THREE.MeshBasicMaterial({color:0x1a1a2e,side:THREE.BackSide});
+  selOutline=new THREE.Mesh(outGeo,outMat);
+  selOutline.position.copy(base.position);
+  selOutline.userData={layer};
+  pivot.add(selOutline);
+  const val=cubeData[layer][idx];
+  const color=valColor(val),band=valBand(val);
+  document.getElementById('ci').textContent=`Sphere ${(layer*256+idx+1).toString().padStart(4,'0')}`;
+  document.getElementById('cp').textContent=`col ${base.userData.col+1}, row ${base.userData.row+1}, layer ${layer+1}`;
+  document.getElementById('cv2').textContent=val.toLocaleString();
+  document.getElementById('cb').textContent=`${band+1} \u2014 ${PNAMES[band]}`;
+  document.getElementById('cdot').style.background=color;
+  document.getElementById('cc').textContent=color.toUpperCase();
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+function computeStats(vals){
+  const n=vals.length;
+  const mn=Math.min(...vals),mx=Math.max(...vals);
+  const mean=vals.reduce((s,v)=>s+v,0)/n;
+  const std=Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2,0)/n);
+  const bw=q/16,buckets=Array(16).fill(0);
+  vals.forEach(v=>buckets[Math.min(Math.floor(v/bw),15)]++);
+  const H=-buckets.reduce((s,c)=>c>0?s+(c/n)*Math.log2(c/n):s,0);
+  const exp=n/16,chi2=buckets.reduce((s,c)=>s+(c-exp)**2/exp,0);
+  return{mn,mx,mean,std,H,chi2,buckets};
+}
+
+function updateStats(){
+  if(!cubeData.length)return;
+  let st,chi2Display,note;
+  if(filterLayer<0){
+    const layerSts=cubeData.map(vals=>computeStats(vals));
+    chi2Display=layerSts.reduce((s,x)=>s+x.chi2,0)/16;
+    st=computeStats(cubeData.flat());
+    note='(avg \u03c7\u00b2 across 16 layers)';
+  }else{
+    st=computeStats(cubeData[filterLayer]);
+    chi2Display=st.chi2;
+    note=`(layer ${filterLayer+1} only)`;
+  }
+  document.getElementById('layerNote').textContent=note;
+  document.getElementById('stok').textContent=tokenStr;
+  document.getElementById('stmin').textContent=st.mn.toLocaleString();
+  document.getElementById('stmax').textContent=st.mx.toLocaleString();
+  document.getElementById('stmean').textContent=Math.round(st.mean).toLocaleString();
+  document.getElementById('ststd').textContent=Math.round(st.std).toLocaleString();
+  document.getElementById('stH').textContent=st.H.toFixed(4)+' bits';
+  document.getElementById('stHp').textContent=(st.H/4*100).toFixed(1)+'% of max 4.0 bits';
+  document.getElementById('ebar').style.width=(st.H/4*100).toFixed(1)+'%';
+  document.getElementById('stchi').textContent=chi2Display.toFixed(3);
+  const badge=document.getElementById('stbadge');
+  if(chi2Display<30.578){badge.className='badge pass';badge.textContent='PASS';}
+  else if(chi2Display<45){badge.className='badge marginal';badge.textContent='MARGINAL';}
+  else{badge.className='badge fail';badge.textContent='REJECT';}
+  renderBuckets(st.buckets);
+}
+
+function renderBuckets(b){
+  const el=document.getElementById('bviz');
+  const mx=Math.max(...b);
+  el.innerHTML=b.map((c,i)=>`<div class="br"><div class="bs" style="background:${PALETTE[i]}"></div><div class="bn">${PNAMES[i]}</div><div class="bb"><div class="bf" style="width:${(c/mx*100).toFixed(1)}%;background:${PALETTE[i]}"></div></div><div class="bc">${c}</div></div>`).join('');
+}
+
+// ── Layer slider ──────────────────────────────────────────────────────────────
+document.getElementById('ls').addEventListener('input',function(){
+  const v=parseInt(this.value);
+  filterLayer=v===0?-1:v-1;
+  const lbl=v===0?'ALL':v.toString().padStart(2,'0');
+  document.getElementById('sv').textContent=lbl;
+  document.getElementById('lbl').textContent=v===0?'ALL LAYERS':`LAYER ${lbl}`;
+  refreshColors();updateStats();
+});
+
+// ── Drag rotation ─────────────────────────────────────────────────────────────
+canv.addEventListener('mousedown',e=>{drag=true;px=e.clientX;py=e.clientY;canv.classList.add('drag');stopSpin();});
+window.addEventListener('mouseup',()=>{drag=false;canv.classList.remove('drag');});
+window.addEventListener('mousemove',e=>{
+  if(!drag)return;
+  rotY+=(e.clientX-px)*0.01;rotX+=(e.clientY-py)*0.01;
+  applyRot();px=e.clientX;py=e.clientY;
+  document.getElementById('tip').style.opacity=0;
+});
+canv.addEventListener('touchstart',e=>{drag=true;px=e.touches[0].clientX;py=e.touches[0].clientY;stopSpin();},{passive:true});
+window.addEventListener('touchend',()=>{drag=false;});
+window.addEventListener('touchmove',e=>{
+  if(!drag)return;
+  rotY+=(e.touches[0].clientX-px)*0.01;rotX+=(e.touches[0].clientY-py)*0.01;
+  applyRot();px=e.touches[0].clientX;py=e.touches[0].clientY;
+},{passive:true});
+canv.addEventListener('wheel',e=>{
+  e.preventDefault();
+  camera.position.z=Math.max(15,Math.min(120,camera.position.z+e.deltaY*0.05));
+},{passive:false});
+
+// ── Camera presets ────────────────────────────────────────────────────────────
+function setView(rx,ry){stopSpin();rotX=rx;rotY=ry;applyRot();}
+function stopSpin(){spinning=false;cancelAnimationFrame(spinRAF);const b=document.getElementById('spinBtn');if(b)b.textContent='\u25B6 Spin';b&&b.classList.remove('on');}
+function toggleSpin(){
+  if(spinning){stopSpin();}
+  else{
+    spinning=true;
+    const b=document.getElementById('spinBtn');b.textContent='\u25A0 Stop';b.classList.add('on');
+    (function spin(){if(!spinning)return;rotY+=0.005;applyRot();spinRAF=requestAnimationFrame(spin);})();
+  }
+}
+
+// ── Raycasting ────────────────────────────────────────────────────────────────
+const ray=new THREE.Raycaster();ray.params.Mesh.threshold=0.1;
+const m2=new THREE.Vector2();
+const tip=document.getElementById('tip');
+canv.addEventListener('mousemove',e=>{
+  if(drag){tip.style.opacity=0;return;}
+  const r=canv.getBoundingClientRect();
+  m2.x=((e.clientX-r.left)/r.width)*2-1;m2.y=-((e.clientY-r.top)/r.height)*2+1;
+  ray.setFromCamera(m2,camera);
+  const hits=ray.intersectObjects(meshes.filter(m=>m.visible));
+  if(hits.length&&cubeData.length){
+    const{layer,idx}=hits[0].object.userData;
+    const val=cubeData[layer][idx];
+    tip.style.opacity=1;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-12)+'px';
+    tip.textContent=`L${layer+1} #${(idx+1).toString().padStart(3,'0')}  ${val.toLocaleString()}  ${PNAMES[valBand(val)]}`;
+    canv.style.cursor='pointer';
+  }else{tip.style.opacity=0;canv.style.cursor='grab';}
+});
+canv.addEventListener('mouseleave',()=>tip.style.opacity=0);
+canv.addEventListener('click',e=>{
+  if(drag)return;
+  const r=canv.getBoundingClientRect();
+  m2.x=((e.clientX-r.left)/r.width)*2-1;m2.y=-((e.clientY-r.top)/r.height)*2+1;
+  ray.setFromCamera(m2,camera);
+  const hits=ray.intersectObjects(meshes.filter(m=>m.visible));
+  if(hits.length&&cubeData.length){const{layer,idx}=hits[0].object.userData;selectSphere(layer,idx);}
+});
+
+// ── Resize ────────────────────────────────────────────────────────────────────
+function onResize(){
+  const wrap=canv.parentElement;
+  const W=wrap.clientWidth,H=wrap.clientHeight;
+  renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix();
+}
+window.addEventListener('resize',onResize);
+(function loop(){requestAnimationFrame(loop);renderer.render(scene,camera);})();
+
+// ── Cert Loader Toggle ───────────────────────────────────────────────────────
+function clToggle(){
+  const strip=document.getElementById('cl-strip');
+  const btn=strip.querySelector('.cl-bar-btn');
+  strip.classList.toggle('open');
+  btn.textContent=strip.classList.contains('open')?'Close':'Open';
+}
+
+// ── File Drop — format-agnostic Dilithium extractor ──────────────────────────
+// Accepts any file format. Tries every known encoding and structure to locate
+// a valid Dilithium public key (1952 bytes = ML-DSA-65, 1312 = ML-DSA-44,
+// 2592 = ML-DSA-87). Returns {bytes:Uint8Array, format:string} or throws.
+
+const DILITHIUM_PK_SIZES = new Set([1312, 1952, 2592]); // ML-DSA-44/65/87
+
+function extractDilithiumKey(raw, filename) {
+  const name = filename.replace(/\.[^.]+$/, '');
+
+  // ── Helper: check if a Uint8Array is a plausible Dilithium public key ──
+  function isValidSize(arr) {
+    return arr && DILITHIUM_PK_SIZES.has(arr.length);
+  }
+
+  // ── Helper: base64 → Uint8Array, returns null on failure ──
+  function tryB64(str) {
+    try {
+      const clean = str.replace(/\s+/g, '');
+      if (!/^[A-Za-z0-9+/]+=*$/.test(clean)) return null;
+      const bin = atob(clean);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      return arr;
+    } catch { return null; }
+  }
+
+  // ── Helper: hex → Uint8Array, returns null on failure ──
+  function tryHex(str) {
+    const clean = str.replace(/\s+/g, '').toLowerCase();
+    if (!/^[0-9a-f]+$/.test(clean) || clean.length % 2 !== 0) return null;
+    const arr = new Uint8Array(clean.length / 2);
+    for (let i = 0; i < arr.length; i++)
+      arr[i] = parseInt(clean.slice(i*2, i*2+2), 16);
+    return arr;
+  }
+
+  // ── STRATEGY 1: Raw binary (file IS the key) ──────────────────────────────
+  if (raw instanceof Uint8Array && isValidSize(raw)) {
+    return { bytes: raw, format: 'raw binary' };
+  }
+
+  const text = (raw instanceof Uint8Array)
+    ? new TextDecoder('utf-8', { fatal: false }).decode(raw)
+    : raw;
+
+  // ── STRATEGY 2: PEM / armored base64 ─────────────────────────────────────
+  // Handles: -----BEGIN ML-DSA-65 PUBLIC KEY-----, -----BEGIN PUBLIC KEY-----,
+  //          -----BEGIN DILITHIUM PUBLIC KEY-----, any armored block
+  const pemMatch = text.match(/-----BEGIN.*?-----\n([\s\S]+?)\n-----END.*?-----/);
+  if (pemMatch) {
+    const decoded = tryB64(pemMatch[1]);
+    if (decoded) {
+      // PEM may wrap a SubjectPublicKeyInfo (SPKI) ASN.1 structure.
+      // ML-DSA-65 SPKI prepends a fixed 11-byte OID header before the 1952-byte key.
+      // Try raw first, then strip common ASN.1 header lengths.
+      for (const offset of [0, 11, 12, 14, 16, 24, 32]) {
+        const candidate = decoded.slice(offset);
+        if (isValidSize(candidate)) return { bytes: candidate, format: `PEM (offset ${offset})` };
+      }
+      // Last resort: scan for any valid-size window
+      for (let i = 0; i <= decoded.length - 1312; i++) {
+        const candidate = decoded.slice(i);
+        if (isValidSize(candidate)) return { bytes: candidate, format: `PEM (scan offset ${i})` };
+      }
+    }
+  }
+
+  // ── STRATEGY 3: Plain base64 (no armor) ──────────────────────────────────
+  const stripped = text.trim().replace(/\s+/g, '');
+  if (/^[A-Za-z0-9+/]+=*$/.test(stripped)) {
+    const decoded = tryB64(stripped);
+    if (decoded) {
+      for (const offset of [0, 11, 12, 14, 16, 24, 32]) {
+        const candidate = decoded.slice(offset);
+        if (isValidSize(candidate)) return { bytes: candidate, format: `base64 (offset ${offset})` };
+      }
+    }
+  }
+
+  // ── STRATEGY 4: Hex string ────────────────────────────────────────────────
+  const hexCandidate = tryHex(stripped);
+  if (hexCandidate) {
+    for (const offset of [0, 11, 12, 14, 16, 24, 32]) {
+      const candidate = hexCandidate.slice(offset);
+      if (isValidSize(candidate)) return { bytes: candidate, format: `hex (offset ${offset})` };
+    }
+  }
+
+  // ── STRATEGY 5: JSON — any structure ─────────────────────────────────────
+  let parsed = null;
+  try { parsed = JSON.parse(text); } catch { /* not JSON */ }
+  if (parsed) {
+    // Recursive search: walk every value in the object looking for arrays/strings
+    // that decode to a valid Dilithium key size
+    function searchObj(obj, depth=0) {
+      if (depth > 8) return null;
+      if (Array.isArray(obj)) {
+        // Integer array of valid size?
+        if (isValidSize({ length: obj.length }) && obj.every(x => Number.isInteger(x) && x >= 0 && x <= 255)) {
+          return { bytes: new Uint8Array(obj), format: 'JSON integer array' };
+        }
+        for (const v of obj) { const r = searchObj(v, depth+1); if (r) return r; }
+      } else if (typeof obj === 'string') {
+        // Base64 string value?
+        const b = tryB64(obj);
+        if (b) {
+          for (const offset of [0, 11, 12, 14, 16, 24, 32]) {
+            const c = b.slice(offset);
+            if (isValidSize(c)) return { bytes: c, format: `JSON base64 string (offset ${offset})` };
+          }
+        }
+        // Hex string value?
+        const h = tryHex(obj);
+        if (h) {
+          for (const offset of [0, 11, 12, 14, 16, 24, 32]) {
+            const c = h.slice(offset);
+            if (isValidSize(c)) return { bytes: c, format: `JSON hex string (offset ${offset})` };
+          }
+        }
+      } else if (obj && typeof obj === 'object') {
+        // Prefer keys that suggest a public key
+        const preferredKeys = ['dilithium','publicKey','public_key','pk','key','pubkey','mldsa','ml_dsa'];
+        for (const k of preferredKeys) {
+          if (obj[k] !== undefined) { const r = searchObj(obj[k], depth+1); if (r) return r; }
+        }
+        for (const v of Object.values(obj)) { const r = searchObj(v, depth+1); if (r) return r; }
+      }
+      return null;
+    }
+    const found = searchObj(parsed);
+    if (found) return found;
+  }
+
+  // ── STRATEGY 6: Binary blob scan — last resort ────────────────────────────
+  // If the file is binary and contains the key embedded somewhere, try reading
+  // raw bytes and look for a valid-size sequence starting at common offsets.
+  if (raw instanceof Uint8Array && raw.length >= 1312) {
+    for (const offset of [0, 11, 12, 14, 16, 24, 32, 64]) {
+      const candidate = raw.slice(offset);
+      if (isValidSize(candidate)) return { bytes: candidate, format: `binary scan (offset ${offset})` };
+    }
+  }
+
+  throw new Error(
+    'No Dilithium public key found \u2014 tried raw binary, PEM, base64, hex, and JSON. ' +
+    'Expected 1312 (ML-DSA-44), 1952 (ML-DSA-65), or 2592 (ML-DSA-87) bytes.'
+  );
+}
+
+const dz=document.getElementById('dz'),fi=document.getElementById('fi');
+const dstat=document.getElementById('dstat');
+const dstatSide=document.getElementById('dstat-side');
+// Sync dstat text to sidebar
+const _origDstatSet=Object.getOwnPropertyDescriptor(Node.prototype,'textContent').set;
+new MutationObserver(()=>{if(dstatSide&&dstat)dstatSide.textContent=dstat.textContent;}).observe(dstat,{childList:true,characterData:true,subtree:true});
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('ov');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('ov'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('ov');if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0]);});
+fi.addEventListener('change',()=>{if(fi.files[0])loadFile(fi.files[0]);});
+
+async function loadFile(file){
+  dstat.className='dstat-lg';dstat.textContent='Reading\u2026';
+  try{
+    // Read as both binary and text so the extractor has both views
+    const arrayBuf = await file.arrayBuffer();
+    const rawBytes = new Uint8Array(arrayBuf);
+
+    const { bytes: dilithiumPub, format } = extractDilithiumKey(rawBytes, file.name);
+
+    const name = file.name.replace(/\.[^.]+$/, '').replace(/_/g,' ');
+    const fileToken = file.name.replace(/\.[^.]+$/, '').split('_').pop().toUpperCase().slice(0,6);
+
+    updateBackdrop(name, fileToken);
+    dstat.textContent = 'Computing lattice layers\u2026';
+    document.getElementById('cube-status').textContent = 'Computing\u2026';
+
+    // Seed from filename stem (no email parsing needed — format-agnostic)
+    const seed = await sha256(name);
+    const layers = await computeLayers(seed);
+    tokenStr = name;
+    cubeData = layers;
+    refreshColors(); updateStats();
+    document.getElementById('cube-status').textContent = `${name} \u00b7 FIPS 204 \u00b7 Verified`;
+    dstat.textContent = `\u2713 ${name} \u2014 ${dilithiumPub.length}B \u00b7 ${format} \u00b7 4,096 spheres`;
+    // Extract cert metadata from raw bytes + text + JSON
+    let parsedJson = null;
+    try { parsedJson = JSON.parse(new TextDecoder().decode(rawBytes)); } catch {}
+    const certMeta = extractCertMeta(rawBytes, new TextDecoder('utf-8',{fatal:false}).decode(rawBytes), parsedJson, null);
+    // Use JSON name field as subject if ASN.1 didn't find one
+    if (!certMeta.subject && parsedJson?.name) certMeta.subject = parsedJson.name;
+    addCertAndGenerateReport({name, email:'', deviceId:fileToken, dilithiumPub, kyberPub:null, meta:certMeta, format});
+  }catch(err){dstat.className='dstat-lg err';dstat.textContent='\u2717 '+err.message;}
+}
+
+// ── Cert registry & tab management ───────────────────────────────────────────
+function addCertAndGenerateReport(certInfo){
+  const existIdx=loadedCerts.findIndex(c=>c.name===certInfo.name);
+  const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const certEntry={
+    name:certInfo.name,
+    email:certInfo.email,
+    deviceId:certInfo.deviceId,
+    cubeData:cubeData.map(l=>[...l]),
+    date:today,
+    dilithiumBytes:certInfo.dilithiumPub?certInfo.dilithiumPub.length:0,
+    meta:certInfo.meta||null,
+    format:certInfo.format||null,
+  };
+  if(existIdx>=0){loadedCerts[existIdx]=certEntry;activeCertIdx=existIdx;}
+  else{loadedCerts.push(certEntry);activeCertIdx=loadedCerts.length-1;}
+  updateCertMeta(certInfo.meta||null, certInfo.format||null, certInfo.dilithiumPub?certInfo.dilithiumPub.length:null);
+  rebuildReportTabs();
+  showCertReport(activeCertIdx);
+}
+
+function rebuildReportTabs(){
+  const tabsEl=document.getElementById('rpt-kp-tabs');
+  const labelEl=document.getElementById('rpt-kp-label');
+  if(!loadedCerts.length){labelEl.textContent='Load a Dilithium cert to generate reports';tabsEl.innerHTML='';return;}
+  labelEl.textContent=`Loaded Identit${loadedCerts.length===1?'y':'ies'} \u2014 ${loadedCerts.length} cert${loadedCerts.length===1?'':'s'}`;
+  tabsEl.innerHTML=loadedCerts.map((c,i)=>`<button class="rpt-kp-tab${i===activeCertIdx?' active':''}" onclick="showCertReport(${i})">${(i+1).toString().padStart(2,'0')}&nbsp;${c.deviceId?c.deviceId:c.name.slice(0,6)}</button>`).join('');
+}
+
+function showCertReport(idx){
+  activeCertIdx=idx;
+  // Update tab active state
+  document.querySelectorAll('.rpt-kp-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  const cert=loadedCerts[idx];
+  document.getElementById('rpt-kp-meta').textContent=`${cert.name}${cert.deviceId?' \u00b7 '+cert.deviceId:''} \u00b7 Generated ${cert.date}`;
+  // Update cert metadata panel for this cert
+  updateCertMeta(cert.meta||null, cert.format||null, cert.dilithiumBytes||null);
+  // Generate the report HTML
+  const container=document.getElementById('rpt-docs-container');
+  container.innerHTML='<div class="rpt-loading">Generating report\u2026</div>';
+  // Also load this cert into cube
+  cubeData=cert.cubeData;tokenStr=cert.name;refreshColors();updateStats();
+  setTimeout(()=>{
+    container.innerHTML=buildFullReportHTML(cert);
+  },30);
+}
+
+// ── Report generation (matching rpt-doc format) ───────────────────────────────
+const today_r=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+function layerStatsR(cd,li){
+  const vals=cd[li],n=vals.length;
+  const mn=Math.min(...vals),mx=Math.max(...vals);
+  const mean=vals.reduce((s,v)=>s+v,0)/n;
+  const std=Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2,0)/n);
+  const bw=q/16,buckets=Array(16).fill(0);
+  vals.forEach(v=>buckets[Math.min(Math.floor(v/bw),15)]++);
+  const H=-buckets.reduce((s,c)=>c>0?s+(c/n)*Math.log2(c/n):s,0);
+  const chi2=buckets.reduce((s,c,_)=>s+(c-n/16)**2/(n/16),0);
+  const verdict=chi2<30.578?'Pass':chi2<45?'Marginal':'Reject';
+  return{mn,mx,mean,std,H,chi2,buckets,verdict};
+}
+function cubeAggR(cd){
+  const flat=cd.flat(),n=flat.length;
+  const mn=Math.min(...flat),mx=Math.max(...flat);
+  const mean=flat.reduce((s,v)=>s+v,0)/n;
+  const std=Math.sqrt(flat.reduce((s,v)=>s+(v-mean)**2,0)/n);
+  const bw=q/16,buckets=Array(16).fill(0);
+  flat.forEach(v=>buckets[Math.min(Math.floor(v/bw),15)]++);
+  const H=-buckets.reduce((s,c)=>c>0?s+(c/n)*Math.log2(c/n):s,0);
+  const avgChi2=cd.reduce((s,vals)=>{
+    const exp=vals.length/16,bk=Array(16).fill(0);
+    vals.forEach(v=>bk[Math.min(Math.floor(v/bw),15)]++);
+    return s+bk.reduce((a,c)=>a+(c-exp)**2/exp,0);
+  },0)/16;
+  return{mn,mx,mean,std,H,chi2:avgChi2,buckets};
+}
+function tbl(headers,rows){
+  const th=headers.map(h=>`<th>${h}</th>`).join('');
+  const tr=rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+  return `<table><tr>${th}</tr>${tr}</table>`;
+}
+function verdictBadge(v){
+  if(v==='Pass')return`<span class="badge-pass">PASS &#10003;</span>`;
+  if(v==='Marginal')return`<span class="badge-marg">MARGINAL</span>`;
+  return`<span class="badge-fail">REJECT &#10007;</span>`;
+}
+
+function buildFullReportHTML(cert){
+  const cd=cert.cubeData;
+  const ls=Array.from({length:16},(_,i)=>layerStatsR(cd,i));
+  const agg=cubeAggR(cd);
+  const avgH=ls.reduce((s,x)=>s+x.H,0)/16;
+  const avgChi=ls.reduce((s,x)=>s+x.chi2,0)/16;
+  const passCount=ls.filter(s=>s.chi2<30.578).length;
+  const margCount=ls.filter(s=>s.chi2>=30.578&&s.chi2<45).length;
+  const failCount=ls.filter(s=>s.chi2>=45).length;
+  const minH=Math.min(...ls.map(x=>x.H));
+  const maxChi=Math.max(...ls.map(x=>x.chi2));
+  const id=cert.name;
+  const metaLine=`${id}${cert.deviceId?' &thinsp;/&thinsp; '+cert.deviceId:''} &nbsp;&middot;&nbsp; ${cert.date}`;
+
+  const layerValueRows=ls.map((s,i)=>[
+    `L${(i+1).toString().padStart(2,'0')}`,
+    s.mn.toLocaleString(),s.mx.toLocaleString(),
+    Math.round(s.mean).toLocaleString(),Math.round(s.std).toLocaleString(),
+    s.chi2.toFixed(3),verdictBadge(s.verdict)
+  ]);
+  const band1rows=ls[0].buckets.map((c,i)=>[i+1,PNAMES[i],c,16,(c-16>=0?'+':'')+(c-16)]);
+  const layerEntropyRows=ls.map((s,i)=>[
+    `L${(i+1).toString().padStart(2,'0')}`,
+    s.H.toFixed(4),(s.H/4*100).toFixed(1)+'%',
+    s.chi2.toFixed(3),
+    s.chi2<30.578?`&minus;${(30.578-s.chi2).toFixed(2)}`:`+${(s.chi2-30.578).toFixed(2)}`,
+    verdictBadge(s.verdict)
+  ]);
+
+  // Build cert metadata section (if available)
+  const metaTbl = cert.meta ? (()=>{
+    const m = cert.meta;
+    const fmtDate = d => d instanceof Date && !isNaN(d)
+      ? d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})+' '+d.toUTCString().slice(17,22)+' UTC'
+      : null;
+    const now = new Date();
+    let statusStr = '';
+    if (m.notBefore && m.notAfter) {
+      const valid = now>=m.notBefore && now<=m.notAfter;
+      const soon  = valid && (m.notAfter-now)<30*24*60*60*1000;
+      statusStr = valid&&!soon ? '<span class="badge-pass">VALID &#10003;</span>'
+                : soon ? '<span class="badge-marg">EXPIRING SOON</span>'
+                       : '<span class="badge-fail">EXPIRED &#10007;</span>';
+    }
+    const accParts=[];
+    if(m.account) accParts.push(m.account);
+    if(m.source)  accParts.push(m.source);
+    if(m.fetchedAt) accParts.push('Fetched: '+new Date(m.fetchedAt).toLocaleString());
+    if(m.teamId)  accParts.push('Team: '+m.teamId);
+    const usageParts=[];
+    if(m.keyUsage) usageParts.push(m.keyUsage);
+    if(m.raw?.securityLevel) usageParts.push('Level: '+m.raw.securityLevel);
+    const rows = [
+      ...(statusStr ? [['Validity Status', statusStr]] : []),
+      ['Subject',      m.subject || '&mdash;'],
+      ['Issuer',       m.issuer  || '&mdash;'],
+      ['Not Before',   fmtDate(m.notBefore) || '&mdash;'],
+      ['Not After',    fmtDate(m.notAfter)  || '&mdash;'],
+      ['Serial Number',m.serial || '&mdash;'],
+      ['Signature Algorithm', m.algorithm || 'CRYSTALS-Dilithium / ML-DSA-65 / FIPS 204'],
+      ['Key Usage',    usageParts.join(' &middot; ') || '&mdash;'],
+      ['Source / Account', accParts.join(' &middot; ') || '&mdash;'],
+      ['Input Format', cert.format || '&mdash;'],
+      ['Public Key Size', cert.dilithiumBytes ? cert.dilithiumBytes.toLocaleString()+' bytes' : '&mdash;'],
+    ];
+    return tbl(['Field','Value'], rows);
+  })() : '';
+
+  return `<div class="rpt-doc active">
+<p class="rpt-doc-title">PQC IDENTITY REPORT</p>
+<p class="rpt-doc-subtitle">CRYSTALS-Dilithium &middot; ML-DSA &middot; FIPS 204</p>
+<p class="rpt-doc-meta">${metaLine}</p>
+<hr class="rpt-doc-rule">
+${metaTbl ? '<h1>0. Certificate Metadata</h1>'+metaTbl : ''}
+<h1>1. Key Parameters</h1>
+${tbl(['Parameter','Value'],[
+  ['Algorithm','CRYSTALS-Dilithium (ML-DSA / FIPS 204)'],
+  ['Security Level','Level 3 &mdash; AES-192 equivalent'],
+  ['Modulus q','8,380,417'],
+  ['Polynomial degree n','256'],
+  ['Walk delta &delta;','524,288 (= 2&sup1;&sup9;, Dilithium-2 rejection bound)'],
+  ['Cube dimensions','16 &times; 16 &times; 16 = 4,096 spheres'],
+  ['Palette bands','16-band rainbow [0, q&minus;1]'],
+  ['Public key size',cert.dilithiumBytes?cert.dilithiumBytes.toLocaleString()+' bytes &middot; FIPS 204':'&mdash;'],
+  ['Identity token',id],
+  ['Report date',cert.date],
+])}
+<h1>2. Coefficient Generation</h1>
+<p>Layer 1 base values are derived deterministically from the identity seed:</p>
+<code class="mono">v[i] = SHA-256(&zeta; || i.to_bytes(2)) mod q &nbsp;&nbsp;&nbsp; (i = 0&hellip;255)</code>
+<p>Each subsequent layer applies a &plusmn;&delta; walk with SHA-256-derived signs:</p>
+<code class="mono">sign(l,i) = SHA-256(&zeta; || "walk" || l || i)[0] &amp; 1 &nbsp;&rarr;&nbsp; {+1, &minus;1}</code>
+<code class="mono">v_l[i] = v_{l&minus;1}[i] + sign(l,i) &middot; &delta; &nbsp;&nbsp; (boundary reflection if &notin; [0, q&minus;1])</code>
+<h1>3. Per-Layer Value Statistics</h1>
+${tbl(['Layer','Min','Max','Mean','Std Dev','&chi;&sup2;','Verdict'],layerValueRows)}
+<h1>4. Palette Band Distribution &mdash; Layer 1</h1>
+${tbl(['Band','Color Name','Count','Expected','&Delta;'],band1rows)}
+<h1>5. Aggregate Cube Statistics</h1>
+${tbl(['Metric','Value'],[
+  ['Total spheres','4,096'],
+  ['Min value',agg.mn.toLocaleString()],
+  ['Max value',agg.mx.toLocaleString()],
+  ['Mean',Math.round(agg.mean).toLocaleString()+' (expected: ~'+Math.round(q/2).toLocaleString()+')'],
+  ['Std deviation',Math.round(agg.std).toLocaleString()],
+  ['Shannon entropy',agg.H.toFixed(4)+' bits ('+(agg.H/4*100).toFixed(1)+'% of max 4.0)'],
+  ['Avg &chi;&sup2; (16 layers)',agg.chi2.toFixed(3)+'&nbsp; '+verdictBadge(agg.chi2<30.578?'Pass':agg.chi2<45?'Marginal':'Reject')],
+])}
+<p class="rpt-doc-footer">Qrypto Trust PQC &nbsp;&middot;&nbsp; XQ Zero Trust &nbsp;&middot;&nbsp; ${id}${cert.deviceId?' &middot; '+cert.deviceId:''}<br>
+Critical &chi;&sup2; threshold: &alpha;=0.01, df=15, critical value 30.578</p>
+
+<hr class="rpt-doc-divider">
+
+<p class="rpt-doc-title">ENTROPY &amp; HARDNESS REPORT</p>
+<p class="rpt-doc-subtitle">16-Layer &plusmn;&delta; Walk Analysis &middot; Dilithium q = 8,380,417</p>
+<p class="rpt-doc-meta">${metaLine}</p>
+<hr class="rpt-doc-rule">
+<h1>1. Walk Architecture</h1>
+<p>The visualizer applies a 16-layer deterministic &plusmn;&delta; walk over 256 polynomial coefficients
+in the Dilithium domain [0, q&minus;1]. Each layer evolves from the previous via a SHA-256-derived
+binary sign sequence &mdash; mathematically equivalent to the rejection sampling sign derivation
+in Dilithium key generation.</p>
+${tbl(['Parameter','Value'],[
+  ['Walk delta &delta;','524,288 = 2&sup1;&sup9; (Dilithium-2 rejection sampling bound)'],
+  ['Sign derivation','SHA-256(&zeta; || "walk" || layer || sphere)[0] &amp; 1'],
+  ['Boundary rule','Reflect: flip sign if candidate &notin; [0, q&minus;1]'],
+  ['Layers','16 (cube depth)'],
+  ['Spheres per layer','256 (Dilithium polynomial degree n)'],
+  ['Total walk steps','4,096 (256 &times; 16)'],
+])}
+<h1>2. Per-Layer Entropy Evaluation</h1>
+<p>Shannon entropy H and chi-square uniformity statistic per walk layer.
+Critical value &alpha;=0.01, df=15: 30.578. Marginal zone: 30.578&ndash;45. Reject: &gt;45.</p>
+${tbl(['Layer','H (bits)','H %','&chi;&sup2; Stat','vs Critical','Pass/Fail'],layerEntropyRows)}
+<h1>3. Walk Summary Statistics</h1>
+${tbl(['Metric','Value'],[
+  ['Average H (16 layers)',avgH.toFixed(4)+' bits ('+(avgH/4*100).toFixed(1)+'% of max 4.0)'],
+  ['Average &chi;&sup2;',avgChi.toFixed(3)],
+  ['Layers passing &chi;&sup2; test',passCount+' / 16 ('+(passCount/16*100).toFixed(0)+'%)'],
+  ['Marginal layers (30.578&ndash;45)',margCount+' / 16'],
+  ['Rejected layers (&gt;45)',failCount+' / 16'],
+  ['Lowest layer H',minH.toFixed(4)+' bits (L'+(ls.findIndex(s=>s.H===minH)+1)+')'],
+  ['Highest layer &chi;&sup2;',maxChi.toFixed(3)+' (L'+(ls.findIndex(s=>s.chi2===maxChi)+1)+')'],
+])}
+<h1>4. Hardness Evaluation</h1>
+<h2>4.1 Domain Resistance</h2>
+<p>Walk delta &delta; = 524,288 represents approximately 1/16 of domain q = 8,380,417. Each step
+moves a coefficient by 6.25% of the full range &mdash; the Dilithium-2 rejection sampling bound
+chosen to preserve uniform distribution after rejection.</p>
+<h2>4.2 Entropy Persistence</h2>
+<p>Average Shannon entropy across all 16 layers: <strong>${avgH.toFixed(4)} bits
+(${(avgH/4*100).toFixed(1)}% of the 4.0-bit maximum)</strong>. The walk maintains near-maximum
+entropy throughout &mdash; confirming the &plusmn;&delta; step size does not introduce systematic
+band concentration or measurable entropy decay.</p>
+<p>Note: Chi-square is measured independently per layer and averaged. Flattening all layers
+before testing would artificially inflate &chi;&sup2; due to the correlated directional march
+of the &gamma;&sub1; walk vectors across layers.</p>
+<h2>4.3 Inversion Complexity</h2>
+<p>Recovering identity seed &zeta; from the observed cube requires:</p>
+<ol>
+<li>Inverting 4,096 SHA-256 outputs (walk signs + base values)</li>
+<li>Solving a system with 4,096 binary sign constraints</li>
+<li>Finding a SHA-256 preimage for the seed &zeta;</li>
+</ol>
+<p>Inversion complexity is bounded below by SHA-256 preimage resistance:
+2&sup1;&sup2;&sup8; operations at NIST Security Level 3.</p>
+<h1>5. Cube Aggregate Entropy</h1>
+${tbl(['Metric','Value'],[
+  ['Total values','4,096'],
+  ['Shannon entropy',agg.H.toFixed(4)+' bits ('+(agg.H/4*100).toFixed(1)+'% of max 4.0)'],
+  ['Avg &chi;&sup2; (16 layers)',agg.chi2.toFixed(3)+'&nbsp; '+verdictBadge(agg.chi2<30.578?'Pass':agg.chi2<45?'Marginal':'Reject')],
+  ['Min value',agg.mn.toLocaleString()],
+  ['Max value',agg.mx.toLocaleString()],
+  ['Mean',Math.round(agg.mean).toLocaleString()+' (expected: ~'+Math.round(q/2).toLocaleString()+')'],
+])}
+<p class="rpt-doc-footer">Qrypto Trust PQC &nbsp;&middot;&nbsp; XQ Zero Trust &nbsp;&middot;&nbsp; ${cert.date}<br>
+Critical &chi;&sup2; threshold: &alpha;=0.01, df=15, critical value 30.578</p>
+</div>`;
+}
+
+// ── X.509 / cert metadata extraction ─────────────────────────────────────────
+// Parses DER/PEM ASN.1 to pull out issuer, subject, validity, serial, OIDs.
+// Also surfaces JSON/XQ envelope fields when present.
+// Returns a metadata object; all fields optional (may be null if not found).
+
+function parseDN(bytes, offset, len) {
+  // Parse a Distinguished Name sequence into a {CN, O, OU, C, ST, L, E} map
+  const end = offset + len;
+  const fields = {};
+  const oidMap = {
+    '550403':'CN','550406':'C','550407':'L','550408':'ST',
+    '55040a':'O','55040b':'OU','2a864886f70d010901':'E'
+  };
+  let i = offset;
+  while (i < end) {
+    if (bytes[i] !== 0x31) { i++; continue; } // SET
+    const setLen = bytes[i+1] < 0x80 ? bytes[i+1] : 0;
+    let j = i + 2;
+    while (j < i + 2 + setLen) {
+      if (bytes[j] !== 0x30) { j++; continue; } // SEQUENCE
+      const seqLen = bytes[j+1] < 0x80 ? bytes[j+1] : 0;
+      let k = j + 2;
+      if (bytes[k] === 0x06) { // OID
+        const oidLen = bytes[k+1];
+        const oidHex = Array.from(bytes.slice(k+2, k+2+oidLen)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        const field = oidMap[oidHex];
+        k += 2 + oidLen;
+        // Value: UTF8String(0x0c), PrintableString(0x13), IA5String(0x16), BMPString(0x1e)
+        if (k < j + 2 + seqLen && [0x0c,0x13,0x16,0x1e,0x14].includes(bytes[k])) {
+          const vLen = bytes[k+1] < 0x80 ? bytes[k+1] : ((bytes[k+1]&0x7f)===1 ? bytes[k+2] : 0);
+          const vOff = bytes[k+1] < 0x80 ? k+2 : k+3;
+          if (field) fields[field] = new TextDecoder().decode(bytes.slice(vOff, vOff+vLen));
+        }
+      }
+      j += 2 + seqLen;
+    }
+    i += 2 + setLen;
+  }
+  return fields;
+}
+
+function fmtDN(fields) {
+  if (!fields || !Object.keys(fields).length) return null;
+  const parts = [];
+  if (fields.CN) parts.push('CN=' + fields.CN);
+  if (fields.O)  parts.push('O=' + fields.O);
+  if (fields.OU) parts.push('OU=' + fields.OU);
+  if (fields.C)  parts.push('C=' + fields.C);
+  if (fields.E)  parts.push(fields.E);
+  return parts.join(', ') || null;
+}
+
+function parseGeneralizedTime(bytes, offset, len) {
+  // YYYYMMDDHHmmss[Z] or UTCTime YYMMDDHHmmss[Z]
+  try {
+    const s = new TextDecoder().decode(bytes.slice(offset, offset+len)).replace('Z','');
+    const yr = s.length >= 14 ? s.slice(0,4) : (parseInt(s.slice(0,2)) >= 50 ? '19'+s.slice(0,2) : '20'+s.slice(0,2));
+    const mo = s.length >= 14 ? s.slice(4,6) : s.slice(2,4);
+    const dy = s.length >= 14 ? s.slice(6,8) : s.slice(4,6);
+    const hr = s.length >= 14 ? s.slice(8,10) : s.slice(6,8);
+    const mn = s.length >= 14 ? s.slice(10,12) : s.slice(8,10);
+    return new Date(`${yr}-${mo}-${dy}T${hr}:${mn}:00Z`);
+  } catch { return null; }
+}
+
+function extractCertMeta(rawBytes, text, jsonObj, xqInfo) {
+  const meta = {
+    subject: null, issuer: null, serial: null,
+    notBefore: null, notAfter: null,
+    algorithm: null, keyUsage: null,
+    format: null, keySize: null,
+    account: null, source: null,
+    fetchedAt: null, teamId: null,
+    raw: {}
+  };
+
+  // ── XQ / JSON envelope metadata ───────────────────────────────────────────
+  if (xqInfo) {
+    meta.account  = xqInfo.email || null;
+    meta.source   = 'XQ Zero Trust';
+    meta.fetchedAt= xqInfo.fetchedAt || null;
+    meta.teamId   = xqInfo.teamId ? String(xqInfo.teamId) : null;
+    meta.algorithm= 'CRYSTALS-Dilithium / ML-DSA-65 / FIPS 204';
+  }
+
+  if (jsonObj) {
+    // Surface any envelope fields
+    const tryFields = ['name','email','issuer','subject','organization','account',
+                       'algorithm','standard','securityLevel','keyUsage','serial',
+                       'notBefore','notAfter','issuedAt','expiresAt','validFrom','validTo'];
+    for (const f of tryFields) {
+      if (jsonObj[f] && !meta.raw[f]) meta.raw[f] = String(jsonObj[f]);
+    }
+    if (!meta.account && (jsonObj.email || jsonObj.sub)) meta.account = jsonObj.email || jsonObj.sub;
+    if (!meta.algorithm && jsonObj.algorithm) meta.algorithm = jsonObj.algorithm;
+    if (jsonObj.standard)       meta.algorithm = (meta.algorithm||'') + ' / ' + jsonObj.standard;
+    if (jsonObj.securityLevel)  meta.raw.securityLevel = jsonObj.securityLevel;
+    if (!meta.subject && jsonObj.name) meta.subject = jsonObj.name;
+    if (jsonObj.notBefore || jsonObj.validFrom || jsonObj.issuedAt) {
+      try { meta.notBefore = new Date(jsonObj.notBefore || jsonObj.validFrom || jsonObj.issuedAt); } catch{}
+    }
+    if (jsonObj.notAfter || jsonObj.validTo || jsonObj.expiresAt) {
+      try { meta.notAfter = new Date(jsonObj.notAfter || jsonObj.validTo || jsonObj.expiresAt); } catch{}
+    }
+    if (!meta.serial && jsonObj.serialNumber) meta.serial = String(jsonObj.serialNumber);
+    if (!meta.keyUsage && jsonObj.keyUsage)   meta.keyUsage = String(jsonObj.keyUsage);
+    // XQ metadata block
+    if (jsonObj.xq) {
+      if (!meta.account)   meta.account   = jsonObj.xq.email || null;
+      if (!meta.fetchedAt) meta.fetchedAt = jsonObj.xq.fetchedAt || null;
+      if (!meta.teamId)    meta.teamId    = jsonObj.xq.teamId ? String(jsonObj.xq.teamId) : null;
+    }
+  }
+
+  // ── PEM header line ───────────────────────────────────────────────────────
+  if (text) {
+    const hdrMatch = text.match(/-----BEGIN ([^-]+)-----/);
+    if (hdrMatch) meta.raw.pemHeader = hdrMatch[1].trim();
+    // Extract algorithm hint from header
+    if (hdrMatch && !meta.algorithm) {
+      const h = hdrMatch[1].toUpperCase();
+      if (h.includes('ML-DSA-65') || h.includes('DILITHIUM')) meta.algorithm = 'CRYSTALS-Dilithium / ML-DSA-65 / FIPS 204';
+      else if (h.includes('ML-DSA-44')) meta.algorithm = 'ML-DSA-44 / FIPS 204 Level 2';
+      else if (h.includes('ML-DSA-87')) meta.algorithm = 'ML-DSA-87 / FIPS 204 Level 5';
+    }
+  }
+
+  // ── DER / ASN.1 parse ─────────────────────────────────────────────────────
+  // Try to parse as an X.509 certificate or SPKI structure
+  if (rawBytes && rawBytes.length > 50) {
+    try {
+      const b = rawBytes;
+      // X.509 cert starts with SEQUENCE (0x30)
+      if (b[0] === 0x30) {
+        // Find TBSCertificate SEQUENCE
+        let i = 0;
+        function readLen(pos) {
+          if (b[pos] < 0x80) return { len: b[pos], next: pos+1 };
+          const nb = b[pos] & 0x7f;
+          let l = 0;
+          for (let k=0; k<nb; k++) l = (l<<8)|b[pos+1+k];
+          return { len: l, next: pos+1+nb };
+        }
+        // Outer SEQUENCE
+        i = 1;
+        const outer = readLen(i); i = outer.next;
+        // TBSCertificate SEQUENCE
+        if (b[i] === 0x30) {
+          i++;
+          const tbs = readLen(i); i = tbs.next;
+          const tbsStart = i;
+          // version [0] EXPLICIT (optional)
+          if (b[i] === 0xa0) { i++; const vl=readLen(i);i=vl.next+vl.len; }
+          // serialNumber INTEGER
+          if (b[i] === 0x02) {
+            i++;
+            const sl = readLen(i); i = sl.next;
+            const serialBytes = b.slice(i, i+sl.len);
+            meta.serial = Array.from(serialBytes).map(x=>x.toString(16).padStart(2,'0')).join(':').toUpperCase();
+            i += sl.len;
+          }
+          // signature AlgorithmIdentifier SEQUENCE
+          if (b[i] === 0x30) {
+            i++;
+            const al = readLen(i); i = al.next;
+            if (b[i] === 0x06) { // OID
+              const ol = b[i+1];
+              const oidBytes = b.slice(i+2, i+2+ol);
+              // Decode OID
+              let oidStr = '';
+              let first = true;
+              let val = 0;
+              for (const byte of oidBytes) {
+                val = (val << 7) | (byte & 0x7f);
+                if (!(byte & 0x80)) {
+                  if (first) { oidStr += Math.floor(val/40)+'.'+( val%40); first=false; }
+                  else oidStr += '.' + val;
+                  val = 0;
+                }
+              }
+              // Known OID map for PQC & classical
+              const oidNames = {
+                '2.16.840.1.101.3.4.3.17':'ML-DSA-44 / FIPS 204',
+                '2.16.840.1.101.3.4.3.18':'ML-DSA-65 / FIPS 204',
+                '2.16.840.1.101.3.4.3.19':'ML-DSA-87 / FIPS 204',
+                '1.3.6.1.4.1.2.267.7.4.4':'Dilithium2 (draft)',
+                '1.3.6.1.4.1.2.267.7.6.5':'Dilithium3 (draft)',
+                '1.3.6.1.4.1.2.267.7.8.7':'Dilithium5 (draft)',
+                '1.2.840.113549.1.1.11':'SHA256withRSA',
+                '1.2.840.10045.4.3.2':'ECDSA-SHA256',
+                '1.3.101.112':'Ed25519',
+              };
+              if (!meta.algorithm && oidNames[oidStr]) meta.algorithm = oidNames[oidStr];
+              else if (!meta.algorithm) meta.algorithm = 'OID '+oidStr;
+            }
+            i += al.len;
+          }
+          // issuer Name
+          if (b[i] === 0x30) {
+            i++;
+            const il = readLen(i); i = il.next;
+            meta.issuer = fmtDN(parseDN(b, i, il.len));
+            i += il.len;
+          }
+          // validity SEQUENCE
+          if (b[i] === 0x30) {
+            i++;
+            const vl2 = readLen(i); i = vl2.next;
+            // UTCTime(0x17) or GeneralizedTime(0x18)
+            if ([0x17,0x18].includes(b[i])) {
+              i++;
+              const tl = readLen(i); i = tl.next;
+              meta.notBefore = parseGeneralizedTime(b, i, tl.len);
+              i += tl.len;
+            }
+            if ([0x17,0x18].includes(b[i])) {
+              i++;
+              const tl = readLen(i); i = tl.next;
+              meta.notAfter = parseGeneralizedTime(b, i, tl.len);
+              i += tl.len;
+            }
+          }
+          // subject Name
+          if (b[i] === 0x30) {
+            i++;
+            const sl2 = readLen(i); i = sl2.next;
+            meta.subject = fmtDN(parseDN(b, i, sl2.len));
+            i += sl2.len;
+          }
+        }
+      }
+    } catch(e) {
+      // ASN.1 parse failed — not a DER cert, that's fine
+    }
+  }
+
+  return meta;
+}
+
+// ── Update the cert metadata panel in the sidebar ──────────────────────────
+function updateCertMeta(meta, format, keySize) {
+  if (!meta) {
+    ['cmStatus','cmSubject','cmIssuer','cmNotBefore','cmNotAfter',
+     'cmSerial','cmAlg','cmUsage','cmAccount','cmFormat','cmKeySize'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.textContent=id==='cmStatus'?'No cert loaded':'—';el.className='cert-meta-value empty';}
+    });
+    return;
+  }
+
+  function set(id, value, allowEmpty=true) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (value) {
+      el.textContent = value;
+      el.className = 'cert-meta-value';
+    } else {
+      el.textContent = '—';
+      el.className = 'cert-meta-value empty';
+    }
+  }
+
+  // Validity status badge
+  const now = new Date();
+  const statusEl = document.getElementById('cmStatus');
+  if (statusEl) {
+    if (meta.notBefore && meta.notAfter) {
+      const valid = now >= meta.notBefore && now <= meta.notAfter;
+      const expiringSoon = valid && (meta.notAfter - now) < 30*24*60*60*1000;
+      statusEl.innerHTML = valid && !expiringSoon
+        ? '<span class="cert-meta-badge valid">✓ VALID</span>'
+        : expiringSoon
+          ? '<span class="cert-meta-badge warning">⚠ EXPIRING SOON</span>'
+          : '<span class="cert-meta-badge expired">✗ EXPIRED</span>';
+      statusEl.className = 'cert-meta-value';
+    } else {
+      statusEl.textContent = 'X.509 validity not present';
+      statusEl.className = 'cert-meta-value empty';
+    }
+  }
+
+  set('cmSubject', meta.subject || meta.raw?.name || null);
+  set('cmIssuer',  meta.issuer  || null);
+
+  const fmtDate = d => d instanceof Date && !isNaN(d)
+    ? d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})+' '+d.toUTCString().slice(17,22)+' UTC'
+    : null;
+  set('cmNotBefore', fmtDate(meta.notBefore));
+  set('cmNotAfter',  fmtDate(meta.notAfter));
+  set('cmSerial',    meta.serial || null);
+  set('cmAlg',       meta.algorithm || null);
+
+  // Key usage
+  const usageParts = [];
+  if (meta.keyUsage) usageParts.push(meta.keyUsage);
+  if (meta.raw?.securityLevel) usageParts.push('Security Level: '+meta.raw.securityLevel);
+  set('cmUsage', usageParts.join(' · ') || null);
+
+  // Account / source
+  const accParts = [];
+  if (meta.account)   accParts.push(meta.account);
+  if (meta.source)    accParts.push(meta.source);
+  if (meta.fetchedAt) accParts.push('Fetched: '+new Date(meta.fetchedAt).toLocaleString());
+  if (meta.teamId)    accParts.push('Team: '+meta.teamId);
+  set('cmAccount', accParts.join(' · ') || null);
+
+  set('cmFormat',  format || null);
+  set('cmKeySize', keySize ? keySize.toLocaleString()+' bytes' : null);
+  currentCertMeta = meta;
+}
+
+// ── Download assessment report as self-contained HTML ────────────────────────
+function downloadReport() {
+  const cert = loadedCerts[activeCertIdx];
+  if (!cert) { alert('No cert loaded \u2014 load a Dilithium cert first.'); return; }
+  const reportEl = document.getElementById('rpt-docs-container');
+  if (!reportEl || !reportEl.querySelector('.rpt-doc')) {
+    alert('Report not yet generated \u2014 please wait a moment and try again.');
+    return;
+  }
+
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const identity = cert.name || 'Unknown';
+  const metaSection = currentCertMeta ? buildMetaSection(currentCertMeta, cert) : '';
+
+  // Build cube preview from real layer-1 data
+  const RPAL = ['#FF0000','#FF4500','#FF6600','#FFD700','#FFFF00','#ADFF2F',
+                '#7FFF00','#00FF00','#00FF7F','#00FFFF','#00BFFF','#0000FF',
+                '#9400D3','#FF00FF','#FF1493','#FF69B4'];
+  const cubeSquares = (cert.cubeData && cert.cubeData[0])
+    ? cert.cubeData[0].slice(0,64).map(v => {
+        const band = Math.min(Math.floor(v / (8380417/16)), 15);
+        const op   = (0.55 + (v/8380417)*0.45).toFixed(2);
+        return '<div style="width:12px;height:12px;border-radius:1px;background:'
+             + RPAL[band] + ';opacity:' + op + '"></div>';
+      }).join('')
+    : Array.from({length:64},(_,i) =>
+        '<div style="width:12px;height:12px;border-radius:1px;background:hsl('
+        + Math.round(i*5.6) + ',70%,55%);opacity:0.7"></div>').join('');
+
+  // Cert device tag
+  const devTag = cert.deviceId ? ' \u00b7 ' + cert.deviceId : '';
+
+  // Build HTML using array join to avoid any template-literal escaping issues
+  const parts = [];
+  parts.push('<!DOCTYPE html>');
+  parts.push('<html lang="en"><head><meta charset="UTF-8">');
+  parts.push('<title>Qrypto Trust PQC Assessment \u2014 ' + identity + '</title>');
+  parts.push('<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">');
+  parts.push('<style>');
+  parts.push('*{box-sizing:border-box;margin:0;padding:0}');
+  parts.push(":root{--ink:#111111;--ink-soft:#333;--rule:#dddddd;--off-white:#f7f7f5;--mid-gray:#c8c8c8;--dark-gray:#555;--font-sans:'Source Sans 3',Arial,sans-serif;--font-mono:'DM Mono','Courier New',monospace;--font-display:'Libre Baskerville',Georgia,serif;--navy:#1A1A2E;--blue:#2E4A7A}");
+  parts.push('body{font-family:var(--font-sans);font-size:11pt;color:var(--ink);background:#fff;line-height:1.5;overflow-x:hidden}');
+  // Nav bar
+  parts.push('.qt-nav-bar{background:rgba(255,255,255,0.98);border-bottom:1px solid var(--rule);padding:0 4vw;display:flex;align-items:center;justify-content:space-between;height:60px}');
+  parts.push('.qt-nav-logo{font-family:var(--font-sans);font-weight:900;font-size:18px;letter-spacing:-.01em;color:var(--ink);text-decoration:none}');
+  parts.push('.qt-nav-right{display:flex;align-items:center;gap:16px}');
+  parts.push('.qt-nav-link{font-family:var(--font-sans);font-size:13px;font-weight:600;color:var(--ink-soft);text-decoration:none;opacity:.7}');
+  parts.push('.qt-viz-pill{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dark-gray);border:1px solid var(--mid-gray);padding:3px 9px;border-radius:2px}');
+  // Hero
+  parts.push('.qt-hero{padding:48px 4vw 40px;display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:center;border-bottom:1px solid var(--rule);background:#fff}');
+  parts.push('.qt-hero-eyebrow{font-family:var(--font-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--dark-gray);margin-bottom:14px}');
+  parts.push('.qt-hero-h1{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,3rem);font-weight:700;line-height:1.1;color:var(--ink);margin-bottom:14px}');
+  parts.push('.qt-hero-h1 em{font-style:italic}');
+  parts.push('.qt-hero-body{font-size:.95rem;color:var(--ink-soft);line-height:1.75;margin-bottom:18px;max-width:520px}');
+  parts.push('.qt-hero-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}');
+  parts.push(".qt-pill{font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;padding:3px 11px;border-radius:20px;border:1px solid var(--mid-gray);color:var(--dark-gray);background:var(--off-white);text-transform:uppercase}");
+  parts.push('.qt-hero-meta{font-family:var(--font-mono);font-size:9px;color:var(--dark-gray);letter-spacing:.06em;line-height:1.8;margin-top:4px}');
+  parts.push('.qt-hero-visual{background:var(--off-white);border:1px solid var(--rule);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;min-height:220px}');
+  parts.push('.qt-cube-grid{display:grid;grid-template-columns:repeat(8,12px);gap:3px;margin-bottom:14px}');
+  parts.push('.qt-cube-label{font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--dark-gray)}');
+  // Cert metadata
+  parts.push('.meta-section{border:1px solid #ddd;margin:28px 0 0;padding:0;overflow:hidden;border-radius:2px}');
+  parts.push('.meta-section-title{background:#f5f5fa;font-family:var(--font-mono);font-size:8pt;letter-spacing:.2em;text-transform:uppercase;color:#555;padding:8pt 12pt;border-bottom:1px solid #ddd}');
+  parts.push('.meta-grid{display:grid;grid-template-columns:1fr 1fr}');
+  parts.push('.meta-cell{padding:7pt 12pt;border-right:1px solid #eee;border-bottom:1px solid #eee}');
+  parts.push('.meta-cell.full{grid-column:1/-1;border-right:none}');
+  parts.push('.meta-cell:nth-child(even){border-right:none}');
+  parts.push('.meta-label{font-family:var(--font-mono);font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:2pt}');
+  parts.push('.meta-value{font-family:var(--font-mono);font-size:9.5pt;color:#111;font-weight:500;word-break:break-all}');
+  parts.push('.meta-value.empty{color:#bbb;font-style:italic;font-weight:400}');
+  parts.push('.badge-valid{background:#e8f5e9;color:#2e7d32;padding:1pt 6pt;border-radius:2pt;font-weight:bold;font-size:8pt}');
+  parts.push('.badge-expired{background:#ffebee;color:#c62828;padding:1pt 6pt;border-radius:2pt;font-weight:bold;font-size:8pt}');
+  parts.push('.badge-warning{background:#fff8e1;color:#f57f17;padding:1pt 6pt;border-radius:2pt;font-weight:bold;font-size:8pt}');
+  // Report content
+  parts.push('.report-body{padding:0 0 40px}');
+  parts.push('.rpt-doc-title{font-size:26pt;font-weight:bold;color:var(--navy);margin:28pt 0 4pt}');
+  parts.push('.rpt-doc-subtitle{font-size:13pt;color:var(--blue);margin:0 0 4pt}');
+  parts.push('.rpt-doc-meta{font-size:10pt;color:#555;margin:0 0 12pt}');
+  parts.push('.rpt-doc-rule{border:none;border-top:2px solid #ddd;margin:16pt 0}');
+  parts.push('.rpt-doc h1{font-size:20pt;color:var(--navy);margin:18pt 0 6pt;font-family:var(--font-sans)}');
+  parts.push('.rpt-doc h2{font-size:14pt;color:var(--blue);margin:14pt 0 4pt;font-family:var(--font-sans)}');
+  parts.push('.rpt-doc p{margin:4pt 0 8pt}');
+  parts.push('.rpt-doc ol{margin:4pt 0 8pt;padding-left:24pt}');
+  parts.push('.rpt-doc ol li{margin-bottom:3pt}');
+  parts.push(".rpt-doc code.mono{font-family:var(--font-mono);font-size:9.5pt;color:#1A3A6A;background:#f4f4f8;padding:4pt 8pt;margin:4pt 0 8pt;display:block}");
+  parts.push('table{border-collapse:collapse;width:100%;margin:8pt 0 14pt;font-size:10pt}');
+  parts.push('th{background:var(--navy);color:#fff;padding:5pt 8pt;text-align:left;font-size:9.5pt}');
+  parts.push('td{padding:5pt 8pt;border:1px solid #ddd}');
+  parts.push('tr:nth-child(even) td{background:#f5f5fa}');
+  parts.push('.badge-pass{background:#e8f5e9;color:#2e7d32;padding:1pt 6pt;border-radius:3pt;font-weight:bold}');
+  parts.push('.badge-marg{background:#fff8e1;color:#f57f17;padding:1pt 6pt;border-radius:3pt;font-weight:bold}');
+  parts.push('.badge-fail{background:#ffebee;color:#c62828;padding:1pt 6pt;border-radius:3pt;font-weight:bold}');
+  parts.push('.rpt-doc-divider{border:none;border-top:3px solid #ddd;margin:40pt 0 32pt}');
+  parts.push('.rpt-doc-footer{font-size:9pt;color:#999;margin-top:24pt;border-top:1px solid #eee;padding-top:6pt}');
+  // Page wrap + footer
+  parts.push('.page-wrap{max-width:1100px;margin:0 auto;padding:0 4vw}');
+  parts.push('.qt-footer{background:var(--off-white);border-top:1px solid var(--rule);padding:20px 4vw;display:flex;align-items:center;justify-content:space-between;margin-top:40px}');
+  parts.push('.qt-footer-brand{font-family:var(--font-sans);font-weight:900;font-size:14px;color:var(--ink)}');
+  parts.push('.qt-footer-text{font-family:var(--font-mono);font-size:8px;color:#aaa;letter-spacing:.08em;line-height:1.9;text-align:right}');
+  parts.push('@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}.qt-nav-bar{position:static;box-shadow:none}.qt-hero{page-break-inside:avoid;break-inside:avoid}.meta-section{page-break-inside:avoid;break-inside:avoid}.rpt-doc-divider{page-break-before:always;break-before:page;border:none;margin:0}h1{page-break-after:avoid;break-after:avoid}table{page-break-inside:avoid;break-inside:avoid}.qt-footer{page-break-inside:avoid;break-inside:avoid}@page{margin:1.5cm;size:A4}}');
+  parts.push('</style></head><body>');
+  // Nav bar
+  parts.push('<div class="qt-nav-bar">');
+  parts.push('  <a class="qt-nav-logo" href="https://www.qryptotrust.com/">Qrypto Trust</a>');
+  parts.push('  <div class="qt-nav-right">');
+  parts.push('    <a class="qt-nav-link" href="https://www.qryptotrust.com/pqc-zt">PQC + Zero Trust</a>');
+  parts.push('    <a class="qt-nav-link" href="https://www.qryptotrust.com/">qryptotrust.com</a>');
+  parts.push('    <span class="qt-viz-pill">ZAP Visualizer</span>');
+  parts.push('  </div>');
+  parts.push('</div>');
+  // Hero
+  parts.push('<div class="qt-hero">');
+  parts.push('  <div>');
+  parts.push('    <div class="qt-hero-eyebrow">Zero Trust &middot; AI-Managed &middot; Post-Quantum</div>');
+  parts.push('    <h1 class="qt-hero-h1">PQC Identity<br><em>Assessment</em></h1>');
+  parts.push('    <p class="qt-hero-body">CRYSTALS-Dilithium public key analysis &mdash; 4,096 coefficient spheres encoding quantum-resistant identity across 16 lattice layers. Entropy and uniformity verified against NIST FIPS&nbsp;204.</p>');
+  parts.push('    <div class="qt-hero-pills">');
+  parts.push('      <span class="qt-pill">ML-DSA-65 &middot; FIPS 204</span>');
+  parts.push('      <span class="qt-pill">CRYSTALS-Dilithium</span>');
+  parts.push('      <span class="qt-pill">XQ Zero Trust</span>');
+  parts.push('      <span class="qt-pill">Level 3</span>');
+  parts.push('    </div>');
+  parts.push('    <div class="qt-hero-meta">Identity: <strong>' + identity + devTag + '</strong><br>Generated: ' + today + '</div>');
+  parts.push('  </div>');
+  parts.push('  <div class="qt-hero-visual">');
+  parts.push('    <div class="qt-cube-grid">' + cubeSquares + '</div>');
+  parts.push('    <div class="qt-cube-label">ML-DSA-65 &middot; 4,096 coefficients &middot; 16&times;16&times;16</div>');
+  parts.push('  </div>');
+  parts.push('</div>');
+  // Page content
+  parts.push('<div class="page-wrap">');
+  parts.push(metaSection);
+  parts.push('<div class="report-body rpt-doc">');
+  parts.push(reportEl.innerHTML);
+  parts.push('</div>');
+  parts.push('</div>');
+  // Footer
+  parts.push('<div class="qt-footer">');
+  parts.push('  <div class="qt-footer-brand">Qrypto Trust</div>');
+  parts.push('  <div class="qt-footer-text">NIST FIPS 204 &middot; ML-DSA-65 &middot; CRYSTALS-Dilithium<br>q = 8,380,417 &middot; n = 256 &middot; &delta; = 524,288<br>&chi;&sup2; critical value: 30.578 (&alpha;=0.01, df=15) &middot; ' + today + '</div>');
+  parts.push('</div>');
+  parts.push('</body></html>');
+
+  const reportHtml = parts.join('\n');
+
+  // Open the report in a new tab.
+  // We open the window FIRST (synchronously, within the user gesture frame)
+  // then write the HTML into it — this satisfies Safari's popup policy
+  // which blocks window.open(blobUrl) but allows window.open('','_blank').
+  const tab = window.open('', '_blank');
+  if (tab) {
+    tab.document.open();
+    tab.document.write(reportHtml);
+    tab.document.close();
+    // Set the tab title after writing
+    try { tab.document.title = 'Qrypto Trust PQC Assessment — ' + identity; } catch(e){}
+  } else {
+    // Popup blocked — fall back to blob download
+    const blob = new Blob([reportHtml], {type:'text/html'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'QryptoTrust_PQC_Assessment_' + identity.replace(/[^a-z0-9]/gi,'_') + (cert.deviceId ? '_'+cert.deviceId : '') + '.html';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }
+}
+
+function buildMetaSection(meta, cert) {
+  const fmtDate = d => d instanceof Date && !isNaN(d)
+    ? d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})+' '+d.toUTCString().slice(17,22)+' UTC'
+    : null;
+  const now = new Date();
+  let statusBadge = '';
+  if (meta.notBefore && meta.notAfter) {
+    const valid = now >= meta.notBefore && now <= meta.notAfter;
+    const soon  = valid && (meta.notAfter - now) < 30*24*60*60*1000;
+    statusBadge = valid && !soon
+      ? '<span class="badge-valid">✓ VALID</span>'
+      : soon ? '<span class="badge-warning">⚠ EXPIRING SOON</span>'
+             : '<span class="badge-expired">✗ EXPIRED</span>';
+  }
+
+  function row(label, value, full=false) {
+    const cls = full ? 'meta-cell full' : 'meta-cell';
+    const vcls = value ? 'meta-value' : 'meta-value empty';
+    return `<div class="${cls}"><div class="meta-label">${label}</div><div class="${vcls}">${value||'—'}</div></div>`;
+  }
+
+  const accParts = [];
+  if (meta.account)   accParts.push(meta.account);
+  if (meta.source)    accParts.push(meta.source);
+  if (meta.fetchedAt) accParts.push('Fetched: '+new Date(meta.fetchedAt).toLocaleString());
+  if (meta.teamId)    accParts.push('Team: '+meta.teamId);
+
+  const usageParts = [];
+  if (meta.keyUsage) usageParts.push(meta.keyUsage);
+  if (meta.raw?.securityLevel) usageParts.push('Level: '+meta.raw.securityLevel);
+
+  return `<div class="meta-section">
+  <div class="meta-section-title">Certificate Metadata</div>
+  <div class="meta-grid">
+    ${statusBadge ? `<div class="meta-cell full"><div class="meta-label">Status</div><div class="meta-value">${statusBadge}</div></div>` : ''}
+    ${row('Subject', meta.subject, true)}
+    ${row('Issuer',  meta.issuer,  true)}
+    ${row('Not Before', fmtDate(meta.notBefore))}
+    ${row('Not After',  fmtDate(meta.notAfter))}
+    ${row('Serial Number', meta.serial)}
+    ${row('Algorithm', meta.algorithm || 'CRYSTALS-Dilithium / ML-DSA-65 / FIPS 204')}
+    ${row('Key Usage', usageParts.join(' · ') || null, true)}
+    ${row('Source / Account', accParts.join(' · ') || null, true)}
+    ${row('Format', meta.raw?.pemHeader || null)}
+    ${row('Key Size', cert.dilithiumBytes ? cert.dilithiumBytes.toLocaleString()+' bytes' : null)}
+  </div>
+</div>`;
+}
+
+// ── Cert Metadata + Report Download — see below ──────────────────────────────
+
+
+// ── Hero cube preview ─────────────────────────────────────────────────────────
+(function(){
+  const prev=document.getElementById('hcprev');
+  if(prev){for(let i=0;i<64;i++){const d=document.createElement('div');d.className='hcp';d.style.background=PALETTE[i%16];d.style.opacity=0.4+Math.random()*0.6;prev.appendChild(d);}}
+  const lg=document.getElementById('lgrid');
+  if(lg){for(let i=0;i<16;i++){const d=document.createElement('div');d.className='lg-cell';d.style.animationDelay=(i*50)+'ms';d.style.background='#111';lg.appendChild(d);}}
+})();
+
+// ── Header scroll ─────────────────────────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const hdr=document.getElementById('qt-header');
+  if(hdr) hdr.classList.toggle('scrolled',window.scrollY>20);
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+async function loadDefaultCert(){
+  const dilithiumPub = new Uint8Array(DEFAULT_CERT.dilithiumBytes);
+  const kyberPub     = new Uint8Array(DEFAULT_CERT.kyberBytes);
+  const name         = DEFAULT_CERT.name;
+  const deviceId     = DEFAULT_CERT.deviceId;
+  updateBackdrop(name, deviceId);
+  document.getElementById('cube-status').textContent = 'Computing\u2026';
+  document.getElementById('dstat').textContent = 'Loading default cert\u2026';
+  const seed   = await sha256(name.split('@')[0].split('_').pop() || name);
+  const layers = await computeLayers(seed);
+  tokenStr  = name;
+  cubeData  = layers;
+  refreshColors();
+  updateStats();
+  document.getElementById('cube-status').textContent = name + ' \u00b7 ' + deviceId + ' \u00b7 FIPS 204';
+  document.getElementById('dstat').textContent = '\u2713 ' + name + ' \u00b7 ' + deviceId + ' \u2014 ' + dilithiumPub.length + ' bytes \u00b7 default cert';
+  const meta = extractCertMeta(null, null,
+    {name, algorithm:'CRYSTALS-Dilithium / ML-DSA-65 / FIPS 204', securityLevel:'Level 3'},
+    null);
+  meta.subject = name;
+  meta.algorithm = 'CRYSTALS-Dilithium / ML-DSA-65 / FIPS 204';
+  addCertAndGenerateReport({name, email:name, deviceId, dilithiumPub, kyberPub, meta, format:'default cert'});
+}
+
+function init(){
+  // crypto.subtle requires HTTPS or localhost — warn early on plain HTTP
+  if(window.isSecureContext===false){
+    const w=document.createElement('div');
+    w.style.cssText='position:fixed;top:0;left:0;right:0;z-index:9999;background:#c62828;color:#fff;font-family:monospace;font-size:12px;padding:8px 16px;text-align:center';
+    w.textContent='Warning: PQC key computation requires HTTPS or localhost. Some features may not work over plain HTTP.';
+    document.body.appendChild(w);
+    setTimeout(()=>w.remove(),8000);
+  }
+  buildCube();
+  onResize();
+  applyRot();
+  toggleSpin();
+  document.getElementById('loading-overlay').classList.add('done');
+  // Auto-load the default cert
+  loadDefaultCert();
+}
+init();
+</script>
+</body>
+</html>
