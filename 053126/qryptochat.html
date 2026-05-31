@@ -2,6 +2,7 @@
 <!--suppress JSUnresolvedReference -->
 <html lang="en">
 <head>
+  <script>/* route relative /api/* (fetch+XHR) to the demo backend */(function(){var B="https://qryptofederal.com/qryptotrustdemo";function rw(u){return (typeof u==="string"&&u.indexOf("/api/")===0)?B+u:u;}var F=window.fetch;window.fetch=function(i,o){try{if(typeof i==="string")i=rw(i);else if(i&&i.url){var p=new URL(i.url,location.href);if(p.origin===location.origin&&p.pathname.indexOf("/api/")===0)i=new Request(B+p.pathname+p.search,i);}}catch(e){}return F.apply(this,[i,o]);};var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=rw(u);}catch(e){}return XO.apply(this,a);};})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qrypto Chat — Qrypto Trust</title>
@@ -224,11 +225,11 @@ var noblePostQuantum=(()=>{var Mt=Object.defineProperty;var xn=Object.getOwnProp
         // This keeps API keys server-side when hosted publicly
         // Server mode disabled — auth flow must stay client-side (direct XQ)
         // Data operations (recipients, keys) can use server proxy when enabled
-        const _useServerMode = false;
+        const _useServerMode = true;
 
         const _mw = new QryptoMiddleware({
             serverMode: _useServerMode,
-            serverUrl: _useServerMode ? window.location.origin : '',
+            serverUrl: '',
             dashboardUrl: "https://dashboard.xqmsg.net/v2",
             subscriptionUrl: "https://subscription.xqmsg.net/v2",
             validationUrl: "https://validation.xqmsg.net/v2",
