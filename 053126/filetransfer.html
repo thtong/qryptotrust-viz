@@ -2,6 +2,7 @@
 <!--suppress JSUnresolvedReference -->
 <html lang="en">
 <head>
+  <script>/* route relative /api/mw to the demo backend */(function(){var B="https://qryptofederal.com/qryptotrustdemo",F=window.fetch;window.fetch=function(i,o){try{if(typeof i==="string"&&i.indexOf("/api/mw/")===0){i=B+i}else if(i&&i.url){var u=new URL(i.url,location.href);if(u.origin===location.origin&&u.pathname.indexOf("/api/mw/")===0){i=new Request(B+u.pathname+u.search,i)}}}catch(e){}return F.apply(this,[i,o])}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure File Transfer — Qrypto Trust</title>
