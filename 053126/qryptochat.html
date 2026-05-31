@@ -225,11 +225,11 @@ var noblePostQuantum=(()=>{var Mt=Object.defineProperty;var xn=Object.getOwnProp
         // This keeps API keys server-side when hosted publicly
         // Server mode disabled — auth flow must stay client-side (direct XQ)
         // Data operations (recipients, keys) can use server proxy when enabled
-        const _useServerMode = true;
+        const _useServerMode = false;
 
         const _mw = new QryptoMiddleware({
             serverMode: _useServerMode,
-            serverUrl: '',
+            serverUrl: _useServerMode ? window.location.origin : '',
             dashboardUrl: "https://dashboard.xqmsg.net/v2",
             subscriptionUrl: "https://subscription.xqmsg.net/v2",
             validationUrl: "https://validation.xqmsg.net/v2",
