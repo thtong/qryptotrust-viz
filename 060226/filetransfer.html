@@ -77,6 +77,24 @@ html, body, button, input, select, textarea, .font-sans {
   --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
 .hover\:to-blue-700:hover { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
 
+/* Action buttons added by the newer build (green/emerald/purple) -> monochrome.
+   Status colors (green-50 success, red destructive, amber/yellow warnings) are left intact. */
+.bg-green-600, .bg-green-500, .bg-emerald-600,
+.hover\:bg-green-700:hover, .hover\:bg-green-500:hover, .hover\:bg-emerald-700:hover { background-color:#0e0e0e !important; }
+.bg-purple-600 { background-color:#0e0e0e !important; }
+.hover\:bg-purple-700:hover { background-color:#272727 !important; }
+.border-green-600 { border-color:#0e0e0e !important; }
+
+/* Green gradient tiles -> graphite (match the blue tiles) */
+.from-green-600 { --tw-gradient-from:#0e0e0e var(--tw-gradient-from-position) !important;
+  --tw-gradient-to:#0e0e0e00 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
+.to-green-800 { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
+.hover\:from-green-500:hover { --tw-gradient-from:#272727 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to:#27272700 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
+.hover\:to-green-700:hover { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
+
 /* Lattice canvas blends into the page — only the cube should stand out */
 .lattice-container canvas { box-shadow:none !important; }
 </style>
