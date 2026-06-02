@@ -1773,6 +1773,38 @@ window.addEventListener('scroll',()=>{
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+async function loadHandoffOrDefault(){
+  let payload = null;
+  try {
+    const raw = localStorage.getItem('pqc_viz_handoff');
+    if (raw) {
+      localStorage.removeItem('pqc_viz_handoff'); // one-shot
+      const p = JSON.parse(raw);
+      if (p && Array.isArray(p.dilithiumBytes) && (!p.ts || (Date.now() - p.ts) < 300000)) payload = p;
+    }
+  } catch (e) {}
+  if (!payload) { return loadDefaultCert(); }
+  try {
+    const dilithiumPub = new Uint8Array(payload.dilithiumBytes);
+    const kyberPub     = new Uint8Array(payload.kyberBytes || []);
+    const name         = payload.name || 'identity';
+    const deviceId     = payload.deviceId || '';
+    updateBackdrop(name, deviceId);
+    document.getElementById('cube-status').textContent = 'Computing\u2026';
+    document.getElementById('dstat').textContent = 'Loading certificate\u2026';
+    const seed   = await sha256(name.split('@')[0].split('_').pop() || name);
+    const layers = await computeLayers(seed);
+    tokenStr  = name;
+    cubeData  = layers;
+    refreshColors();
+    updateStats();
+    document.getElementById('cube-status').textContent = name + ' \u00b7 ' + deviceId + ' \u00b7 FIPS 204';
+    document.getElementById('dstat').textContent = '\u2713 ' + name + ' \u2014 ' + dilithiumPub.length + 'B ML-DSA \u00b7 ' + kyberPub.length + 'B ML-KEM';
+  } catch (e) {
+    return loadDefaultCert();
+  }
+}
+
 async function loadDefaultCert(){
   const dilithiumPub = new Uint8Array(DEFAULT_CERT.dilithiumBytes);
   const kyberPub     = new Uint8Array(DEFAULT_CERT.kyberBytes);
@@ -1811,8 +1843,8 @@ function init(){
   applyRot();
   toggleSpin();
   document.getElementById('loading-overlay').classList.add('done');
-  // Auto-load the default cert
-  loadDefaultCert();
+  // Auto-load the default cert (or a handoff certificate from the SFT page)
+  loadHandoffOrDefault();
 }
 init();
 </script>
