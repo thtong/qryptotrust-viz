@@ -1785,21 +1785,14 @@ async function loadHandoffOrDefault(){
   } catch (e) {}
   if (!payload) { return loadDefaultCert(); }
   try {
-    const dilithiumPub = new Uint8Array(payload.dilithiumBytes);
-    const kyberPub     = new Uint8Array(payload.kyberBytes || []);
-    const name         = payload.name || 'identity';
-    const deviceId     = payload.deviceId || '';
-    updateBackdrop(name, deviceId);
-    document.getElementById('cube-status').textContent = 'Computing\u2026';
-    document.getElementById('dstat').textContent = 'Loading certificate\u2026';
-    const seed   = await sha256(name.split('@')[0].split('_').pop() || name);
-    const layers = await computeLayers(seed);
-    tokenStr  = name;
-    cubeData  = layers;
-    refreshColors();
-    updateStats();
-    document.getElementById('cube-status').textContent = name + ' \u00b7 ' + deviceId + ' \u00b7 FIPS 204';
-    document.getElementById('dstat').textContent = '\u2713 ' + name + ' \u2014 ' + dilithiumPub.length + 'B ML-DSA \u00b7 ' + kyberPub.length + 'B ML-KEM';
+    // Route the handoff through the same path as a manual file upload so the
+    // lattice, metadata and entropy/chi-squared report all generate. Rebuild
+    // the exported keypair file (pqc_identity_<email>_<device>.json) from the
+    // public key so the filename-seeded render matches a manual upload.
+    const keyBytes = new Uint8Array(payload.dilithiumBytes);
+    const v = String(payload.name || 'identity').replace(/[^a-zA-Z0-9@._-]/g, '_');
+    const b = String(payload.deviceId || 'device').replace(/[^a-zA-Z0-9_-]/g, '_');
+    return await loadFile(new File([keyBytes], `pqc_identity_${v}_${b}.json`));
   } catch (e) {
     return loadDefaultCert();
   }
