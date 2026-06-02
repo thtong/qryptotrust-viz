@@ -95,6 +95,13 @@ html, body, button, input, select, textarea, .font-sans {
   --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
 .hover\:to-green-700:hover { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
 
+/* Readability: where a background was darkened, the dark text-gray-900 label/title must go light.
+   Scoped to those elements only, so the ~34 other text-gray-900 headings on white stay dark. */
+.from-blue-600 .text-gray-900, .from-green-600 .text-gray-900,
+.bg-blue-600.text-gray-900, .bg-green-600.text-gray-900, .bg-emerald-600.text-gray-900,
+.bg-purple-600.text-gray-900, .bg-indigo-600.text-gray-900,
+.bg-blue-500.text-gray-900, .bg-green-500.text-gray-900 { color:#ffffff !important; }
+
 /* Lattice canvas blends into the page — only the cube should stand out */
 .lattice-container canvas { box-shadow:none !important; }
 </style>
