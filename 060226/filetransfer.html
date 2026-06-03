@@ -78,12 +78,18 @@ html, body, button, input, select, textarea, .font-sans {
 .hover\:to-blue-700:hover { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
 
 /* Action buttons added by the newer build (green/emerald/purple) -> monochrome.
-   Status colors (green-50 success, red destructive, amber/yellow warnings) are left intact. */
+   Status colors (green-50 success, amber/yellow warnings, red status text) are
+   left intact; the solid red action buttons (Delete, Logout) are darkened below. */
 .bg-green-600, .bg-green-500, .bg-emerald-600,
 .hover\:bg-green-700:hover, .hover\:bg-green-500:hover, .hover\:bg-emerald-700:hover { background-color:#0e0e0e !important; }
 .bg-purple-600 { background-color:#0e0e0e !important; }
 .hover\:bg-purple-700:hover { background-color:#272727 !important; }
 .border-green-600 { border-color:#0e0e0e !important; }
+
+/* Solid red buttons (Delete All My XQ Keys, Logout) -> monochrome. bg-red-600 is
+   only those two; Logout's dark text-gray-900 label is lightened below. */
+.bg-red-600 { background-color:#0e0e0e !important; }
+.hover\:bg-red-700:hover, .hover\:bg-red-500:hover { background-color:#272727 !important; }
 
 /* Green gradient tiles -> graphite (match the blue tiles) */
 .from-green-600 { --tw-gradient-from:#0e0e0e var(--tw-gradient-from-position) !important;
@@ -100,7 +106,8 @@ html, body, button, input, select, textarea, .font-sans {
 .from-blue-600 .text-gray-900, .from-green-600 .text-gray-900,
 .bg-blue-600.text-gray-900, .bg-green-600.text-gray-900, .bg-emerald-600.text-gray-900,
 .bg-purple-600.text-gray-900, .bg-indigo-600.text-gray-900,
-.bg-blue-500.text-gray-900, .bg-green-500.text-gray-900 { color:#ffffff !important; }
+.bg-blue-500.text-gray-900, .bg-green-500.text-gray-900,
+.bg-red-600.text-gray-900 { color:#ffffff !important; }
 
 /* Lattice canvas blends into the page — only the cube should stand out */
 .lattice-container canvas { box-shadow:none !important; }
