@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--suppress JSUnresolvedReference -->
+<html lang="en">
+<head>
+  <script>/* route relative /api/* (fetch+XHR) to the demo backend */(function(){var B="https://qryptofederal.com/qryptotrustdemo";function rw(u){if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return B+u;try{var p=new URL(u,location.href);if(p.origin===location.origin&&p.pathname.indexOf("/api/")===0)return B+p.pathname+p.search;}catch(e){}return u;}var F=window.fetch;window.fetch=function(i,o){try{if(typeof i==="string")i=rw(i);else if(i&&i.url){var p=new URL(i.url,location.href);if(p.origin===location.origin&&p.pathname.indexOf("/api/")===0)i=new Request(B+p.pathname+p.search,i);}}catch(e){}return F.apply(this,[i,o]);};var XO=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=rw(u);}catch(e){}return XO.apply(this,a);};})();</script>
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Transfer — Qrypto Trust</title>
+    <script src="js/vendor/react-18.2.0.min.js" integrity="sha384-tMH8h3BGESGckSAVGZ82T9n90ztNXxvdwvdM6UoR56cYcf+0iGXBliJ29D+wZ/x8" crossorigin="anonymous"></script>
+    <script src="js/vendor/react-dom-18.2.0.min.js" integrity="sha384-bm7MnzvK++ykSwVJ2tynSE5TRdN+xL418osEVF2DE/L/gfWHj91J2Sphe582B1Bh" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/vendor/toastify-1.12.0.min.js" integrity="sha384-1ypXlohFqSnDLddhnZiShX//tfF/8DnI48Om/a4duN13pHb1ptyRaxBONqaAb61d" crossorigin="anonymous"></script>
+    <script src="js/qrypto-middleware.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/app.css" integrity="sha384-VoJIuXCgt7ErzYQiuo5nwBSKlfWrNf7IrXYsGvd5FeaVyI1bDzJsd4omtZzQ6+lI" crossorigin="anonymous">
+    <script src="js/vendor/fingerprintjs-5.1.0.min.js" integrity="sha384-53enfzXvnBYAwZEvMwQOXs5KcojpEZ/dM70qIAlo1vPSLFjXh5p/QD+mpTUvsyNC" crossorigin="anonymous"></script>
+    <style>
+        body { background: #ffffff; margin: 0; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .lattice-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 20px; padding-bottom: 10px; }
+        .main-content { padding-top: 20px; }
+        select {
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb; color: #111;
+            padding: 5px 10px 5px 10px !important;
+            height: 40px;
+            margin-bottom: 20px !important;
+            -moz-appearance: initial;
+            appearance: initial;
+        }
+        select::-ms-expand {
+            display: none;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+    </style>
+    <link rel="stylesheet" type="text/css" href="css/vendor/toastify-1.12.0.min.css" integrity="sha384-GSJP6bR4yv1SbLGhL+ntxb4LDi6RC5j8eM8OAh5lwPYdvj9cflIWJiFZdAFr2gyP" crossorigin="anonymous">
+    <script src="js/vendor/noble-post-quantum.min.js" integrity="sha384-/NeNsTbm7mdvIwmayW4zg0dTjdXiydWilgC/9aPAZx93QyivsRipaYKqCaDkDNIy" crossorigin="anonymous"></script>
+    <script src="js/pqc-protocol.js"></script>
+<style>/* Squarespace provides header/footer; hide the demo chrome */ .text-center.mb-8{display:none!important} .mt-6.text-center.text-gray-400.text-xs{display:none!important}</style>
+<style>
+/* ===== qryptotrust.com brand theme — monochrome override layer =====
+   Maps the bundle's blue/indigo Tailwind utilities onto the site's
+   Helvetica + black/white/grey palette. Pure restyle: app.css and the
+   minified bundle (both SRI-pinned) are untouched. Remove this block
+   to revert to the stock blue theme. */
+
+/* Match the live site's font stack (Helvetica Neue / Arial) */
+html, body, button, input, select, textarea, .font-sans {
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+}
+
+/* Solid fills */
+.bg-blue-600 { background-color:#0e0e0e !important; }
+.bg-blue-700, .hover\:bg-blue-700:hover { background-color:#272727 !important; }
+.bg-blue-500 { background-color:#3e3e3e !important; }
+.bg-indigo-600 { background-color:#0e0e0e !important; }
+.hover\:bg-indigo-700:hover { background-color:#272727 !important; }
+.bg-blue-50, .hover\:bg-blue-50:hover { background-color:#f6f6f6 !important; }
+
+/* Text */
+.text-blue-700, .text-blue-600 { color:#0e0e0e !important; }
+.text-blue-200 { color:#d0d0d0 !important; }
+.hover\:text-blue-900:hover { color:#000 !important; }
+.hover\:text-blue-300:hover { color:#d0d0d0 !important; }
+
+/* Borders / focus */
+.border-blue-200 { border-color:#e7e7e7 !important; }
+.hover\:border-blue-400:hover { border-color:#a9a9a9 !important; }
+.focus\:border-blue-500:focus { border-color:#0e0e0e !important; }
+
+/* Gradient hero tiles -> graphite gradient */
+.from-blue-600 { --tw-gradient-from:#0e0e0e var(--tw-gradient-from-position) !important;
+  --tw-gradient-to:#0e0e0e00 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
+.to-blue-800 { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
+.hover\:from-blue-500:hover { --tw-gradient-from:#272727 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to:#27272700 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
+.hover\:to-blue-700:hover { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
+
+/* Action buttons added by the newer build (green/emerald/purple) -> monochrome.
+   Status colors (green-50 success, amber/yellow warnings, red status text) are
+   left intact; the solid red action buttons (Delete, Logout) are darkened below. */
+.bg-green-600, .bg-green-500, .bg-emerald-600,
+.hover\:bg-green-700:hover, .hover\:bg-green-500:hover, .hover\:bg-emerald-700:hover { background-color:#0e0e0e !important; }
+.bg-purple-600 { background-color:#0e0e0e !important; }
+.hover\:bg-purple-700:hover { background-color:#272727 !important; }
+.border-green-600 { border-color:#0e0e0e !important; }
+
+/* Solid red buttons (Delete All My XQ Keys, Logout) -> monochrome. bg-red-600 is
+   only those two; Logout's dark text-gray-900 label is lightened below. */
+.bg-red-600 { background-color:#0e0e0e !important; }
+.hover\:bg-red-700:hover, .hover\:bg-red-500:hover { background-color:#272727 !important; }
+
+/* Green gradient tiles -> graphite (match the blue tiles) */
+.from-green-600 { --tw-gradient-from:#0e0e0e var(--tw-gradient-from-position) !important;
+  --tw-gradient-to:#0e0e0e00 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
+.to-green-800 { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
+.hover\:from-green-500:hover { --tw-gradient-from:#272727 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to:#27272700 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to) !important; }
+.hover\:to-green-700:hover { --tw-gradient-to:#3e3e3e var(--tw-gradient-to-position) !important; }
+
+/* Readability: where a background was darkened, the dark text-gray-900 label/title must go light.
+   Scoped to those elements only, so the ~34 other text-gray-900 headings on white stay dark. */
+.from-blue-600 .text-gray-900, .from-green-600 .text-gray-900,
+.bg-blue-600.text-gray-900, .bg-green-600.text-gray-900, .bg-emerald-600.text-gray-900,
+.bg-purple-600.text-gray-900, .bg-indigo-600.text-gray-900,
+.bg-blue-500.text-gray-900, .bg-green-500.text-gray-900,
+.bg-red-600.text-gray-900 { color:#ffffff !important; }
+
+/* Lattice canvas blends into the page — only the cube should stand out */
+.lattice-container canvas { box-shadow:none !important; }
+</style>
+</head>
+<body>
+    <!-- Qrypto Trust Navigation Bar -->
+    <div id="root"></div>
+    <script src="js/vendor/aes-detect.js" integrity="sha384-3/kHeRKieQTs1lGeRPn1T7TYLFKEkkmbOoa//HhNe8abBMpg5P2kkNleSBGqKoZ1" crossorigin="anonymous"></script>
+    <script src="js/vendor/aes-js-3.1.2.min.js" integrity="sha384-+LL7Y4rpnArL5swWm1Zby7CJWtBEdNeHl0QuShHvlco9GZscM6v6ZMjbt3cqn1op" crossorigin="anonymous"></script>
+    <script src="js/vendor/aes-gcm-fallback.js" integrity="sha384-prtNi0zdAvXX9xV0XgdGVvCUeKTQr9Gma2UMVNqB+8n9CWxt8L+6P9h78RemFUuM" crossorigin="anonymous"></script>
+    <script src="js/app/filetransfer.js" integrity="sha384-4F1PAVdXo3BWSEVP2RycfbmzcXphIkXpBszNO0Bd64hp7zbfuFBiW9OVJy5hiGjL" crossorigin="anonymous"></script>
+</body>
+</html>
