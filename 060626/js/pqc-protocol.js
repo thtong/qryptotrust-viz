@@ -728,6 +728,97 @@
         return ptBytes;
     }
 
+    // ---------- File envelope: encrypt payload ONCE, wrap the key per device ----------
+    // For FILES (large payloads), re-encrypting the whole file per device the way
+    // encryptForRecipientEmail does makes the package N*filesize. Instead, encrypt the
+    // file once under a random AES-256 data key (DEK) and wrap just the 32-byte DEK for
+    // each device using its ratchet message key -> package ~= filesize + N*(tiny).
+    async function encryptFileForRecipientEmail(myDeviceId, recipientEmail, plaintext) {
+        const me = getMyDeviceState(myDeviceId);
+        if (!me) throw new Error('Unknown local device');
+        const ptBytes = typeof plaintext === 'string' ? enc.encode(plaintext) : plaintext;
+
+        const devsResp = await fetch('/api/mw/devices/' + encodeURIComponent(recipientEmail));
+        if (!devsResp.ok) throw new Error('Recipient device lookup failed');
+        const eligible = (await devsResp.json()).filter(d => d.authorized);
+        if (!eligible.length) throw new Error('Recipient has no authorized devices yet');
+
+        // 1. Encrypt the file ONCE with a random data-encryption key (DEK).
+        const dek = randomBytes(32);
+        const fileAad = enc.encode(JSON.stringify({ from: myDeviceId, email: me.email }));
+        const file = await aesEncrypt(dek, ptBytes, fileAad);
+
+        // 2. Wrap the DEK for each recipient device using its ratchet message key.
+        const slots = [];
+        const skipped = [];
+        for (const d of eligible) {
+            try {
+                let sess = loadSession(myDeviceId, d.device_id);
+                let handshake = null;
+                if (!sess) {
+                    const r = await establishOutboundSession(myDeviceId, d.device_id);
+                    sess = r.sess;
+                    handshake = r.handshake;
+                }
+                const adv = await ratchetSend(sess);
+                const pcs = sess.pendingPcs;
+                const aad = enc.encode(JSON.stringify({
+                    from: myDeviceId, to: d.device_id, counter: adv.counter,
+                }));
+                const wrap = await aesEncrypt(adv.messageKey, dek, aad);
+                const slot = {
+                    from: { deviceId: myDeviceId, email: me.email },
+                    to: { deviceId: d.device_id, email: recipientEmail },
+                    counter: adv.counter,
+                    iv: b64encode(wrap.iv),
+                    wrappedKey: b64encode(wrap.ciphertext),
+                };
+                if (handshake) slot.handshake = handshake;
+                if (pcs) { slot.pcs = pcs; sess.pendingPcs = null; }
+                sess.handshakeSent = true;
+                storeSession(myDeviceId, d.device_id, sess);
+                slots.push(slot);
+            } catch (e) {
+                console.warn('Route B file: skipping device ' + d.device_id + ' (' + (e && e.message ? e.message : e) + ')');
+                skipped.push({ deviceId: d.device_id, error: String(e && e.message ? e.message : e) });
+            }
+        }
+        if (!slots.length) {
+            throw new Error('No recipient devices could be set up for Route B (' +
+                skipped.map(s => s.deviceId + ': ' + s.error).join('; ') + ')');
+        }
+        return {
+            v: 2,
+            from: { deviceId: myDeviceId, email: me.email },
+            file: { iv: b64encode(file.iv), ciphertext: b64encode(file.ciphertext) },
+            slots,
+        };
+    }
+
+    async function decryptFileEnvelope(myDeviceId, envelope) {
+        if (!envelope || envelope.v !== 2) throw new Error('Unsupported file envelope version');
+        const slot = (envelope.slots || []).find(s => s && s.to && s.to.deviceId === myDeviceId);
+        if (!slot) throw new Error('No key slot addressed to this device (' + myDeviceId + ')');
+
+        if (slot.handshake) await processInboundHandshake(myDeviceId, slot.handshake);
+        if (slot.pcs) await processInboundPcs(myDeviceId, slot.from.deviceId, slot.pcs);
+
+        const sess = loadSession(myDeviceId, slot.from.deviceId);
+        if (!sess) throw new Error('No session with ' + slot.from.deviceId);
+
+        // Unwrap the DEK with this device's ratchet message key.
+        const messageKey = await ratchetReceive(sess, slot.counter);
+        const aad = enc.encode(JSON.stringify({
+            from: slot.from.deviceId, to: slot.to.deviceId, counter: slot.counter,
+        }));
+        const dek = await aesDecrypt(messageKey, b64decode(slot.iv), b64decode(slot.wrappedKey), aad);
+        storeSession(myDeviceId, slot.from.deviceId, sess);
+
+        // Decrypt the single shared file ciphertext with the unwrapped DEK.
+        const fileAad = enc.encode(JSON.stringify({ from: envelope.from.deviceId, email: envelope.from.email }));
+        return await aesDecrypt(dek, b64decode(envelope.file.iv), b64decode(envelope.file.ciphertext), fileAad);
+    }
+
     // ---------- Phase 8: sender keys for groups ----------
 
     async function createGroupSenderKey(groupId) {
@@ -958,6 +1049,8 @@
         // Phase 4 / 5 / 6 / 7 (per-device, PQXDH, ratchet, PCS)
         encryptForRecipientEmail,
         decryptIncomingPacket,
+        encryptFileForRecipientEmail,
+        decryptFileEnvelope,
         pcsStep,
         loadSession,
         // Phase 8 (groups via sender keys)
