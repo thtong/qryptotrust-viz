@@ -138,6 +138,39 @@ class QryptoMiddleware {
         return this._serverFetch(`/session?email=${encodeURIComponent(this._currentUser || '')}&device_id=${encodeURIComponent(this._deviceId || 'default')}`);
     }
 
+    // ── In-app inbox: store-and-forward of encrypted file packages ──
+    // Server holds only the opaque .pqc.json envelope (ciphertext); the recipient
+    // pulls it after signing in and decrypts locally. Mirrors the other _server* methods.
+
+    async _serverSendTransfer(recipientEmail, payload, filename) {
+        // payload: the stringified .pqc.json envelope. Returns { status, id } | { status:'error', reason }.
+        return this._serverFetch('/transfers', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: this._currentUser,
+                device_id: this._deviceId || 'default',
+                recipient_email: recipientEmail,
+                filename,
+                payload,
+            }),
+        });
+    }
+
+    async _serverListTransfers() {
+        const result = await this._serverFetch(`/transfers?email=${encodeURIComponent(this._currentUser)}&device_id=${encodeURIComponent(this._deviceId || 'default')}`);
+        return result.transfers ? { transfers: result.transfers } : { transfers: [], error: result.reason };
+    }
+
+    async _serverFetchTransfer(id) {
+        // Returns { id, filename, sender_email, payload } on success, else null.
+        const result = await this._serverFetch(`/transfers/${encodeURIComponent(id)}?email=${encodeURIComponent(this._currentUser)}&device_id=${encodeURIComponent(this._deviceId || 'default')}`);
+        return result.status === 'ok' ? result : null;
+    }
+
+    async _serverDeleteTransfer(id) {
+        return this._serverFetch(`/transfers/${encodeURIComponent(id)}?email=${encodeURIComponent(this._currentUser)}&device_id=${encodeURIComponent(this._deviceId || 'default')}`, { method: 'DELETE' });
+    }
+
     // ═══════════════════════════════════════════════════════════
     // EVENT SYSTEM
     // ═══════════════════════════════════════════════════════════
