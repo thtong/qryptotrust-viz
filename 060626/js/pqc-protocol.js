@@ -167,6 +167,9 @@
     }
 
     async function generateAndRegisterDevice(email, deviceName) {
+        // Guard: an empty email would hit /api/mw/devices/ (trailing slash), which
+        // 307-redirects out of the proxied path and CORS-fails. Never do that.
+        if (!email) throw new Error('generateAndRegisterDevice: email is required');
         // Idempotent: if a device is already registered for this email in
         // localStorage, return it. But also make sure the server has a
         // healthy prekey bundle and that any pending group invites are
